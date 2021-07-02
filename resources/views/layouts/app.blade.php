@@ -157,6 +157,11 @@
                                     <i class="fas fa-car-side icon-color"></i> Autos<span class="caret"></span>
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                    @can('viewAny', \App\Models\Factura::class)
+                                        <a class="dropdown-item" href="{{url('/facturas')}}">
+                                            <i class="fas fa-file-invoice-dollar icon-color"></i> Facturas
+                                        </a>
+                                    @endcan
                                     @can('viewAny', \App\Models\Vauto::class)
                                         <a class="dropdown-item" href="{{url('/autos')}}">
                                             <i class="fas fa-car-side icon-color"></i> Autos

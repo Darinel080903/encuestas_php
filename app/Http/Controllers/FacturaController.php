@@ -3,17 +3,47 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use App\Models\User;
+use App\Models\Factura;
+use App\Models\Bitacora;
+
 
 class FacturaController extends Controller
 {
+
+    // By CIRG - Protejer la ruta.
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $this->authorize('viewAny', Factura::class);
+
+        $page = $request->page;
+        $vfecha = $request->vfecha;
+        $vbusqueda = $request->vbusqueda;
+
+        $usuario = auth()->user()->id;
+        $usuariorole = User::findOrFail($usuario);
+
+        if($usuariorole->hasRole('administrador'))
+        {
+            $facturas = Factura::fecha($vfecha)->busqueda($vbusqueda)->orderByDesc('fecha')->orderByDesc('idfactura')->paginate(20);
+        }
+        else
+        {
+            $facturas = Factura::usuario($usuario)->fecha($vfecha)->busqueda($vbusqueda)->orderByDesc('fecha')->orderByDesc('idfactura')->paginate(20);
+        }
+
+        return view('facturas.lista', compact('page', 'vfecha', 'vbusqueda', 'facturas'));    
     }
 
     /**
@@ -21,9 +51,15 @@ class FacturaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        $this->authorize('create', Vauto::class);
+
+        $page = $request->page;
+        $vfecha = $request->vfecha;
+        $vbusqueda = $request->vbusqueda;
+
+        return view('facturas.crear', compact('page', 'vfecha', 'vbusqueda'));
     }
 
     /**
