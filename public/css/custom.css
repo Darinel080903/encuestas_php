@@ -1,0 +1,121 @@
+.page-link {
+    position: relative;
+    display: block;
+    padding: .5rem .75rem;
+    margin-left: -1px;
+    line-height: 1.25;
+    color: #e3342f;
+    background-color: #fff;
+    border: 1px solid #dee2e6;
+}
+
+.page-item.active .page-link {
+    z-index: 3;
+    color: #fff;
+    background-color: #e3342f;
+    border-color: #e3342f;
+}
+
+#divaddmap{
+    height: 300px;
+}
+
+.rowmapa{
+    margin-right: 3px !important;
+}
+
+#logomenu{
+	margin-left: 0px;
+	margin-top: 22px;
+	margin-bottom: 10px;
+}
+
+#tablerodivmenu{
+    height: 720px;
+	background-color: #343434;
+    border-color: #343434;
+    padding-left: 10px;
+	padding-right: 10px;
+    box-shadow: 5px 5px 5px #888888;
+    border-radius: 4px;
+}
+
+#tablerodivmenuhead{
+	background-color: #343434;
+	padding-left: 0px;
+	border-bottom: 0px;
+}
+
+#tablerodivmapa{
+    height: 720px;
+    box-shadow: 5px 5px 5px #888888;
+    border-radius: 4px;
+}
+
+#tablerodivdetalle{
+	height: 720px;
+	overflow-y:auto;
+	box-shadow: 5px 5px 5px #888888;
+	padding-top: 5px;
+	padding-left: 5px;
+	padding-right: 5px;
+
+	background-color: #343434;
+	border-radius: 4px;
+}
+
+#footermodallogo
+{
+    width: 16%;
+}
+
+.headermodal{
+    background-color: #343434;
+}
+
+.footermodal{
+    background-color: #343434;
+}
+
+.encabezadoform{
+    background-color: #343434;
+    color: #fff;
+}
+
+#headerlistalogo{
+    margin-top: 2px;
+	margin-bottom: 5px;
+}
+
+.headerlistatitulo{
+    margin-bottom: 0px;
+}
+
+.cardborde{
+    box-shadow: 5px 5px 5px #888888;
+}
+
+#divcontentgrafica{
+    height: 720px;
+    box-shadow: 5px 5px 5px #888888;
+    border-radius: 4px;
+    background-color: #fff;
+}
+
+#divgrafica{
+    height: 500px;
+}
+
+#divdescripcion{
+    height: 169px;
+    border-radius: 4px;
+    overflow: auto;
+}
+
+.icon-color{
+    color: #e3342f;
+}
+
+.intranet-fondo{
+    background-color: #FFFFFF;
+}
