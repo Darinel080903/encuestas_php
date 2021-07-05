@@ -14,8 +14,7 @@
                             @csrf
 
                             <div class="form-row">
-                                
-                                <div class="form-group col-md-3">
+                                <div class="form-group col-md-2">
                                     <label for="fecha">Fecha:</label>
                                     <input type="text" class="form-control @error('fecha') is-invalid @enderror" id="fecha" name="fecha" aria-label="Fecha" placeholder="Fecha" value="{{ date("d/m/Y") }}" readonly/>
                                 </div>
@@ -23,77 +22,51 @@
                                     ¡La <strong>fecha</strong> es un campo requerido!
                                 </div>
 
-                                <div class="form-group col-md-3">
+                                <div class="form-group col-md-2">
                                     <label for="numero">Número de factura:</label>
-                                    <input type="text" class="form-control @error('numero') is-invalid @enderror" id="numero" name="numero" placeholder="Número económico" maxlength="11" value="{{old('numero')}}" required/>
+                                    <input type="text" class="form-control @error('numero') is-invalid @enderror" id="numero" name="numero" placeholder="Número económico" maxlength="50" value="{{old('numero')}}" required/>
                                     <div class="invalid-feedback">
-                                        ¡El <strong>número </strong> es un campo requerido!
+                                        ¡El <strong>número</strong> es un campo requerido!
                                     </div>  
                                 </div>
 
-                            </div>
-
-                            <div class="form-row">
-
-                                
-
-                                
-
-                                <div class="form-group col-md-3">
-                                    <label for="modelo">Modelo:</label>
-                                    <input type="text" class="form-control @error('modelo') is-invalid @enderror" id="modelo" name="modelo" placeholder="modelo" maxlength="4" value="{{old('modelo')}}" required/>
+                                <div class="form-group col-md-8">
+                                    <label for="proveedor">Proveedor:</label>
+                                    <input type="text" class="form-control @error('proveedor') is-invalid @enderror" id="proveedor" name="proveedor" placeholder="Proveedor" maxlength="250" value="{{old('proveedor')}}" required/>
                                     <div class="invalid-feedback">
-                                        ¡El <strong>modelo</strong> es un campo requerido!
-                                    </div>                                
+                                        ¡El <strong>proveedor</strong> es un campo requerido!
+                                    </div>  
                                 </div>
-
-                                <div class="form-group col-md-3">
-                                    <label for="placa">Número de placas:</label>
-                                    <input type="text" class="form-control" id="placa" name="placa" placeholder="Número de placas" maxlength="10" value="{{old('placa')}}"/>
-                                </div>
-
                             </div>
 
                             <div class="form-row">
-                                <div class="form-group col-md-3">
-                                    <label for="serie">Número de serie (NIV):</label>
-                                    <input type="text" class="form-control" name="serie" placeholder="Número de serie" maxlength="20" value="{{old('serie')}}"/>                                
+                                <div class="form-group col-md-2">
+                                    <label for="monto">Monto:</label>
+                                    <input type="text" class="form-control" id="monto" name="monto" placeholder="Monto" maxlength="15" value="{{old('monto')}}" readonly/>
                                 </div>
 
-                                <div class="form-group col-md-3">
-                                    <label for="motor">Número de motor:</label>
-                                    <input type="text" class="form-control" name="motor" placeholder="Motor" maxlength="20" value="{{old('motor')}}"/>                                
-                                </div>
-                                
-                                
-
-                            </div>
-                    
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label for="descripcion">Descripción u observaciones:</label>
-                                    <textarea class="form-control" name="descripcion" placeholder="Descripción" rows="2">{{old('descripcion')}}</textarea>                                
+                                <div class="form-group col-md-2">
+                                    <label for="saldo">Saldo:</label>
+                                    <input type="text" class="form-control" id="saldo" name="saldo" placeholder="Saldo" maxlength="15" value="{{old('saldo')}}" readonly/>
                                 </div>
 
-                                
-                            </div>
+                                <div class="form-group col-md-2">
+                                    <label for="monto">Fecha:</label>
+                                    <input type="text" class="form-control" id="pago" name="pago" aria-label="Fecha de pago" placeholder="Fecha de pago" readonly/>
+                                </div>
 
-                            <div class="form-row">
                                 <div class="form-group col-md-2">
                                     <label for="activo">Activo:</label><br>
                                     <input type="checkbox" class="form-control" id="activo" name="activo" data-toggle="toggle" data-on="Activo" data-off="Inactivo" data-onstyle="success" data-offstyle="danger" checked>
                                 </div>
                             </div>
 
-                            
                             <input type="hidden" name="page" value="{{$page ?? ''}}">
                             <input type="hidden" name="vfecha" value="{{$vfecha ?? ''}}">
                             <input type="hidden" name="vbusqueda" value="{{$vbusqueda ?? ''}}">
 
                             <button type="submit" class="btn btn-outline-danger"><i class="fas fa-save"></i> Guardar</button>
                             <a class="btn btn-outline-danger" href="{{url('/facturas?page='.$page.'&vfecha='.$vfecha.'&vbusqueda='.$vbusqueda)}}"><i class="fas fa-sign-out-alt fa-rotate-180"></i> Regresar</a>
-
-                            
 
                         </form>
                     </div>
@@ -103,6 +76,12 @@
     </div>
     <script>
         $('#fecha').datepicker({
+            uiLibrary: 'bootstrap4',
+            locale: 'es-es',
+            format: 'dd/mm/yyyy'
+        });
+
+        $('#pago').datepicker({
             uiLibrary: 'bootstrap4',
             locale: 'es-es',
             format: 'dd/mm/yyyy'

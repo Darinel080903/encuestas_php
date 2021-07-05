@@ -70,7 +70,43 @@ class FacturaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->authorize('create', Vauto::class);
+
+        $request->validate([
+            'fecha' => 'required',
+            'numero' => 'required',
+            'proveedor' => 'required'
+        ]);
+
+        $nuevo = new Factura();
+        $fechaformat = date('Y-m-d', strtotime(str_replace('/', '-', $request->fecha)));
+        $nuevo->fecha = $fechaformat;
+        $nuevo->numero = $request->numero;
+        $nuevo->proveedor = $request->proveedor;
+        $nuevo->monto = $request->monto;
+        $nuevo->saldo = $request->saldo;
+        $pagoformat = date('Y-m-d', strtotime(str_replace('/', '-', $request->pago)));
+        $nuevo->pago = $pagoformat;
+        $nuevo->fkusuario = auth()->user()->id;
+        if(isset($request->activo))
+        {
+            $nuevo->activo = 1;
+        }
+        else
+        {
+            $nuevo->activo = 0;
+        }
+        $nuevo->save();
+
+        $bitacora = new Bitacora();
+        $bitacora->fkusuario = auth()->user()->id;
+        $bitacora->operacion = 'Factura agregada con id:'.$nuevo->idfactura;
+        $bitacora->fecha = date('Y-m-d H:i:s');
+        $bitacora->ip = $request->ip();
+        $bitacora->pc = gethostname();
+        $bitacora->save();
+
+        return redirect('/facturas?page='.$request->page.'&vfecha='.$request->vfecha.'&vbusqueda='.$request->vbusqueda)->with('mensaje','¡Factura agregada correctamente!');
     }
 
     /**

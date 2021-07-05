@@ -51,8 +51,8 @@
                                 <tr>
                                     <th class="text-center" scope="row">{{date('d/m/Y', strtotime($item->fecha))}}</th>
                                     <td>{{$item->numero}}</td>
-                                    <td>{{$item->fabrica.' - '.$item->tipo.' - '.$item->modelo}}</td>
-                                    <td>{{$item->fabrica.' - '.$item->tipo.' - '.$item->modelo}}</td>
+                                    <td>{{$item->proveedor}}</td>
+                                    <td>{{$item->monto}}</td>
                                     <td class="text-center" width="12%">
                                         @can('update', $item)
                                             <a class="btn btn-outline-danger" href="{{url('/facturas/'.$item->idfactura.'/edit?page='.$page.'&vfecha='.$vfecha.'&vbusqueda='.$vbusqueda)}}"><i class="fas fa-pen"></i> Editar</a>
