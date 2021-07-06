@@ -81,3 +81,5 @@ Route::put('/autos/{id}/update2', 'App\Http\Controllers\AutoController@update2')
 Route::resource('/autosimgs', 'App\Http\Controllers\AutoimgController');
 
 Route::resource('/facturas', 'App\Http\Controllers\FacturaController');
+
+Route::put('/facturas/{id}/update2', 'App\Http\Controllers\FacturaController@update2');

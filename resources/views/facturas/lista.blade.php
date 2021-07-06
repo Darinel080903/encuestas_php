@@ -31,60 +31,60 @@
                         @if ( session('mensaje') )
                             <div class="alert alert-success">{{ session('mensaje') }}</div>
                         @endif 
-                        
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                <th class="text-center" width="10%" scope="col">Fecha</th>
-                                <th class="text-center" scope="col">Número</th>
-                                <th class="text-center" scope="col">Proveedor</th>
-                                <th class="text-center" scope="col">Monto</th>
-                                <th class="text-center" width="48%" scope="col" colspan="4">
-                                    @can('create', \App\Models\Factura::class)
-                                        <a class="btn btn-outline-danger" href="{{url('/facturas/create?page='.$page.'&vfecha='.$vfecha.'&vbusqueda='.$vbusqueda)}}"><i class="fas fa-save"></i> Nuevo</a>
-                                    @endcan
-                                </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($facturas as $item)
-                                <tr>
-                                    <th class="text-center" scope="row">{{date('d/m/Y', strtotime($item->fecha))}}</th>
-                                    <td>{{$item->numero}}</td>
-                                    <td>{{$item->proveedor}}</td>
-                                    <td>{{$item->monto}}</td>
-                                    <td class="text-center" width="12%">
-                                        @can('update', $item)
-                                            <a class="btn btn-outline-danger" href="{{url('/facturas/'.$item->idfactura.'/edit?page='.$page.'&vfecha='.$vfecha.'&vbusqueda='.$vbusqueda)}}"><i class="fas fa-pen"></i> Editar</a>
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                    <th class="text-center" width="10%" scope="col">Fecha</th>
+                                    <th class="text-center" scope="col">Número</th>
+                                    <th class="text-center" scope="col">Proveedor</th>
+                                    <th class="text-center" scope="col">Monto</th>
+                                    <th class="text-center" width="36%" scope="col" colspan="3">
+                                        @can('create', \App\Models\Factura::class)
+                                            <a class="btn btn-outline-danger" href="{{url('/facturas/create?page='.$page.'&vfecha='.$vfecha.'&vbusqueda='.$vbusqueda)}}"><i class="fas fa-save"></i> Nuevo</a>
                                         @endcan
-                                    </td>
-                                    <td class="text-center" width="12%">
-                                        @can('update', $item)
-                                            <a class="btn btn-outline-danger" href="{{url('/facturasimgs/'.$item->idfactura.'?page='.$page.'&vfecha='.$vfecha.'&vbusqueda='.$vbusqueda)}}"><i class="fas fa-images"></i> Galeria</a>
-                                        @endcan
-                                    </td>
-                                    <td class="text-center" width="12%">
-                                        <form id="frmimgpublicar{{$item->idfactura}}" name="frmimgpublicar{{$item->idfactura}}" method="POST" action="{{url('/facturas/'.$item->idfactura.'/update2')}}">
-                                            @method('PUT')
-                                            @csrf
-                                            <input type="checkbox" id="activo" name="activo" onchange="funpublicar('frmimgpublicar{{$item->idfactura}}')"  data-toggle="toggle" data-on="Activo" data-off="Inactivo" data-onstyle="success" data-offstyle="danger" @if($item->activo == 1) {{'checked'}} @endif @if(!Auth::user()->hasRole('administrador')) disabled @endif>
-                                        </form>
-                                    </td>
-                                    <td class="text-center" width="12%">
-                                        @can('delete', $item)
-                                            <form action="{{url('/facturas/'.$item->idfactura)}}" method="POST">
-                                                @method('DELETE')
+                                    </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($datos as $item)
+                                    <tr>
+                                        <th class="align-middle text-center" scope="row">{{date('d/m/Y', strtotime($item->fecha))}}</th>
+                                        <td class="align-middle">{{$item->numero}}</td>
+                                        <td class="align-middle">{{$item->proveedor}}</td>
+                                        @if ($item->monto)
+                                            <td class="align-middle">{{'$ '.$item->monto}}</td>
+                                        @else
+                                            <td class="align-middle">{{'$ 0.00'}}</td>
+                                        @endif
+                                        <td class="text-center" width="12%">
+                                            @can('update', $item)
+                                                <a class="btn btn-outline-danger" href="{{url('/facturas/'.$item->idfactura.'/edit?page='.$page.'&vfecha='.$vfecha.'&vbusqueda='.$vbusqueda)}}"><i class="fas fa-pen"></i> Editar</a>
+                                            @endcan
+                                        </td>
+                                        <td class="text-center" width="12%">
+                                            <form id="frmimgpublicar{{$item->idfactura}}" name="frmimgpublicar{{$item->idfactura}}" method="POST" action="{{url('/facturas/'.$item->idfactura.'/update2')}}">
+                                                @method('PUT')
                                                 @csrf
-                                                <button class="btn btn-outline-danger" type="submit"><i class="fas fa-trash"></i> Borrar</button>
+                                                <input type="checkbox" id="activo" name="activo" onchange="funpublicar('frmimgpublicar{{$item->idfactura}}')"  data-toggle="toggle" data-on="Activo" data-off="Inactivo" data-onstyle="success" data-offstyle="danger" @if($item->activo == 1) {{'checked'}} @endif @if(!Auth::user()->hasRole('administrador')) disabled @endif>
                                             </form>
-                                        @endcan
-                                    </td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                                        </td>
+                                        <td class="text-center" width="12%">
+                                            @can('delete', $item)
+                                                <form action="{{url('/facturas/'.$item->idfactura)}}" method="POST">
+                                                    @method('DELETE')
+                                                    @csrf
+                                                    <button class="btn btn-outline-danger" type="submit"><i class="fas fa-trash"></i> Borrar</button>
+                                                </form>
+                                            @endcan
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                         <div class="row justify-content-md-center">
-                            {{$facturas->withQueryString()->links()}}
+                            {{$datos->withQueryString()->links('pagination::bootstrap-4')}}
                         </div>
                     </div>
                 </div>

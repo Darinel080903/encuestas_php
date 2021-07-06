@@ -40,6 +40,33 @@
                             </div>
 
                             <div class="form-row">
+                                <div class="form-group col-md-1">
+                                    <label for="desglosenumero">Número:</label>
+                                    <input type="text" class="form-control" id="desglosenumero" name="desglosenumero" placeholder="Número" maxlength="11"/>
+                                </div>
+
+                                <div class="form-group col-md-8">
+                                    <label for="desgloseconcepto">Concepto:</label>
+                                    <input type="text" class="form-control" id="desgloseconcepto" name="desgloseconcepto" placeholder="Concepto" maxlength="250"/>
+                                </div>
+
+                                <div class="form-group col-md-1">
+                                    <label for="desgloseunitario">Precio:</label>
+                                    <input type="text" class="form-control" id="desgloseunitario" name="desgloseunitario" placeholder="Unitario" maxlength="11"/>
+                                </div>
+
+                                <div class="form-group col-md-1">
+                                    <label for="desglosemonto">Total:</label>
+                                    <input type="text" class="form-control" id="desglosemonto" name="desglosemonto" placeholder="Total" maxlength="11"/>
+                                </div>
+
+                                <div class="form-group col-md-1">
+                                    <label for="boton">&nbsp; Agregar</label>
+                                    <a class="btn btn-outline-danger" href=""><i class="fas fa-plus"></i></a>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
                                 <div class="form-group col-md-2">
                                     <label for="monto">Monto:</label>
                                     <input type="text" class="form-control" id="monto" name="monto" placeholder="Monto" maxlength="15" value="{{old('monto')}}" readonly/>
@@ -64,6 +91,7 @@
                             <input type="hidden" name="page" value="{{$page ?? ''}}">
                             <input type="hidden" name="vfecha" value="{{$vfecha ?? ''}}">
                             <input type="hidden" name="vbusqueda" value="{{$vbusqueda ?? ''}}">
+                            <input type="text" name="vdetalle" value="{{$vdetalle ?? ''}}">
 
                             <button type="submit" class="btn btn-outline-danger"><i class="fas fa-save"></i> Guardar</button>
                             <a class="btn btn-outline-danger" href="{{url('/facturas?page='.$page.'&vfecha='.$vfecha.'&vbusqueda='.$vbusqueda)}}"><i class="fas fa-sign-out-alt fa-rotate-180"></i> Regresar</a>
@@ -88,9 +116,25 @@
         });
 
         $(function(){
-            $("#modelo").validCampoFranz("0123456789");	
-    		// $("#precio").validCampoFranz(".,0123456789");	
+            $("#desglosenumero").validCampoFranz("0123456789");	
+    		$("#desgloseunitario").validCampoFranz(".0123456789");	
+            $("#desglosemonto").validCampoFranz(".0123456789");	
     	});
+
+        $("#desglosemonto").click(function(){
+            var num = $("#desglosenumero").val();
+            var uni = $("#desgloseunitario").val();
+            var total=0;
+            if(num && uni)
+            {
+                total = num * uni;
+                $("#desglosemonto").val(total);
+            }
+            else
+            {
+                $("#desglosemonto").val('');
+            }
+        });
 
         // Example starter JavaScript for disabling form submissions if there are invalid fields
         (function() {

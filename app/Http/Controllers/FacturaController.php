@@ -36,14 +36,14 @@ class FacturaController extends Controller
 
         if($usuariorole->hasRole('administrador'))
         {
-            $facturas = Factura::fecha($vfecha)->busqueda($vbusqueda)->orderByDesc('fecha')->orderByDesc('idfactura')->paginate(20);
+            $datos = Factura::fecha($vfecha)->busqueda($vbusqueda)->orderByDesc('fecha')->orderByDesc('idfactura')->paginate(20);
         }
         else
         {
-            $facturas = Factura::usuario($usuario)->fecha($vfecha)->busqueda($vbusqueda)->orderByDesc('fecha')->orderByDesc('idfactura')->paginate(20);
+            $datos = Factura::usuario($usuario)->fecha($vfecha)->busqueda($vbusqueda)->orderByDesc('fecha')->orderByDesc('idfactura')->paginate(20);
         }
 
-        return view('facturas.lista', compact('page', 'vfecha', 'vbusqueda', 'facturas'));    
+        return view('facturas.lista', compact('page', 'vfecha', 'vbusqueda', 'datos'));    
     }
 
     /**
@@ -85,8 +85,10 @@ class FacturaController extends Controller
         $nuevo->proveedor = $request->proveedor;
         $nuevo->monto = $request->monto;
         $nuevo->saldo = $request->saldo;
-        $pagoformat = date('Y-m-d', strtotime(str_replace('/', '-', $request->pago)));
-        $nuevo->pago = $pagoformat;
+        if($request->pago){
+            $pagoformat = date('Y-m-d', strtotime(str_replace('/', '-', $request->pago)));
+            $nuevo->pago = $pagoformat;
+        }
         $nuevo->fkusuario = auth()->user()->id;
         if(isset($request->activo))
         {
@@ -126,9 +128,28 @@ class FacturaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request, $id)
     {
-        //
+        $modelo = Factura::findOrFail($id);
+        $this->authorize('update', $modelo);
+
+        $page = $request->page;
+        $vfecha = $request->vfecha;
+        $vbusqueda = $request->vbusqueda;
+
+        $usuario = auth()->user()->id;
+        $usuariorole = User::findOrFail($usuario);
+
+        if($usuariorole->hasRole('administrador'))
+        {
+            $datos = Factura::findOrFail($id);
+        }
+        else
+        {
+            $datos = Factura::where('fkusuario', $usuario)->findOrFail($id);
+        }
+
+        return view('facturas.editar',compact('page', 'vfecha', 'vbusqueda', 'datos'));
     }
 
     /**
@@ -140,7 +161,86 @@ class FacturaController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $modelo = Factura::findOrFail($id);
+        $this->authorize('update', $modelo);
+        
+        $request->validate([
+            'fecha' => 'required',
+            'numero' => 'required',
+            'proveedor' => 'required'
+        ]);
+
+        $actualiza = Factura::findOrFail($id);
+        $fechaformat = date('Y-m-d', strtotime(str_replace('/', '-', $request->fecha)));
+        $actualiza->fecha = $fechaformat;
+        $actualiza->numero = $request->numero;
+        $actualiza->proveedor = $request->proveedor;
+        $actualiza->monto = $request->monto;
+        $actualiza->saldo = $request->saldo;
+        if($request->pago){
+            $pagoformat = date('Y-m-d', strtotime(str_replace('/', '-', $request->pago)));
+            $actualiza->pago = $pagoformat;
+        }
+        if(isset($request->activo))
+        {
+            $actualiza->activo = 1;
+        }
+        else
+        {
+            $actualiza->activo = 0;
+        }
+        $actualiza->save();
+
+        $bitacora = new Bitacora();
+        $bitacora->fkusuario = auth()->user()->id;
+        $bitacora->operacion = 'Factura editada con id:'.$id;
+        $bitacora->fecha = date('Y-m-d H:i:s');
+        $bitacora->ip = $request->ip();
+        $bitacora->pc = gethostname();
+        $bitacora->save();
+
+        return redirect('/facturas?page='.$request->page.'&vfecha='.$request->vfecha.'&vbusqueda='.$request->vbusqueda)->with('mensaje','¡Factura editada correctamente!');
+    }
+
+    public function update2(Request $request, $id)
+    {
+        $modelo = Factura::findOrFail($id);
+        $this->authorize('update', $modelo);
+        
+        $actualiza = Factura::findOrFail($id);
+        if(isset($request->activo))
+        {
+            $actualiza->activo = 1;
+        }
+        else
+        {
+            $actualiza->activo = 0;
+        }
+        $actualiza->save();
+
+        $bitacora = new Bitacora();
+        $bitacora->fkusuario = auth()->user()->id;
+        if(isset($request->activo))
+        {
+            $bitacora->operacion = 'Factura activada con id:'.$id;
+        }
+        else
+        {
+            $bitacora->operacion = 'Factura desactivada con id:'.$id;
+        }
+        $bitacora->fecha = date('Y-m-d H:i:s');
+        $bitacora->ip = $request->ip();
+        $bitacora->pc = gethostname();
+        $bitacora->save();
+
+        if(isset($request->activo))
+        {
+            return back()->withInput()->with('mensaje', '¡Factura activada correctamente!');
+        }
+        else
+        {
+            return back()->withInput()->with('mensaje', '¡Factura desactivada correctamente!');
+        }
     }
 
     /**
@@ -149,8 +249,36 @@ class FacturaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        //
+        $modelo = Factura::findOrFail($id);
+        $this->authorize('delete', $modelo);
+
+        $elimina = Factura::findOrFail($id);
+        
+        // foreach (Autoimg::where('fkauto', $id)->cursor() as $imgcursor)
+        // {
+        //     if($imgcursor->imagen)
+        //     {
+        //         $imagenborrar = public_path().'/storage/auto/'.$imgcursor->imagen;
+        //         if (File::exists($imagenborrar))
+        //         {
+        //             unlink($imagenborrar);
+        //         }
+        //     }
+        //     $imgcursor->delete();    
+        // }
+        
+        $elimina->delete();
+
+        $bitacora = new Bitacora();
+        $bitacora->fkusuario = auth()->user()->id;
+        $bitacora->operacion = 'Factura eliminada con id:'.$id;
+        $bitacora->fecha = date('Y-m-d H:i:s');
+        $bitacora->ip = $request->ip();
+        $bitacora->pc = gethostname();
+        $bitacora->save();
+        
+        return back()->withInput()->with('mensaje', '¡Factura eliminada correctamente!');
     }
 }
