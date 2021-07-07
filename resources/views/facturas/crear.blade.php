@@ -41,7 +41,7 @@
 
                             <div class="form-row">
                                 <div class="form-group col-md-1">
-                                    <label for="desglosenumero">Número:</label>
+                                    <label for="desglosenumero">Unidades:</label>
                                     <input type="text" class="form-control" id="desglosenumero" name="desglosenumero" placeholder="Número" maxlength="11"/>
                                 </div>
 
@@ -62,9 +62,11 @@
 
                                 <div class="form-group col-md-1">
                                     <label for="boton">&nbsp; Agregar</label>
-                                    <a class="btn btn-outline-danger" href=""><i class="fas fa-plus"></i></a>
+                                    <a class="btn btn-outline-danger" href="javascript:DesgloseGuardar();"><i class="fas fa-plus"></i></a>
                                 </div>
                             </div>
+
+                            <table class="table" id="DesgloseTabla"></table>
 
                             <div class="form-row">
                                 <div class="form-group col-md-2">
@@ -91,7 +93,7 @@
                             <input type="hidden" name="page" value="{{$page ?? ''}}">
                             <input type="hidden" name="vfecha" value="{{$vfecha ?? ''}}">
                             <input type="hidden" name="vbusqueda" value="{{$vbusqueda ?? ''}}">
-                            <input type="text" name="vdetalle" value="{{$vdetalle ?? ''}}">
+                            <input type="text" id="vdetalle" name="vdetalle">
 
                             <button type="submit" class="btn btn-outline-danger"><i class="fas fa-save"></i> Guardar</button>
                             <a class="btn btn-outline-danger" href="{{url('/facturas?page='.$page.'&vfecha='.$vfecha.'&vbusqueda='.$vbusqueda)}}"><i class="fas fa-sign-out-alt fa-rotate-180"></i> Regresar</a>
@@ -135,6 +137,46 @@
                 $("#desglosemonto").val('');
             }
         });
+
+        var Equipo = [];
+        
+        function DesgloseGuardar()
+        {
+            var vnumero = $("#desglosenumero").val();
+            var vconcepto = $("#desgloseconcepto").val();
+            var vunitario = $("#desgloseunitario").val();
+            var vmonto = $("#desglosemonto").val();
+            
+            Equipo.push({numero:vnumero, concepto:vconcepto, unitario:vunitario, monto:vmonto});    
+            $("#vdetalle").val("");
+            $("#vdetalle").val(JSON.stringify(Equipo));
+            MostrarDesgloseTabla();
+
+            $("#desglosenumero").val("");
+            $("#desgloseconcepto").val("");
+            $("#desgloseunitario").val("");
+            $("#desglosemonto").val("");
+        }
+
+        function DesgloseEliminar(i)
+        {
+            Equipo.splice(i, 1);
+            $("#vdetalle").val("");
+            $("#vdetalle").val(JSON.stringify(Equipo));
+            MostrarDesgloseTabla();     
+        }  
+
+        function MostrarDesgloseTabla()
+        {         
+            $("#DesgloseTabla").empty();
+            $("#DesgloseTabla").append("<thead><tr><th>Unidades</th><th>Concepto</th><th>Precio</th><th>Total</th><th>Eliminar</th></tr></thead>"); 
+            $("#DesgloseTabla").append("<tbody>");
+            $.each(Equipo, function(key, value)
+            {
+                $("#DesgloseTabla").append("<tr><td>"+Equipo[key].numero+"</td><td>"+Equipo[key].concepto+"</td><td>"+Equipo[key].unitario+"</td><td>"+Equipo[key].monto+"</td><td><a class='btn btn-outline-danger' href='javascript:DesgloseEliminar("+key+");'><i class='fas fa-minus'></i></a></td></tr>");
+            });
+            $("#DesgloseTabla").append("</tbody>");
+        }
 
         // Example starter JavaScript for disabling form submissions if there are invalid fields
         (function() {

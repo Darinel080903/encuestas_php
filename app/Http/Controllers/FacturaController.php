@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\User;
 use App\Models\Factura;
+use App\Models\Desglose;
 use App\Models\Bitacora;
 
 
@@ -99,6 +100,19 @@ class FacturaController extends Controller
             $nuevo->activo = 0;
         }
         $nuevo->save();
+
+        $desglose = json_decode($request->vdetalle);
+
+        foreach ($desglose as $item)
+        {                
+            $agregar = new Desglose();
+            $agregar->fkfactura= $nuevo->idfactura;
+            $agregar->numero = $item->numero;
+            $agregar->concepto = $item->concepto;
+            $agregar->unitario = $item->unitario;
+            $agregar->monto = $item->monto;
+            $agregar->save();
+        }
 
         $bitacora = new Bitacora();
         $bitacora->fkusuario = auth()->user()->id;
