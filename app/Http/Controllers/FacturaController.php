@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+// use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Validator;
 use App\Models\User;
 use App\Models\Factura;
@@ -103,15 +104,20 @@ class FacturaController extends Controller
 
         $desglose = json_decode($request->vdetalle);
 
-        foreach ($desglose as $item)
-        {                
-            $agregar = new Desglose();
-            $agregar->fkfactura= $nuevo->idfactura;
-            $agregar->numero = $item->numero;
-            $agregar->concepto = $item->concepto;
-            $agregar->unitario = $item->unitario;
-            $agregar->monto = $item->monto;
-            $agregar->save();
+        dd(count($desglose));
+
+        if(count($desglose) > 0)
+        {
+            foreach ($desglose as $item)
+            {                
+                $agregar = new Desglose();
+                $agregar->fkfactura= $nuevo->idfactura;
+                $agregar->numero = $item->numero;
+                $agregar->concepto = $item->concepto;
+                $agregar->unitario = $item->unitario;
+                $agregar->monto = $item->monto;
+                $agregar->save();
+            }
         }
 
         $bitacora = new Bitacora();
