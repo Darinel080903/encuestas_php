@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-// use Illuminate\Support\Collection;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Validator;
 use App\Models\User;
 use App\Models\Factura;
@@ -104,9 +105,7 @@ class FacturaController extends Controller
 
         $desglose = json_decode($request->vdetalle);
 
-        dd(count($desglose));
-
-        if(count($desglose) > 0)
+        if($desglose)
         {
             foreach ($desglose as $item)
             {                
