@@ -180,32 +180,81 @@
             }
         });
 
-        var Equipo = [];
+        $("#desglosenumero").keyup(function(){
+            if($("#desglosenumero").val() != "")
+            {
+                if($("#desglosenumero").hasClass("is-invalid") === true)
+                {
+                    $("#desglosenumero").removeClass("is-invalid");
+                    $("#desglosenumero").addClass("is-valid");
+                }
+            }
+            // else
+            // {
+            //     if($("#desglosenumero").hasClass("is-valid") === true)
+            //     {
+            //         $("#desglosenumero").removeClass("is-valid");
+            //         $("#desglosenumero").addClass("is-invalid");
+            //     }
+            // }
+        });
+
+        var Detalle = [];
         
         function DesgloseGuardar()
         {
+            var valida = true;
             var vnumero = $("#desglosenumero").val();
             var vconcepto = $("#desgloseconcepto").val();
             var vunitario = $("#desgloseunitario").val();
             var vmonto = $("#desglosemonto").val();
             
-            Equipo.push({numero:vnumero, concepto:vconcepto, unitario:parseFloat(vunitario).toFixed(2), monto:parseFloat(vmonto).toFixed(2)});    
-            $("#vdetalle").val("");
-            $("#vdetalle").val(JSON.stringify(Equipo));
-            MostrarMontoTotal();
-            MostrarDesgloseTabla();
+            if(vnumero == "")
+            {
+                $("#desglosenumero").addClass("is-invalid");
+                valida = false;
+            }
+            if(vconcepto == "")
+            {
+                $("#desgloseconcepto").addClass("is-invalid");
+                valida = false;
+            }
+            if(vunitario == "")
+            {
+                $("#desgloseunitario").addClass("is-invalid");
+                valida = false;
+            }
+            if(vmonto == "")
+            {
+                $("#desglosemonto").addClass("is-invalid");
+                valida = false;
+            }
+            
+            if(valida == true)
+            {
+                Detalle.push({numero:vnumero, concepto:vconcepto, unitario:parseFloat(vunitario).toFixed(2), monto:parseFloat(vmonto).toFixed(2)});    
+                $("#vdetalle").val("");
+                $("#vdetalle").val(JSON.stringify(Detalle));
+                MostrarMontoTotal();
+                MostrarDesgloseTabla();
 
-            $("#desglosenumero").val("");
-            $("#desgloseconcepto").val("");
-            $("#desgloseunitario").val("");
-            $("#desglosemonto").val("");
+                $("#desglosenumero").val("");
+                $("#desgloseconcepto").val("");
+                $("#desgloseunitario").val("");
+                $("#desglosemonto").val("");
+
+                if($("#desglosenumero").hasClass("is-valid") === true)
+                {
+                    $("#desglosenumero").removeClass("is-valid");
+                }
+            }
         }
 
         function DesgloseEliminar(i)
         {
-            Equipo.splice(i, 1);
+            Detalle.splice(i, 1);
             $("#vdetalle").val("");
-            $("#vdetalle").val(JSON.stringify(Equipo));
+            $("#vdetalle").val(JSON.stringify(Detalle));
             MostrarMontoTotal();
             MostrarDesgloseTabla();     
         }
@@ -213,9 +262,9 @@
         function MostrarMontoTotal()
         {
             var total = 0;
-            $.each(Equipo, function(key, value)
+            $.each(Detalle, function(key, value)
             {
-                total = parseFloat(total) + parseFloat(Equipo[key].monto);
+                total = parseFloat(total) + parseFloat(Detalle[key].monto);
             });
             $("#monto").val(total.toFixed(2));
         }  
@@ -225,9 +274,9 @@
             $("#DesgloseTabla").empty();
             $("#DesgloseTabla").append("<thead><tr><th class='col-2'>Unidades</th><th class='col-5'>Concepto</th><th class='col-2'>Precio</th><th class='col-2'>Total</th><th class='col-1'>Eliminar</th></tr></thead>"); 
             $("#DesgloseTabla").append("<tbody>");
-            $.each(Equipo, function(key, value)
+            $.each(Detalle, function(key, value)
             {
-                $("#DesgloseTabla").append("<tr><td class='align-middle'>"+Equipo[key].numero+"</td><td class='align-middle'>"+Equipo[key].concepto+"</td><td class='align-middle'>$"+Equipo[key].unitario+"</td><td class='align-middle'>$"+Equipo[key].monto+"</td><td><a class='btn btn-outline-danger btn-block' href='javascript:DesgloseEliminar("+key+");'><i class='fas fa-minus'></i></a></td></tr>");
+                $("#DesgloseTabla").append("<tr><td class='align-middle'>"+Detalle[key].numero+"</td><td class='align-middle'>"+Detalle[key].concepto+"</td><td class='align-middle'>$"+Detalle[key].unitario+"</td><td class='align-middle'>$"+Detalle[key].monto+"</td><td><a class='btn btn-outline-danger btn-block' href='javascript:DesgloseEliminar("+key+");'><i class='fas fa-minus'></i></a></td></tr>");
             });
             $("#DesgloseTabla").append("</tbody>");
         }

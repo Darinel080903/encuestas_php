@@ -167,8 +167,9 @@ class FacturaController extends Controller
         {
             $datos = Factura::where('fkusuario', $usuario)->findOrFail($id);
         }
+        $desgloses = Desglose::where('fkfactura', $id)->orderby('iddesglose', 'asc')->get();
 
-        return view('facturas.editar',compact('page', 'vfecha', 'vbusqueda', 'datos'));
+        return view('facturas.editar',compact('page', 'vfecha', 'vbusqueda', 'datos', 'desgloses'));
     }
 
     /**
@@ -209,6 +210,25 @@ class FacturaController extends Controller
             $actualiza->activo = 0;
         }
         $actualiza->save();
+
+        $desglose = json_decode($request->vdetalle);
+
+        $eliminadesglose = Desglose::where('fkfactura', $id);
+        $eliminadesglose->delete();
+
+        if($desglose)
+        {
+            foreach ($desglose as $item)
+            {                
+                $agregar = new Desglose();
+                $agregar->fkfactura= $id;
+                $agregar->numero = $item->numero;
+                $agregar->concepto = $item->concepto;
+                $agregar->unitario = $item->unitario;
+                $agregar->monto = $item->monto;
+                $agregar->save();
+            }
+        }
 
         $bitacora = new Bitacora();
         $bitacora->fkusuario = auth()->user()->id;
@@ -273,21 +293,10 @@ class FacturaController extends Controller
         $modelo = Factura::findOrFail($id);
         $this->authorize('delete', $modelo);
 
-        $elimina = Factura::findOrFail($id);
-        
-        // foreach (Autoimg::where('fkauto', $id)->cursor() as $imgcursor)
-        // {
-        //     if($imgcursor->imagen)
-        //     {
-        //         $imagenborrar = public_path().'/storage/auto/'.$imgcursor->imagen;
-        //         if (File::exists($imagenborrar))
-        //         {
-        //             unlink($imagenborrar);
-        //         }
-        //     }
-        //     $imgcursor->delete();    
-        // }
-        
+        $eliminadesglose = Desglose::where('fkfactura', $id);
+        $eliminadesglose->delete();
+
+        $elimina = Factura::findOrFail($id);    
         $elimina->delete();
 
         $bitacora = new Bitacora();

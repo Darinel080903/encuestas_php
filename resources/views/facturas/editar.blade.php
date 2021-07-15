@@ -139,7 +139,7 @@
                             <input type="hidden" name="page" value="{{$page ?? ''}}">
                             <input type="hidden" name="vfecha" value="{{$vfecha ?? ''}}">
                             <input type="hidden" name="vbusqueda" value="{{$vbusqueda ?? ''}}">
-                            <input type="hidden" id="vdetalle" name="vdetalle">
+                            <input type="text" id="vdetalle" name="vdetalle" value="{{$desgloses ?? ''}}">
 
                             <button type="submit" class="btn btn-outline-danger"><i class="fas fa-save"></i> Guardar</button>
                             <a class="btn btn-outline-danger" href="{{url('/facturas?page='.$page.'&vfecha='.$vfecha.'&vbusqueda='.$vbusqueda)}}"><i class="fas fa-sign-out-alt fa-rotate-180"></i> Regresar</a>
@@ -184,7 +184,13 @@
             }
         });
 
-        var Equipo = [];
+        var Detalle = [];
+
+        var data = $("#vdetalle").val();
+        $.each(JSON.parse(data), function(i, item){
+            Detalle.push({numero:item.numero, concepto:item.concepto, unitario:parseFloat(item.unitario).toFixed(2), monto:parseFloat(item.monto).toFixed(2)});    
+        });
+        MostrarDesgloseTabla();
         
         function DesgloseGuardar()
         {
@@ -193,9 +199,9 @@
             var vunitario = $("#desgloseunitario").val();
             var vmonto = $("#desglosemonto").val();
             
-            Equipo.push({numero:vnumero, concepto:vconcepto, unitario:parseFloat(vunitario).toFixed(2), monto:parseFloat(vmonto).toFixed(2)});    
+            Detalle.push({numero:vnumero, concepto:vconcepto, unitario:parseFloat(vunitario).toFixed(2), monto:parseFloat(vmonto).toFixed(2)});    
             $("#vdetalle").val("");
-            $("#vdetalle").val(JSON.stringify(Equipo));
+            $("#vdetalle").val(JSON.stringify(Detalle));
             MostrarMontoTotal();
             MostrarDesgloseTabla();
 
@@ -207,9 +213,9 @@
 
         function DesgloseEliminar(i)
         {
-            Equipo.splice(i, 1);
+            Detalle.splice(i, 1);
             $("#vdetalle").val("");
-            $("#vdetalle").val(JSON.stringify(Equipo));
+            $("#vdetalle").val(JSON.stringify(Detalle));
             MostrarMontoTotal();
             MostrarDesgloseTabla();     
         }
@@ -217,9 +223,9 @@
         function MostrarMontoTotal()
         {
             var total = 0;
-            $.each(Equipo, function(key, value)
+            $.each(Detalle, function(key, value)
             {
-                total = parseFloat(total) + parseFloat(Equipo[key].monto);
+                total = parseFloat(total) + parseFloat(Detalle[key].monto);
             });
             $("#monto").val(total.toFixed(2));
         }  
@@ -229,9 +235,9 @@
             $("#DesgloseTabla").empty();
             $("#DesgloseTabla").append("<thead><tr><th class='col-2'>Unidades</th><th class='col-5'>Concepto</th><th class='col-2'>Precio</th><th class='col-2'>Total</th><th class='col-1'>Eliminar</th></tr></thead>"); 
             $("#DesgloseTabla").append("<tbody>");
-            $.each(Equipo, function(key, value)
+            $.each(Detalle, function(key, value)
             {
-                $("#DesgloseTabla").append("<tr><td class='align-middle'>"+Equipo[key].numero+"</td><td class='align-middle'>"+Equipo[key].concepto+"</td><td class='align-middle'>$"+Equipo[key].unitario+"</td><td class='align-middle'>$"+Equipo[key].monto+"</td><td><a class='btn btn-outline-danger btn-block' href='javascript:DesgloseEliminar("+key+");'><i class='fas fa-minus'></i></a></td></tr>");
+                $("#DesgloseTabla").append("<tr><td class='align-middle'>"+Detalle[key].numero+"</td><td class='align-middle'>"+Detalle[key].concepto+"</td><td class='align-middle'>$"+Detalle[key].unitario+"</td><td class='align-middle'>$"+Detalle[key].monto+"</td><td><a class='btn btn-outline-danger btn-block' href='javascript:DesgloseEliminar("+key+");'><i class='fas fa-minus'></i></a></td></tr>");
             });
             $("#DesgloseTabla").append("</tbody>");
         }
