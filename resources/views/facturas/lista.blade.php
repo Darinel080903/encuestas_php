@@ -53,7 +53,7 @@
                                         <td class="align-middle">{{$item->numero}}</td>
                                         <td class="align-middle">{{$item->proveedor}}</td>
                                         @if ($item->monto)
-                                            <td class="align-middle">{{'$ '.$item->monto}}</td>
+                                            <td class="align-middle">${!! number_format((float)($item->monto), 2) !!}</td>
                                         @else
                                             <td class="align-middle">{{'$ 0.00'}}</td>
                                         @endif

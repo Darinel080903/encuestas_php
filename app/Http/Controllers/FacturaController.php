@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 use App\Models\User;
 use App\Models\Factura;
 use App\Models\Desglose;
@@ -86,7 +87,8 @@ class FacturaController extends Controller
         $nuevo->fecha = $fechaformat;
         $nuevo->numero = $request->numero;
         $nuevo->proveedor = $request->proveedor;
-        $nuevo->monto = $request->monto;
+        $monto = str_replace(',', "", $request->monto);
+        $nuevo->monto = $monto;
         $nuevo->saldo = $request->saldo;
         if($request->pago){
             $pagoformat = date('Y-m-d', strtotime(str_replace('/', '-', $request->pago)));
@@ -189,13 +191,14 @@ class FacturaController extends Controller
             'numero' => 'required',
             'proveedor' => 'required'
         ]);
-
+    
         $actualiza = Factura::findOrFail($id);
         $fechaformat = date('Y-m-d', strtotime(str_replace('/', '-', $request->fecha)));
         $actualiza->fecha = $fechaformat;
         $actualiza->numero = $request->numero;
         $actualiza->proveedor = $request->proveedor;
-        $actualiza->monto = $request->monto;
+        $monto = str_replace(',', "", $request->monto);
+        $actualiza->monto = $monto;
         $actualiza->saldo = $request->saldo;
         if($request->pago){
             $pagoformat = date('Y-m-d', strtotime(str_replace('/', '-', $request->pago)));

@@ -139,7 +139,7 @@
                             <input type="hidden" name="page" value="{{$page ?? ''}}">
                             <input type="hidden" name="vfecha" value="{{$vfecha ?? ''}}">
                             <input type="hidden" name="vbusqueda" value="{{$vbusqueda ?? ''}}">
-                            <input type="text" id="vdetalle" name="vdetalle" value="{{$desgloses ?? ''}}">
+                            <input type="hidden" id="vdetalle" name="vdetalle" value="{{$desgloses ?? ''}}">
 
                             <button type="submit" class="btn btn-outline-danger"><i class="fas fa-save"></i> Guardar</button>
                             <a class="btn btn-outline-danger" href="{{url('/facturas?page='.$page.'&vfecha='.$vfecha.'&vbusqueda='.$vbusqueda)}}"><i class="fas fa-sign-out-alt fa-rotate-180"></i> Regresar</a>
@@ -184,6 +184,42 @@
             }
         });
 
+        $("#desglosenumero").keyup(function(){
+            if($("#desglosenumero").val() != "" && $("#desglosenumero").hasClass("is-invalid") === true)
+            {
+                $("#desglosenumero").removeClass("is-invalid");
+                $("#desglosenumero").addClass("is-valid");    
+            }
+        });
+        $("#desgloseconcepto").keyup(function(){
+            if($("#desgloseconcepto").val() != "" && $("#desgloseconcepto").hasClass("is-invalid") === true)
+            {
+                $("#desgloseconcepto").removeClass("is-invalid");
+                $("#desgloseconcepto").addClass("is-valid");    
+            }
+        });
+        $("#desgloseunitario").keyup(function(){
+            if($("#desgloseunitario").val() != "" && $("#desgloseunitario").hasClass("is-invalid") === true)
+            {
+                $("#desgloseunitario").removeClass("is-invalid");
+                $("#desgloseunitario").addClass("is-valid");    
+            }
+        });
+        $("#desglosemonto").keyup(function(){
+            if($("#desglosemonto").val() != "" && $("#desglosemonto").hasClass("is-invalid") === true)
+            {
+                $("#desglosemonto").removeClass("is-invalid");
+                $("#desglosemonto").addClass("is-valid");    
+            }
+        });
+        $("#desglosemonto").click(function(){
+            if($("#desglosemonto").val() != "" && $("#desglosemonto").hasClass("is-invalid") === true)
+            {
+                $("#desglosemonto").removeClass("is-invalid");
+                $("#desglosemonto").addClass("is-valid");    
+            }
+        });
+
         var Detalle = [];
 
         var data = $("#vdetalle").val();
@@ -194,21 +230,63 @@
         
         function DesgloseGuardar()
         {
+            var valida = true;
             var vnumero = $("#desglosenumero").val();
             var vconcepto = $("#desgloseconcepto").val();
             var vunitario = $("#desgloseunitario").val();
             var vmonto = $("#desglosemonto").val();
             
-            Detalle.push({numero:vnumero, concepto:vconcepto, unitario:parseFloat(vunitario).toFixed(2), monto:parseFloat(vmonto).toFixed(2)});    
-            $("#vdetalle").val("");
-            $("#vdetalle").val(JSON.stringify(Detalle));
-            MostrarMontoTotal();
-            MostrarDesgloseTabla();
+            if(vnumero == "")
+            {
+                $("#desglosenumero").addClass("is-invalid");
+                valida = false;
+            }
+            if(vconcepto == "")
+            {
+                $("#desgloseconcepto").addClass("is-invalid");
+                valida = false;
+            }
+            if(vunitario == "")
+            {
+                $("#desgloseunitario").addClass("is-invalid");
+                valida = false;
+            }
+            if(vmonto == "")
+            {
+                $("#desglosemonto").addClass("is-invalid");
+                valida = false;
+            }
+            
+            if(valida == true)
+            {
+                Detalle.push({numero:vnumero, concepto:vconcepto, unitario:parseFloat(vunitario).toFixed(2), monto:parseFloat(vmonto).toFixed(2)});    
+                $("#vdetalle").val("");
+                $("#vdetalle").val(JSON.stringify(Detalle));
+                MostrarMontoTotal();
+                MostrarDesgloseTabla();
 
-            $("#desglosenumero").val("");
-            $("#desgloseconcepto").val("");
-            $("#desgloseunitario").val("");
-            $("#desglosemonto").val("");
+                $("#desglosenumero").val("");
+                $("#desgloseconcepto").val("");
+                $("#desgloseunitario").val("");
+                $("#desglosemonto").val("");
+
+                if($("#desglosenumero").hasClass("is-valid") === true)
+                {
+                    $("#desglosenumero").removeClass("is-valid");
+                }
+                if($("#desgloseconcepto").hasClass("is-valid") === true)
+                {
+                    $("#desgloseconcepto").removeClass("is-valid");
+                }
+                if($("#desgloseunitario").hasClass("is-valid") === true)
+                {
+                    $("#desgloseunitario").removeClass("is-valid");
+                }
+                if($("#desglosemonto").hasClass("is-valid") === true)
+                {
+                    $("#desglosemonto").removeClass("is-valid");
+                }
+            }
         }
 
         function DesgloseEliminar(i)
@@ -227,7 +305,7 @@
             {
                 total = parseFloat(total) + parseFloat(Detalle[key].monto);
             });
-            $("#monto").val(total.toFixed(2));
+            $("#monto").val(formatCurrencyclean(total.toFixed(2)));
         }  
 
         function MostrarDesgloseTabla()
@@ -237,7 +315,7 @@
             $("#DesgloseTabla").append("<tbody>");
             $.each(Detalle, function(key, value)
             {
-                $("#DesgloseTabla").append("<tr><td class='align-middle'>"+Detalle[key].numero+"</td><td class='align-middle'>"+Detalle[key].concepto+"</td><td class='align-middle'>$"+Detalle[key].unitario+"</td><td class='align-middle'>$"+Detalle[key].monto+"</td><td><a class='btn btn-outline-danger btn-block' href='javascript:DesgloseEliminar("+key+");'><i class='fas fa-minus'></i></a></td></tr>");
+                $("#DesgloseTabla").append("<tr><td class='align-middle'>"+Detalle[key].numero+"</td><td class='align-middle'>"+Detalle[key].concepto+"</td><td class='align-middle'>"+formatCurrency(Detalle[key].unitario)+"</td><td class='align-middle'>"+formatCurrency(Detalle[key].monto)+"</td><td><a class='btn btn-outline-danger btn-block' href='javascript:DesgloseEliminar("+key+");'><i class='fas fa-minus'></i></a></td></tr>");
             });
             $("#DesgloseTabla").append("</tbody>");
         }

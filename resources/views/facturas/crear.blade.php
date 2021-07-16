@@ -181,22 +181,39 @@
         });
 
         $("#desglosenumero").keyup(function(){
-            if($("#desglosenumero").val() != "")
+            if($("#desglosenumero").val() != "" && $("#desglosenumero").hasClass("is-invalid") === true)
             {
-                if($("#desglosenumero").hasClass("is-invalid") === true)
-                {
-                    $("#desglosenumero").removeClass("is-invalid");
-                    $("#desglosenumero").addClass("is-valid");
-                }
+                $("#desglosenumero").removeClass("is-invalid");
+                $("#desglosenumero").addClass("is-valid");    
             }
-            // else
-            // {
-            //     if($("#desglosenumero").hasClass("is-valid") === true)
-            //     {
-            //         $("#desglosenumero").removeClass("is-valid");
-            //         $("#desglosenumero").addClass("is-invalid");
-            //     }
-            // }
+        });
+        $("#desgloseconcepto").keyup(function(){
+            if($("#desgloseconcepto").val() != "" && $("#desgloseconcepto").hasClass("is-invalid") === true)
+            {
+                $("#desgloseconcepto").removeClass("is-invalid");
+                $("#desgloseconcepto").addClass("is-valid");    
+            }
+        });
+        $("#desgloseunitario").keyup(function(){
+            if($("#desgloseunitario").val() != "" && $("#desgloseunitario").hasClass("is-invalid") === true)
+            {
+                $("#desgloseunitario").removeClass("is-invalid");
+                $("#desgloseunitario").addClass("is-valid");    
+            }
+        });
+        $("#desglosemonto").keyup(function(){
+            if($("#desglosemonto").val() != "" && $("#desglosemonto").hasClass("is-invalid") === true)
+            {
+                $("#desglosemonto").removeClass("is-invalid");
+                $("#desglosemonto").addClass("is-valid");    
+            }
+        });
+        $("#desglosemonto").click(function(){
+            if($("#desglosemonto").val() != "" && $("#desglosemonto").hasClass("is-invalid") === true)
+            {
+                $("#desglosemonto").removeClass("is-invalid");
+                $("#desglosemonto").addClass("is-valid");    
+            }
         });
 
         var Detalle = [];
@@ -247,6 +264,18 @@
                 {
                     $("#desglosenumero").removeClass("is-valid");
                 }
+                if($("#desgloseconcepto").hasClass("is-valid") === true)
+                {
+                    $("#desgloseconcepto").removeClass("is-valid");
+                }
+                if($("#desgloseunitario").hasClass("is-valid") === true)
+                {
+                    $("#desgloseunitario").removeClass("is-valid");
+                }
+                if($("#desglosemonto").hasClass("is-valid") === true)
+                {
+                    $("#desglosemonto").removeClass("is-valid");
+                }
             }
         }
 
@@ -266,7 +295,7 @@
             {
                 total = parseFloat(total) + parseFloat(Detalle[key].monto);
             });
-            $("#monto").val(total.toFixed(2));
+            $("#monto").val(formatCurrencyclean(total.toFixed(2)));
         }  
 
         function MostrarDesgloseTabla()
@@ -276,7 +305,7 @@
             $("#DesgloseTabla").append("<tbody>");
             $.each(Detalle, function(key, value)
             {
-                $("#DesgloseTabla").append("<tr><td class='align-middle'>"+Detalle[key].numero+"</td><td class='align-middle'>"+Detalle[key].concepto+"</td><td class='align-middle'>$"+Detalle[key].unitario+"</td><td class='align-middle'>$"+Detalle[key].monto+"</td><td><a class='btn btn-outline-danger btn-block' href='javascript:DesgloseEliminar("+key+");'><i class='fas fa-minus'></i></a></td></tr>");
+                $("#DesgloseTabla").append("<tr><td class='align-middle'>"+Detalle[key].numero+"</td><td class='align-middle'>"+Detalle[key].concepto+"</td><td class='align-middle'>"+formatCurrency(Detalle[key].unitario)+"</td><td class='align-middle'>"+formatCurrency(Detalle[key].monto)+"</td><td><a class='btn btn-outline-danger btn-block' href='javascript:DesgloseEliminar("+key+");'><i class='fas fa-minus'></i></a></td></tr>");
             });
             $("#DesgloseTabla").append("</tbody>");
         }
