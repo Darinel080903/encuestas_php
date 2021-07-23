@@ -166,10 +166,12 @@
                                         <a class="dropdown-item" href="{{url('/autos')}}">
                                             <i class="fas fa-car-side icon-color"></i> Autos
                                         </a>
-                                    @endcan                                    
-                                    <a class="dropdown-item" href="{{url('/vales')}}">
-                                        <i class="fas fa-file-alt icon-color"></i> Vales
-                                    </a>
+                                    @endcan
+                                    @can('viewAny', \App\Models\Vvale::class)
+                                        <a class="dropdown-item" href="{{url('/vales')}}">
+                                            <i class="fas fa-file-alt icon-color"></i> Vales
+                                        </a>
+                                    @endcan
                                 </div>                                
                             </li>
 

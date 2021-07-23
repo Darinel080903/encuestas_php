@@ -62,8 +62,6 @@ Route::resource('/resguardos', 'App\Http\Controllers\ResguardoController');
 
 Route::resource('/valesalidas', 'App\Http\Controllers\valesalidaController');
 
-//Route::get('/valesalida', 'App\Http\Controllers\valesalidaController');
-
 Route::resource('/fabricas', 'App\Http\Controllers\FabricaController');
 
 Route::resource('/tipos', 'App\Http\Controllers\TipoController');
@@ -83,3 +81,5 @@ Route::resource('/autosimgs', 'App\Http\Controllers\AutoimgController');
 Route::resource('/facturas', 'App\Http\Controllers\FacturaController');
 
 Route::put('/facturas/{id}/update2', 'App\Http\Controllers\FacturaController@update2');
+
+Route::resource('/vales', 'App\Http\Controllers\ValegasController');

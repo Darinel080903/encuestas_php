@@ -12,7 +12,6 @@ use App\Models\Factura;
 use App\Models\Desglose;
 use App\Models\Bitacora;
 
-
 class FacturaController extends Controller
 {
 
@@ -57,7 +56,7 @@ class FacturaController extends Controller
      */
     public function create(Request $request)
     {
-        $this->authorize('create', Vauto::class);
+        $this->authorize('create', Factura::class);
 
         $page = $request->page;
         $vfecha = $request->vfecha;
@@ -74,7 +73,7 @@ class FacturaController extends Controller
      */
     public function store(Request $request)
     {
-        $this->authorize('create', Vauto::class);
+        $this->authorize('create', Factura::class);
 
         $request->validate([
             'fecha' => 'required',
