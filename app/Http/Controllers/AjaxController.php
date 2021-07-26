@@ -8,6 +8,8 @@ use App\Models\Tmpbien;
 use App\Models\Vtmpbien;
 use App\Models\Bien;
 use App\Models\Tipo;
+use App\Models\Auto;
+use App\Models\Funcionario;
 
 class AjaxController extends Controller
 {
@@ -93,5 +95,14 @@ class AjaxController extends Controller
             return response()->json($tipos);
         }
     }
-       
+
+    public function cargafuncionario(Request $request, $id)
+    {
+        if($request->ajax())
+        {
+            $idfuncionario = Auto::where('idauto', $id)->value('fkfuncionario');
+            $funcionario = Funcionario::where('idfuncionario', $idfuncionario)->get();
+            return response()->json($funcionario);
+        }
+    }
 }

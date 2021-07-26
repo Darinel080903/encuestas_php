@@ -23,7 +23,7 @@
                                 </div>
 
                                 <div class="form-group col-md-3">
-                                    <label for="combustible">Autos:</label>
+                                    <label for="auto">Autos:</label>
                                     <select class="form-control" id="auto" name="auto">
                                         <option value="">Auto</option>
                                         @foreach ($autos as $item)
@@ -34,6 +34,33 @@
                                             @endif
                                         @endforeach  
                                     </select>
+                                </div>
+
+                                <div class="form-group col-md-3">
+                                    <label for="funcionario">Funcionarios:</label>
+                                    <select class="form-control" id="funcionario" name="funcionario">
+                                        <option value="">Funcionario</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group col-md-2 mb-0">
+                                    <label for="kmini">Km inicial:</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="validatedInputGroupPrepend">Km.</span>
+                                        </div>
+                                        <input type="text" class="form-control" id="kmini" name="kmini" placeholder="Km inicial" maxlength="11"/>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-2 mb-0">
+                                    <label for="kmfin">Km final:</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="validatedInputGroupPrepend">Km.</span>
+                                        </div>
+                                        <input type="text" class="form-control" id="kmfin" name="kmfin" placeholder="Km final" maxlength="11"/>
+                                    </div>
                                 </div>
                             </div>
 
@@ -100,17 +127,17 @@
                             </div>
                         
                             <div class="form-row">
-                                <div class="form-group col-md-2">
+                                {{-- <div class="form-group col-md-2">
                                     <label for="activo">Activo:</label><br>
                                     <input type="checkbox" class="form-control" id="activo" name="activo" data-toggle="toggle" data-on="Activo" data-off="Inactivo" data-onstyle="success" data-offstyle="danger" checked>
-                                </div>
+                                </div> --}}
 
                                 {{-- <div class="form-group col-md-2">
                                     <label for="saldo">Saldo:</label>
                                     <input type="text" class="form-control" id="saldo" name="saldo" placeholder="Saldo" maxlength="15" value="{{old('saldo')}}" readonly/>
                                 </div> --}}
 
-                                <div class="form-group offset-md-7 col-md-2 pl-0 mr-2">
+                                <div class="form-group offset-md-9 col-md-2 pl-0 mr-2">
                                     <label for="monto">Monto:</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
@@ -122,7 +149,16 @@
                             </div>
 
                             <div class="form-row">
-                                    
+                                <div class="form-group col-md-4">
+                                    <label for="recibe">Recibe:</label>    
+                                    <input type="text" class="form-control" id="recibe" name="recibe" placeholder="Recibe" maxlength="250"/>
+                                </div>
+
+                                <div class="form-group col-md-4">
+                                    <label for="observacion">Observaciones:</label>    
+                                    <input type="text" class="form-control" id="observacion" name="observacion" placeholder="Recibe" maxlength="250"/>
+                                    <textarea name="" id="" cols="30" rows="10"></textarea>
+                                </div>
                             </div>
 
                             <input type="hidden" name="page" value="{{$page ?? ''}}">
@@ -132,6 +168,13 @@
 
                             <button type="submit" class="btn btn-outline-danger"><i class="fas fa-save"></i> Guardar</button>
                             <a class="btn btn-outline-danger" href="{{url('/vales?page='.$page.'&vfecha='.$vfecha.'&vbusqueda='.$vbusqueda)}}"><i class="fas fa-sign-out-alt fa-rotate-180"></i> Regresar</a>
+
+                            <div class="d-none justify-content-center" id="divloading">
+                                <div class="spinner-grow divloading" role="status">
+                                    <span class="sr-only">Loading...</span>
+                                </div>
+                                <p class="font-weight-bolder text-muted font-italic mt-1 mb-2">&nbsp;Cargando...</p>
+                            </div>
 
                         </form>
                     </div>
@@ -146,17 +189,51 @@
             format: 'dd/mm/yyyy'
         });
 
+        $(function(){
+            $("#auto").change(function(){
+                
+                // Ini Ajax
+                var url = "{{url('/vales/autos/idauto')}}";
+                url = url.replace("idauto", event.target.value);
+                $("#divloading").addClass("d-flex").removeClass("d-none");
+                $.ajax({type:"get",
+                    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                    url:url,
+                    dataType: "json",
+                    success: function(response, textStatus, xhr)
+                    {
+                        $("#funcionario").empty();
+                        $("#funcionario").append("<option value=''>Funcionario</option>");
+                        for(let i = 0; i< response.length; i++)
+                        {
+                            $("#funcionario").append("<option value='"+response[i].idfuncionario+"'>"+response[i].nombre+" "+response[i].paterno+" "+response[i].materno+"</option>"); 
+                        }
+                        $("#divloading").addClass("d-none").removeClass("d-flex");
+                    },
+                    error: function(xhr, textStatus, errorThrown)
+                    {
+                        alert("¡Error al cargar el funcionario!");
+                        $("#divloading").addClass("d-none").removeClass("d-flex");
+                    }
+                });
+                // Fin Ajax 
+   
+            });
+        });
+
+        $(function(){
+            $("#kmini").validCampoFranz("0123456789");
+            $("#kmfin").validCampoFranz("0123456789");
+    	});
+
+
         $('#pago').datepicker({
             uiLibrary: 'bootstrap4',
             locale: 'es-es',
             format: 'dd/mm/yyyy'
         });
 
-        $(function(){
-            $("#desglosenumero").validCampoFranz("0123456789");	
-    		$("#desgloseunitario").validCampoFranz(".0123456789");	
-            $("#desglosemonto").validCampoFranz(".0123456789");	
-    	});
+        
 
         $("#desglosemonto").click(function(){
             var num = $("#desglosenumero").val();
