@@ -23,7 +23,7 @@
                                 </div>
 
                                 <div class="form-group col-md-3">
-                                    <label for="auto">Autos:</label>
+                                    <label for="auto">Autos / Activos / Resguardo:</label>
                                     <select class="form-control" id="auto" name="auto">
                                         <option value="">Auto</option>
                                         @foreach ($autos as $item)
@@ -66,10 +66,33 @@
 
                             <div class="card mb-2">
                                 <div class="card-header">
-                                    Desglose de la factura
+                                    Desglose de los folios
                                 </div>
                                 <div class="card-body">
                                     <div class="form-row">
+                                        <div class="form-group col-md-2">
+                                            <label for="factura">Facturas:</label>
+                                            <select class="form-control" id="factura" name="factura">
+                                                <option value="">Factura</option>
+                                                @foreach ($facturas as $item)
+                                                    @if (old('factura') == $item->idfactura)
+                                                        <option value="{{$item->idfactura}}" selected>{{$item->numero}}</option>
+                                                    @else
+                                                        <option value="{{$item->idfactura}}">{{$item->numero}}</option>
+                                                    @endif
+                                                @endforeach  
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label for="factura">Conceptos:</label>
+                                            <select class="form-control" id="concepto" name="concepto">
+                                                <option value="">Concepto</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-row">
+                                        
                                         <div class="form-group col-md-2 mb-0">
                                             <label for="desglosenumero">Unidades:</label>
                                             <div class="input-group">
@@ -80,10 +103,12 @@
                                             </div>
                                         </div>
         
-                                        <div class="form-group col-md-5 mb-0">
+                                        {{-- <div class="form-group col-md-3 mb-0">
                                             <label for="desgloseconcepto">Concepto:</label>
                                             <input type="text" class="form-control" id="desgloseconcepto" name="desgloseconcepto" placeholder="Concepto" maxlength="250"/>
-                                        </div>
+                                        </div> --}}
+                                        
+                                        
         
                                         <div class="form-group col-md-2 mb-0">
                                             <label for="desgloseunitario">Precio:</label>
@@ -154,10 +179,9 @@
                                     <input type="text" class="form-control" id="recibe" name="recibe" placeholder="Recibe" maxlength="250"/>
                                 </div>
 
-                                <div class="form-group col-md-4">
+                                <div class="form-group col-md-8">
                                     <label for="observacion">Observaciones:</label>    
-                                    <input type="text" class="form-control" id="observacion" name="observacion" placeholder="Recibe" maxlength="250"/>
-                                    <textarea name="" id="" cols="30" rows="10"></textarea>
+                                    <textarea class="form-control" name="observacion" id="observacion" cols="30" rows="2" placeholder="Observaciones"></textarea>
                                 </div>
                             </div>
 
@@ -191,7 +215,6 @@
 
         $(function(){
             $("#auto").change(function(){
-                
                 // Ini Ajax
                 var url = "{{url('/vales/autos/idauto')}}";
                 url = url.replace("idauto", event.target.value);
@@ -217,7 +240,6 @@
                     }
                 });
                 // Fin Ajax 
-   
             });
         });
 
@@ -226,14 +248,35 @@
             $("#kmfin").validCampoFranz("0123456789");
     	});
 
-
-        $('#pago').datepicker({
-            uiLibrary: 'bootstrap4',
-            locale: 'es-es',
-            format: 'dd/mm/yyyy'
+        $(function(){
+            $("#factura").change(function(){
+                // Ini Ajax
+                var url = "{{url('/vales/conceptos/idfactura')}}";
+                url = url.replace("idfactura", event.target.value);
+                $("#divloading").addClass("d-flex").removeClass("d-none");
+                $.ajax({type:"get",
+                    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                    url:url,
+                    dataType: "json",
+                    success: function(response, textStatus, xhr)
+                    {
+                        $("#concepto").empty();
+                        $("#concepto").append("<option value=''>Concepto</option>");
+                        for(let i = 0; i< response.length; i++)
+                        {
+                            $("#concepto").append("<option value='"+response[i].iddesglose+"'>"+response[i].concepto+"</option>"); 
+                        }
+                        $("#divloading").addClass("d-none").removeClass("d-flex");
+                    },
+                    error: function(xhr, textStatus, errorThrown)
+                    {
+                        alert("¡Error al cargar el concepto!");
+                        $("#divloading").addClass("d-none").removeClass("d-flex");
+                    }
+                });
+                // Fin Ajax 
+            });
         });
-
-        
 
         $("#desglosemonto").click(function(){
             var num = $("#desglosenumero").val();

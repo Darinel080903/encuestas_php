@@ -85,3 +85,5 @@ Route::put('/facturas/{id}/update2', 'App\Http\Controllers\FacturaController@upd
 Route::resource('/vales', 'App\Http\Controllers\ValegasController');
 
 Route::get('/vales/autos/{idauto}', 'App\Http\Controllers\AjaxController@cargafuncionario');
+
+Route::get('/vales/conceptos/{idfactura}', 'App\Http\Controllers\AjaxController@cargaconceptos');

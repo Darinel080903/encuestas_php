@@ -10,6 +10,7 @@ use App\Models\Bien;
 use App\Models\Tipo;
 use App\Models\Auto;
 use App\Models\Funcionario;
+use App\Models\Desglose;
 
 class AjaxController extends Controller
 {
@@ -103,6 +104,15 @@ class AjaxController extends Controller
             $idfuncionario = Auto::where('idauto', $id)->value('fkfuncionario');
             $funcionario = Funcionario::where('idfuncionario', $idfuncionario)->get();
             return response()->json($funcionario);
+        }
+    }
+
+    public function cargaconceptos(Request $request, $id)
+    {
+        if($request->ajax())
+        {
+            $desgloses = Desglose::where('fkfactura', $id)->get();
+            return response()->json($desgloses);
         }
     }
 }

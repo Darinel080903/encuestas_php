@@ -11,6 +11,7 @@ use App\Models\User;
 use App\Models\Vvale;
 use App\Models\Auto;
 use App\Models\Vale;
+use App\Models\Factura;
 use App\Models\Folio;
 use App\Models\Bitacora;
 
@@ -64,8 +65,9 @@ class ValegasController extends Controller
         $vbusqueda = $request->vbusqueda;
 
         $autos = Auto::whereNotNull('fkfuncionario')->where('activo', 1)->get();
+        $facturas = Factura::where('activo', 1)->get(); 
 
-        return view('vales.crear', compact('page', 'vfecha', 'vbusqueda', 'autos'));
+        return view('vales.crear', compact('page', 'vfecha', 'vbusqueda', 'autos', 'facturas'));
     }
 
     /**
