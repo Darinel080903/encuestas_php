@@ -11,6 +11,8 @@ use App\Models\Tipo;
 use App\Models\Auto;
 use App\Models\Funcionario;
 use App\Models\Desglose;
+use App\Models\Factura;
+use App\Models\Folio;
 
 class AjaxController extends Controller
 {
@@ -113,6 +115,44 @@ class AjaxController extends Controller
         {
             $desgloses = Desglose::where('fkfactura', $id)->get();
             return response()->json($desgloses);
+        }
+    }
+
+    public function cargamontos(Request $request, $id)
+    {
+        if($request->ajax())
+        {
+            $montos = Factura::findOrFail($id);
+            return response()->json($montos);
+        }
+    }
+
+    public function cargasaldos(Request $request, $id)
+    {
+        if($request->ajax())
+        {
+            $saldos = Folio::where('fkfactura', $id)->sum('monto');
+            return response()->json($saldos);
+        }
+    }
+
+    public function cargaunidades(Request $request, $id)
+    {
+        if($request->ajax())
+        {
+            $numero = Desglose::where('iddesglose', $id)->value('numero');
+            $unidades = Folio::where('fkdesglose', $id)->sum('numero');
+            $disponible = $numero - $unidades;
+            return response()->json($disponible);
+        }
+    }
+
+    public function cargaunitarios(Request $request, $id)
+    {
+        if($request->ajax())
+        {
+            $unitario = Desglose::where('iddesglose', $id)->value('unitario');
+            return response()->json($unitario);
         }
     }
 }

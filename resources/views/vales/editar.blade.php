@@ -6,13 +6,13 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
-                        <h4><i class="fas fa-file-invoice-dollar"></i> Editar factura</h4>
+                        <h4><i class="fas fa-file-invoice-dollar"></i> Editar vale</h4>
                     </div>
                     <div class="card-body">     
                         
-                        <form class="needs-validation" method="POST" action="{{url('/facturas/'.$datos->idfactura)}}" novalidate>
-                            @method('PUT')
-                            @csrf
+                        <form class="needs-validation" method="POST" action="{{url('/vales/'.$datos->idvale)}}" novalidate>
+                        @method('PUT')
+                        @csrf
 
                             <div class="form-row">
                                 <div class="form-group col-md-2">
@@ -23,56 +23,125 @@
                                     ¡La <strong>fecha</strong> es un campo requerido!
                                 </div>
 
-                                <div class="form-group col-md-2">
-                                    <label for="numero">No. factura:</label>
-                                    <input type="text" class="form-control @error('numero') is-invalid @enderror" id="numero" name="numero" placeholder="Número de factura" maxlength="50" value="{{$datos->numero}}" required/>
+                                <div class="form-group col-md-3">
+                                    <label for="auto">Autos / Activos / Resguardo:</label>
+                                    <select class="form-control" id="auto" name="auto" required>
+                                        <option value="">Auto</option>
+                                        @foreach ($autos as $item)
+                                            @if ($datos->fkauto == $item->idauto)
+                                                <option value="{{$item->idauto}}" selected>{{$item->numero}}</option>
+                                            @else
+                                                <option value="{{$item->idauto}}">{{$item->numero}}</option>
+                                            @endif
+                                        @endforeach  
+                                    </select>
                                     <div class="invalid-feedback">
-                                        ¡El <strong>número</strong> es un campo requerido!
-                                    </div>  
+                                        ¡El <strong>auto</strong> es un campo requerido!
+                                    </div>
                                 </div>
 
-                                <div class="form-group col-md-6">
-                                    <label for="proveedor">Proveedor:</label>
-                                    <input type="text" class="form-control @error('proveedor') is-invalid @enderror" id="proveedor" name="proveedor" placeholder="Proveedor" maxlength="250" value="{{$datos->proveedor}}" required/>
+                                <div class="form-group col-md-3">
+                                    <label for="funcionario">Funcionarios:</label>
+                                    <select class="form-control" id="funcionario" name="funcionario" required>
+                                        <option value="">Funcionario</option>
+                                        @foreach ($funcionarios as $item)
+                                            @if ($datos->fkfuncionario == $item->idfuncionario)
+                                                <option value="{{$item->idfuncionario}}" selected>{{$item->nombre.' '.$item->peterno.' '.$item->materno}}</option>
+                                            @else
+                                                <option value="{{$item->idfuncionario}}">{{$item->nombre.' '.$item->peterno.' '.$item->materno}}</option>
+                                            @endif
+                                        @endforeach 
+                                    </select>
                                     <div class="invalid-feedback">
-                                        ¡El <strong>proveedor</strong> es un campo requerido!
-                                    </div>  
+                                        ¡El <strong>funcionario</strong> es un campo requerido!
+                                    </div>
                                 </div>
 
-                                <div class="form-group col-md-2">
-                                    <label for="monto">Fecha:</label>
-                                    <input type="text" class="form-control" id="pago" name="pago" aria-label="Fecha de pago" placeholder="Fecha de pago" value="@if($datos->pago) {{date('d/m/Y', strtotime($datos->pago))}} @endif" readonly/>
+                                <div class="form-group col-md-2 mb-0">
+                                    <label for="kmini">Km inicial:</label>
+                                    <input type="text" class="form-control" id="kmini" name="kmini" placeholder="Km inicial" maxlength="11" value="{{$datos->kmini}}"/>
+                                </div>
+
+                                <div class="form-group col-md-2 mb-0">
+                                    <label for="kmfin">Km final:</label>
+                                    <input type="text" class="form-control" id="kmfin" name="kmfin" placeholder="Km final" maxlength="11" value="{{$datos->kmfin}}"/>
                                 </div>
                             </div>
 
                             <div class="card mb-2">
                                 <div class="card-header">
-                                    Desglose de la factura
+                                    Desglose de los folios
                                 </div>
                                 <div class="card-body">
                                     <div class="form-row">
+                                        <div class="form-group col-md-2">
+                                            <label for="factura">Facturas:</label>
+                                            <select class="form-control" id="factura" name="factura">
+                                                <option value="">Factura</option>
+                                                @foreach ($facturas as $item)
+                                                    @if (old('factura') == $item->idfactura)
+                                                        <option value="{{$item->idfactura}}" selected>{{$item->numero}}</option>
+                                                    @else
+                                                        <option value="{{$item->idfactura}}">{{$item->numero}}</option>
+                                                    @endif
+                                                @endforeach  
+                                            </select>
+                                        </div>
                                         <div class="form-group col-md-2 mb-0">
-                                            <label for="desglosenumero">Unidades:</label>
+                                            <label for="montofactura">Monto factura:</label>
                                             <div class="input-group">
                                                 <div class="input-group-prepend">
-                                                    <span class="input-group-text" id="validatedInputGroupPrepend">No.</span>
+                                                    <span class="input-group-text" id="validatedInputGroupPrepend">$</span>
                                                 </div>
-                                                <input type="text" class="form-control" id="desglosenumero" name="desglosenumero" placeholder="Unidades" maxlength="11"/>
+                                                <input type="text" class="form-control" id="montofactura" name="montofactura" placeholder="Monto" maxlength="11" readonly/>
                                             </div>
                                         </div>
-        
-                                        <div class="form-group col-md-5 mb-0">
-                                            <label for="desgloseconcepto">Concepto:</label>
-                                            <input type="text" class="form-control" id="desgloseconcepto" name="desgloseconcepto" placeholder="Concepto" maxlength="250"/>
+                                        <div class="form-group col-md-2 mb-0">
+                                            <label for="saldofactura">Saldo factura:</label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text" id="validatedInputGroupPrepend">$</span>
+                                                </div>
+                                                <input type="text" class="form-control" id="saldofactura" name="saldofactura" placeholder="Saldo" maxlength="11" readonly/>
+                                            </div>
                                         </div>
-        
+                                    </div>
+
+                                    <div class="form-row">
+                                        <div class="form-group col-md-1 mb-0">
+                                            <label for="disponible">Disponible:</label>
+                                            <input type="text" class="form-control" id="disponible" name="disponible" placeholder="No." maxlength="11" readonly/>
+                                        </div>
+
+                                        <div class="form-group col-md-3">
+                                            <label for="factura">Conceptos:</label>
+                                            <select class="form-control" id="concepto" name="concepto">
+                                                <option value="">Concepto</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group col-md-1 mb-0">
+                                            <label for="folioini">Folio inicial:</label>
+                                            <input type="text" class="form-control" id="folioini" name="folioini" placeholder="Inicio" maxlength="11"/>
+                                        </div>
+
+                                        <div class="form-group col-md-1 mb-0">
+                                            <label for="foliofin">Folio final:</label>
+                                            <input type="text" class="form-control" id="foliofin" name="foliofin" placeholder="Final" maxlength="11"/>
+                                        </div>
+
+                                        <div class="form-group col-md-1 mb-0">
+                                            <label for="desglosenumero">Unidades:</label>
+                                            <input type="text" class="form-control" id="folionumero" name="folionumero" placeholder="No." maxlength="11"/>
+                                        </div>
+
                                         <div class="form-group col-md-2 mb-0">
                                             <label for="desgloseunitario">Precio:</label>
                                             <div class="input-group">
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text" id="validatedInputGroupPrepend">$</span>
                                                 </div>
-                                                <input type="text" class="form-control" id="desgloseunitario" name="desgloseunitario" placeholder="Unitario" maxlength="11"/>
+                                                <input type="text" class="form-control" id="foliounitario" name="foliounitario" placeholder="Unitario" maxlength="11" readonly/>
                                             </div>
                                         </div>
         
@@ -82,22 +151,24 @@
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text" id="validatedInputGroupPrepend">$</span>
                                                 </div>
-                                                <input type="text" class="form-control" id="desglosemonto" name="desglosemonto" placeholder="Total" maxlength="11"/>
+                                                <input type="text" class="form-control" id="foliomonto" name="foliomonto" placeholder="Total" maxlength="11"/>
                                             </div>
                                         </div>
         
                                         <div class="form-group col-md-1 mb-0">
                                             <label for="boton">&nbsp; Agregar</label>
-                                            <a class="btn btn-outline-danger btn-block" href="javascript:DesgloseGuardar();"><i class="fas fa-plus"></i></a>
+                                            <a class="btn btn-outline-danger btn-block" href="javascript:FolioGuardar();"><i class="fas fa-plus"></i></a>
                                         </div>
                                     </div>
                                 </div>
+                                
                                 <div class="card-footer">
                                     <table class="table table-bordered" id="DesgloseTabla">
                                         <thead>
                                             <tr>
+                                                <th class="col-2">Factura</th>
+                                                <th class="col-3">Concepto</th>
                                                 <th class="col-2">Unidades</th>
-                                                <th class="col-5">Concepto</th>
                                                 <th class="col-2">Precio</th>
                                                 <th class="col-2">Total</th>
                                                 <th class="col-1">Eliminar</th>
@@ -120,29 +191,24 @@
                             </div>
 
                             <div class="form-row">
-                                <div class="form-group col-md-2">
-                                    <label for="activo">Activo:</label><br>
-                                    <input type="checkbox" class="form-control" id="activo" name="activo" data-toggle="toggle" data-on="Activo" data-off="Inactivo" data-onstyle="success" data-offstyle="danger" @if($datos->activo == 1) {{'checked'}} @endif>
+                                <div class="form-group col-md-4">
+                                    <label for="recibe">Recibe:</label>    
+                                    <input type="text" class="form-control" id="recibe" name="recibe" placeholder="Recibe" maxlength="250" value="{{$datos->recibe}}"/>
                                 </div>
-                                
-                                <div class="form-group offset-md-7 col-md-2 pl-0 mr-2">
-                                    <label for="saldo">Saldo:</label>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text" id="validatedInputGroupPrepend">$</span>
-                                        </div>
-                                        <input type="text" class="form-control" id="saldo" name="saldo" placeholder="Saldo" maxlength="15" value="{{$datos->saldo}}" readonly/>
-                                    </div>
+
+                                <div class="form-group col-md-8">
+                                    <label for="observacion">Observaciones:</label>    
+                                    <textarea class="form-control" name="observacion" id="observacion" cols="30" rows="2" placeholder="Observaciones">{{$datos->observacion}}</textarea>
                                 </div>
-                            </div> 
+                            </div>
 
                             <input type="hidden" name="page" value="{{$page ?? ''}}">
                             <input type="hidden" name="vfecha" value="{{$vfecha ?? ''}}">
                             <input type="hidden" name="vbusqueda" value="{{$vbusqueda ?? ''}}">
-                            <input type="hidden" id="vdetalle" name="vdetalle" value="{{$desgloses ?? ''}}">
+                            <input type="hidden" id="vdetalle" name="vdetalle" value="{{$folios ?? ''}}">
 
                             <button type="submit" class="btn btn-outline-danger"><i class="fas fa-save"></i> Guardar</button>
-                            <a class="btn btn-outline-danger" href="{{url('/facturas?page='.$page.'&vfecha='.$vfecha.'&vbusqueda='.$vbusqueda)}}"><i class="fas fa-sign-out-alt fa-rotate-180"></i> Regresar</a>
+                            <a class="btn btn-outline-danger" href="{{url('/vales?page='.$page.'&vfecha='.$vfecha.'&vbusqueda='.$vbusqueda)}}"><i class="fas fa-sign-out-alt fa-rotate-180"></i> Regresar</a>
 
                         </form>
                     </div>
@@ -151,151 +217,458 @@
         </div>
     </div>
     <script>
+        var Detalle = [];
+
+        var data = $("#vdetalle").val();
+        $.each(JSON.parse(data), function(i, item){
+            Detalle.push({factura:item.fkfactura, facturafolio:item.folio, concepto:item.fkdesglose, conceptotexto:item.concepto, folioini:item.folioini, foliofin:item.foliofin, numero:item.numero, unitario:parseFloat(item.unitario).toFixed(2), monto:parseFloat(item.monto).toFixed(2)});
+        });
+        MostrarDesgloseTabla();
+
         $('#fecha').datepicker({
             uiLibrary: 'bootstrap4',
             locale: 'es-es',
             format: 'dd/mm/yyyy'
         });
 
-        $('#pago').datepicker({
-            uiLibrary: 'bootstrap4',
-            locale: 'es-es',
-            format: 'dd/mm/yyyy'
+        $(function(){
+            $("#auto").change(function(){
+                // Ini Ajax
+                var url = "{{url('/vales/autos/idauto')}}";
+                url = url.replace("idauto", event.target.value);
+                $("#divloading").addClass("d-flex").removeClass("d-none");
+                $.ajax({type:"get",
+                    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                    url:url,
+                    dataType: "json",
+                    success: function(response, textStatus, xhr)
+                    {
+                        $("#funcionario").empty();
+                        $("#funcionario").append("<option value=''>Funcionario</option>");
+                        for(let i = 0; i< response.length; i++)
+                        {
+                            $("#funcionario").append("<option value='"+response[i].idfuncionario+"'>"+response[i].nombre+" "+response[i].paterno+" "+response[i].materno+"</option>"); 
+                        }
+                        $("#divloading").addClass("d-none").removeClass("d-flex");
+                    },
+                    error: function(xhr, textStatus, errorThrown)
+                    {
+                        alert("¡Error al cargar el funcionario!");
+                        $("#divloading").addClass("d-none").removeClass("d-flex");
+                    }
+                });
+                // Fin Ajax 
+            });
         });
 
         $(function(){
-            $("#desglosenumero").validCampoFranz("0123456789");	
-    		$("#desgloseunitario").validCampoFranz(".0123456789");	
-            $("#desglosemonto").validCampoFranz(".0123456789");	
+            $("#kmini").validCampoFranz("0123456789");
+            $("#kmfin").validCampoFranz("0123456789");
+            $("#folioini").validCampoFranz("0123456789");
+            $("#foliofin").validCampoFranz("0123456789");
     	});
 
-        $("#desglosemonto").click(function(){
-            var num = $("#desglosenumero").val();
-            var uni = $("#desgloseunitario").val();
+        $(function(){
+            $("#factura").change(function(){
+                
+                var Factura = event.target.value;
+                if(Factura)
+                {
+                    // Ini Ajax
+                    var url = "{{url('/vales/conceptos/idfactura')}}";
+                    url = url.replace("idfactura", Factura);
+                    $("#divloading").addClass("d-flex").removeClass("d-none");
+                    $.ajax({type:"get",
+                        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                        url:url,
+                        dataType: "json",
+                        success: function(response, textStatus, xhr)
+                        {
+                            $("#concepto").empty();
+                            $("#concepto").append("<option value=''>Concepto</option>");
+                            for(let i = 0; i< response.length; i++)
+                            {
+                                $("#concepto").append("<option value='"+response[i].iddesglose+"'>"+response[i].concepto+"</option>"); 
+                            }
+                            $("#disponible").val("");
+                            $("#divloading").addClass("d-none").removeClass("d-flex");
+                            CargarMonto(Factura);
+                            Limpiar();
+                        },
+                        error: function(xhr, textStatus, errorThrown)
+                        {
+                            alert("¡Error al cargar el concepto!");
+                            $("#divloading").addClass("d-none").removeClass("d-flex");
+                        }
+                    });
+                    // Fin Ajax
+                }
+                else
+                {
+                    $("#montofactura").val("");
+                    $("#saldofactura").val(""); 
+                    $("#concepto").empty();
+                    $("#concepto").append("<option value=''>Concepto</option>");
+                    Limpiar();
+                }  
+            });
+        });
+
+        function CargarMonto(IdFactura)
+        {
+            // Ini Ajax
+            var url = "{{url('/vales/montos/idfactura')}}";
+            url = url.replace("idfactura", IdFactura);
+            $("#divloading").addClass("d-flex").removeClass("d-none");
+            $.ajax({type:"get",
+                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                url:url,
+                dataType: "json",
+                success: function(response, textStatus, xhr)
+                {
+                    $("#montofactura").val("");
+                    $("#montofactura").val(formatCurrencyclean(parseFloat(response.monto).toFixed(2)));
+                    $("#divloading").addClass("d-none").removeClass("d-flex");
+                    CargarSaldo(IdFactura);
+                },
+                error: function(xhr, textStatus, errorThrown)
+                {
+                    alert("¡Error al cargar los montos de la factura!");
+                    $("#divloading").addClass("d-none").removeClass("d-flex");
+                }
+            });
+            // Fin Ajax
+        }
+
+        function CargarSaldo(IdFactura)
+        {
+            // Ini Ajax
+            var url = "{{url('/vales/saldos/idfactura')}}";
+            url = url.replace("idfactura", IdFactura);
+            $("#divloading").addClass("d-flex").removeClass("d-none");
+            $.ajax({type:"get",
+                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                url:url,
+                dataType: "json",
+                success: function(response, textStatus, xhr)
+                {
+                    $("#saldofactura").val("");
+                    var vmonto = $("#montofactura").val();
+                    vmonto = parseFloat(vmonto.replace(",", "")).toFixed(2);
+                    var vsaldo = parseFloat(response).toFixed(2);
+                    saldototal = vmonto - vsaldo;
+                    $("#saldofactura").val(formatCurrencyclean(parseFloat(saldototal).toFixed(2)));
+                    $("#divloading").addClass("d-none").removeClass("d-flex");
+                },
+                error: function(xhr, textStatus, errorThrown)
+                {
+                    alert("¡Error al cargar los montos de la factura!");
+                    $("#divloading").addClass("d-none").removeClass("d-flex");
+                }
+            });
+            // Fin Ajax  
+        }
+
+        function Limpiar()
+        {
+            $("#disponible").val("");
+            $("#concepto").val("");
+            $("#folioini").val("");
+            $("#foliofin").val("");
+            $("#folionumero").val("");
+            $("#foliounitario").val("");
+            $("#foliomonto").val("");
+        }
+
+        $(function(){
+            $("#concepto").change(function(){
+                var Desglose = event.target.value;
+                if(Desglose)
+                {
+                    // Ini Ajax
+                    var url = "{{url('/vales/unidades/iddesglose')}}";
+                    url = url.replace("iddesglose", Desglose);
+                    $("#divloading").addClass("d-flex").removeClass("d-none");
+                    $.ajax({type:"get",
+                        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                        url:url,
+                        dataType: "json",
+                        success: function(response, textStatus, xhr)
+                        {
+                            var disponible = 0;
+                            console.log(parseInt(CalcularDisponibleLista(Desglose)));
+                            disponible = parseInt(response) - parseInt(CalcularDisponibleLista(Desglose));
+                            $("#disponible").val("");
+                            $("#disponible").val(disponible);
+                            $("#divloading").addClass("d-none").removeClass("d-flex");
+                            CargarUnitario(Desglose);
+                            LimpiarFolios();
+                        },
+                        error: function(xhr, textStatus, errorThrown)
+                        {
+                            alert("¡Error al cargar las unidades disponibles!");
+                            $("#divloading").addClass("d-none").removeClass("d-flex");
+                        }
+                    });
+                    // Fin Ajax    
+                }
+                else
+                {
+                    Limpiar();
+                }
+            });
+        });
+
+        function CalcularDisponibleLista(Concepto)
+        {
+            var total = 0;
+            $.each(Detalle, function(key, value)
+            {
+                if(Concepto == Detalle[key].concepto)
+                {
+                    total = parseInt(total) + parseInt(Detalle[key].numero);
+                }
+            });
+            return total;
+        }
+
+        function CargarUnitario(Desglose)
+        {
+            // Ini Ajax
+            var url = "{{url('/vales/unitarios/iddesglose')}}";
+            url = url.replace("iddesglose", Desglose);
+            $("#divloading").addClass("d-flex").removeClass("d-none");
+            $.ajax({type:"get",
+                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                url:url,
+                dataType: "json",
+                success: function(response, textStatus, xhr)
+                {
+                    $("#foliounitario").val("");
+                    $("#foliounitario").val(parseFloat(response).toFixed(2));
+                    $("#divloading").addClass("d-none").removeClass("d-flex");
+                },
+                error: function(xhr, textStatus, errorThrown)
+                {
+                    alert("¡Error al cargar el precio unitario!");
+                    $("#divloading").addClass("d-none").removeClass("d-flex");
+                }
+            });
+            // Fin Ajax
+        }
+
+        function LimpiarFolios()
+        {
+            $("#folioini").val("");
+            $("#foliofin").val("");
+            $("#folionumero").val("");
+            $("#foliomonto").val("");
+        }
+
+        $("#folionumero").click(function(){
+            var ini = parseInt($("#folioini").val());
+            var fin = parseInt($("#foliofin").val());
+            fin = fin + 1;
+            if(ini && fin)
+            {
+                if(fin >= ini)
+                {
+                    $("#folionumero").val(fin-ini);
+                    $("#foliomonto").val("");
+                }
+                else
+                {
+                    $("#folionumero").val("");
+                    $("#foliomonto").val("");
+                }
+            }
+            else
+            {
+                $("#folionumero").val("");
+            }
+        });
+
+        $("#foliomonto").click(function(){
+            var num = $("#folionumero").val();
+            var uni = $("#foliounitario").val();
             var total = 0;
             if(num && uni)
             {
                 total = num * parseFloat(uni).toFixed(2);
-                $("#desglosemonto").val(parseFloat(total).toFixed(2));
+                $("#foliomonto").val(parseFloat(total).toFixed(2));
             }
             else
             {
-                $("#desglosemonto").val('');
+                $("#foliomonto").val('');
             }
         });
 
-        $("#desglosenumero").keyup(function(){
-            if($("#desglosenumero").val() != "" && $("#desglosenumero").hasClass("is-invalid") === true)
+        $("#concepto").change(function(){
+            if($("#concepto").val() != "" && $("#concepto").hasClass("is-invalid") === true)
             {
-                $("#desglosenumero").removeClass("is-invalid");
-                $("#desglosenumero").addClass("is-valid");    
+                $("#concepto").removeClass("is-invalid");
+                $("#concepto").addClass("is-valid");    
             }
         });
-        $("#desgloseconcepto").keyup(function(){
-            if($("#desgloseconcepto").val() != "" && $("#desgloseconcepto").hasClass("is-invalid") === true)
+        $("#folioini").keyup(function(){
+            if($("#folioini").val() != "" && $("#folioini").hasClass("is-invalid") === true)
             {
-                $("#desgloseconcepto").removeClass("is-invalid");
-                $("#desgloseconcepto").addClass("is-valid");    
+                $("#folioini").removeClass("is-invalid");
+                $("#folioini").addClass("is-valid");    
             }
         });
-        $("#desgloseunitario").keyup(function(){
-            if($("#desgloseunitario").val() != "" && $("#desgloseunitario").hasClass("is-invalid") === true)
+        $("#foliofin").keyup(function(){
+            if($("#foliofin").val() != "" && $("#foliofin").hasClass("is-invalid") === true)
             {
-                $("#desgloseunitario").removeClass("is-invalid");
-                $("#desgloseunitario").addClass("is-valid");    
+                $("#foliofin").removeClass("is-invalid");
+                $("#foliofin").addClass("is-valid");    
             }
         });
-        $("#desglosemonto").keyup(function(){
-            if($("#desglosemonto").val() != "" && $("#desglosemonto").hasClass("is-invalid") === true)
+        $("#folionumero").keyup(function(){
+            if($("#folionumero").val() != "" && $("#folionumero").hasClass("is-invalid") === true)
             {
-                $("#desglosemonto").removeClass("is-invalid");
-                $("#desglosemonto").addClass("is-valid");    
+                $("#folionumero").removeClass("is-invalid");
+                $("#folionumero").addClass("is-valid");    
             }
         });
-        $("#desglosemonto").click(function(){
-            if($("#desglosemonto").val() != "" && $("#desglosemonto").hasClass("is-invalid") === true)
+        $("#folionumero").click(function(){
+            if($("#folionumero").val() != "" && $("#folionumero").hasClass("is-invalid") === true)
             {
-                $("#desglosemonto").removeClass("is-invalid");
-                $("#desglosemonto").addClass("is-valid");    
+                $("#folionumero").removeClass("is-invalid");
+                $("#folionumero").addClass("is-valid");    
+            }
+        });
+        $("#foliounitario").keyup(function(){
+            if($("#foliounitario").val() != "" && $("#foliounitario").hasClass("is-invalid") === true)
+            {
+                $("#foliounitario").removeClass("is-invalid");
+                $("#foliounitario").addClass("is-valid");    
+            }
+        });
+        $("#foliounitario").click(function(){
+            if($("#foliounitario").val() != "" && $("#foliounitario").hasClass("is-invalid") === true)
+            {
+                $("#foliounitario").removeClass("is-invalid");
+                $("#foliounitario").addClass("is-valid");    
+            }
+        });
+        $("#foliomonto").keyup(function(){
+            if($("#foliomonto").val() != "" && $("#foliomonto").hasClass("is-invalid") === true)
+            {
+                $("#foliomonto").removeClass("is-invalid");
+                $("#foliomonto").addClass("is-valid");    
+            }
+        });
+        $("#foliomonto").click(function(){
+            if($("#foliomonto").val() != "" && $("#foliomonto").hasClass("is-invalid") === true)
+            {
+                $("#foliomonto").removeClass("is-invalid");
+                $("#foliomonto").addClass("is-valid");    
             }
         });
 
-        var Detalle = [];
-
-        var data = $("#vdetalle").val();
-        $.each(JSON.parse(data), function(i, item){
-            Detalle.push({numero:item.numero, concepto:item.concepto, unitario:parseFloat(item.unitario).toFixed(2), monto:parseFloat(item.monto).toFixed(2)});    
-        });
-        MostrarDesgloseTabla();
-        
-        function DesgloseGuardar()
+        function FolioGuardar()
         {
             var valida = true;
-            var vnumero = $("#desglosenumero").val();
-            var vconcepto = $("#desgloseconcepto").val();
-            var vunitario = $("#desgloseunitario").val();
-            var vmonto = $("#desglosemonto").val();
+            var vfactura = $("#factura").val();
+            var vfacturafolio = $("#factura option:selected").text();
+            var vdisponible = $("#disponible").val();
+            var vconcepto = $("#concepto").val();
+            var vconceptotexto = $("#concepto option:selected").text();
+            var vfolioini = $("#folioini").val();
+            var vfoliofin = $("#foliofin").val();
+            var vfolionumero = $("#folionumero").val();
+            var vfoliounitario = $("#foliounitario").val();
+            var vfoliomonto = $("#foliomonto").val();
             
-            if(vnumero == "")
-            {
-                $("#desglosenumero").addClass("is-invalid");
-                valida = false;
-            }
             if(vconcepto == "")
             {
-                $("#desgloseconcepto").addClass("is-invalid");
+                $("#concepto").addClass("is-invalid");
                 valida = false;
             }
-            if(vunitario == "")
+            if(vfolioini == "")
             {
-                $("#desgloseunitario").addClass("is-invalid");
+                $("#folioini").addClass("is-invalid");
                 valida = false;
             }
-            if(vmonto == "")
+            if(vfoliofin == "")
             {
-                $("#desglosemonto").addClass("is-invalid");
+                $("#foliofin").addClass("is-invalid");
                 valida = false;
             }
+            if(vfolionumero == "" || vfolionumero == 0 || parseInt(vfolionumero) > parseInt(vdisponible))
+            {
+                $("#folionumero").addClass("is-invalid");
+                valida = false;
+            }
+            if(vfoliounitario == "")
+            {
+                $("#foliounitario").addClass("is-invalid");
+                valida = false;
+            }
+            if(vfoliomonto == "")
+            {
+                $("#foliomonto").addClass("is-invalid");
+                valida = false;
+            } 
             
             if(valida == true)
             {
-                Detalle.push({numero:vnumero, concepto:vconcepto, unitario:parseFloat(vunitario).toFixed(2), monto:parseFloat(vmonto).toFixed(2)});    
+                Detalle.push({factura:vfactura, facturafolio:vfacturafolio, concepto:vconcepto, conceptotexto:vconceptotexto, folioini:vfolioini, foliofin:vfoliofin, numero:vfolionumero, unitario:parseFloat(vfoliounitario).toFixed(2), monto:parseFloat(vfoliomonto).toFixed(2)});    
                 $("#vdetalle").val("");
                 $("#vdetalle").val(JSON.stringify(Detalle));
-                MostrarMontoTotal();
                 MostrarDesgloseTabla();
+                MostrarMontoTotal();
 
-                $("#desglosenumero").val("");
-                $("#desgloseconcepto").val("");
-                $("#desgloseunitario").val("");
-                $("#desglosemonto").val("");
+                $("#disponible").val("");
+                $("#concepto").val("");
+                $("#folioini").val("");
+                $("#foliofin").val("");
+                $("#folionumero").val("");
+                $("#foliounitario").val("");
+                $("#foliomonto").val("");
 
-                if($("#desglosenumero").hasClass("is-valid") === true)
+                if($("#disponible").hasClass("is-valid") === true)
                 {
-                    $("#desglosenumero").removeClass("is-valid");
+                    $("#disponible").removeClass("is-valid");
                 }
-                if($("#desgloseconcepto").hasClass("is-valid") === true)
+                if($("#concepto").hasClass("is-valid") === true)
                 {
-                    $("#desgloseconcepto").removeClass("is-valid");
+                    $("#concepto").removeClass("is-valid");
                 }
-                if($("#desgloseunitario").hasClass("is-valid") === true)
+                if($("#folioini").hasClass("is-valid") === true)
                 {
-                    $("#desgloseunitario").removeClass("is-valid");
+                    $("#folioini").removeClass("is-valid");
                 }
-                if($("#desglosemonto").hasClass("is-valid") === true)
+                if($("#foliofin").hasClass("is-valid") === true)
                 {
-                    $("#desglosemonto").removeClass("is-valid");
+                    $("#foliofin").removeClass("is-valid");
+                }
+                if($("#folionumero").hasClass("is-valid") === true)
+                {
+                    $("#folionumero").removeClass("is-valid");
+                }
+                if($("#foliounitario").hasClass("is-valid") === true)
+                {
+                    $("#foliounitario").removeClass("is-valid");
+                }
+                if($("#foliomonto").hasClass("is-valid") === true)
+                {
+                    $("#foliomonto").removeClass("is-valid");
                 }
             }
         }
 
-        function DesgloseEliminar(i)
-        {
-            Detalle.splice(i, 1);
-            $("#vdetalle").val("");
-            $("#vdetalle").val(JSON.stringify(Detalle));
-            MostrarMontoTotal();
-            MostrarDesgloseTabla();     
+        function MostrarDesgloseTabla()
+        {         
+            $("#DesgloseTabla").empty();
+            $("#DesgloseTabla").append("<thead><tr><th class='col-2'>Factura</th><th class='col-3'>Concepto</th><th class='col-2'>Unidades</th><th class='col-2'>Precio</th><th class='col-2'>Total</th><th class='col-1'>Eliminar</th></tr></thead>"); 
+            $("#DesgloseTabla").append("<tbody>");
+            $.each(Detalle, function(key, value)
+            {
+                $("#DesgloseTabla").append("<tr><td class='align-middle'>"+Detalle[key].facturafolio+"</td><td class='align-middle'>"+Detalle[key].conceptotexto+"</td><td class='align-middle'>"+Detalle[key].numero+"</td><td class='align-middle'>"+formatCurrency(Detalle[key].unitario)+"</td><td class='align-middle'>"+formatCurrency(Detalle[key].monto)+"</td><td><a class='btn btn-outline-danger btn-block' href='javascript:DesgloseEliminar("+key+");'><i class='fas fa-minus'></i></a></td></tr>");
+            });
+            $("#DesgloseTabla").append("</tbody>");
         }
 
         function MostrarMontoTotal()
@@ -306,20 +679,18 @@
                 total = parseFloat(total) + parseFloat(Detalle[key].monto);
             });
             $("#monto").val(formatCurrencyclean(total.toFixed(2)));
-        }  
-
-        function MostrarDesgloseTabla()
-        {         
-            $("#DesgloseTabla").empty();
-            $("#DesgloseTabla").append("<thead><tr><th class='col-2'>Unidades</th><th class='col-5'>Concepto</th><th class='col-2'>Precio</th><th class='col-2'>Total</th><th class='col-1'>Eliminar</th></tr></thead>"); 
-            $("#DesgloseTabla").append("<tbody>");
-            $.each(Detalle, function(key, value)
-            {
-                $("#DesgloseTabla").append("<tr><td class='align-middle'>"+Detalle[key].numero+"</td><td class='align-middle'>"+Detalle[key].concepto+"</td><td class='align-middle'>"+formatCurrency(Detalle[key].unitario)+"</td><td class='align-middle'>"+formatCurrency(Detalle[key].monto)+"</td><td><a class='btn btn-outline-danger btn-block' href='javascript:DesgloseEliminar("+key+");'><i class='fas fa-minus'></i></a></td></tr>");
-            });
-            $("#DesgloseTabla").append("</tbody>");
         }
 
+        function DesgloseEliminar(i)
+        {
+            Detalle.splice(i, 1);
+            $("#vdetalle").val("");
+            $("#vdetalle").val(JSON.stringify(Detalle));
+            MostrarMontoTotal();
+            MostrarDesgloseTabla();
+            Limpiar();   
+        }
+        
         // Example starter JavaScript for disabling form submissions if there are invalid fields
         (function() {
           'use strict';

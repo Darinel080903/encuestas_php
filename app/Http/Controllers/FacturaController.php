@@ -80,7 +80,7 @@ class FacturaController extends Controller
             'numero' => 'required',
             'proveedor' => 'required'
         ]);
-
+        
         $nuevo = new Factura();
         $fechaformat = date('Y-m-d', strtotime(str_replace('/', '-', $request->fecha)));
         $nuevo->fecha = $fechaformat;
@@ -88,7 +88,6 @@ class FacturaController extends Controller
         $nuevo->proveedor = $request->proveedor;
         $monto = str_replace(',', "", $request->monto);
         $nuevo->monto = $monto;
-        $nuevo->saldo = $request->saldo;
         if($request->pago){
             $pagoformat = date('Y-m-d', strtotime(str_replace('/', '-', $request->pago)));
             $nuevo->pago = $pagoformat;
@@ -198,7 +197,6 @@ class FacturaController extends Controller
         $actualiza->proveedor = $request->proveedor;
         $monto = str_replace(',', "", $request->monto);
         $actualiza->monto = $monto;
-        $actualiza->saldo = $request->saldo;
         if($request->pago){
             $pagoformat = date('Y-m-d', strtotime(str_replace('/', '-', $request->pago)));
             $actualiza->pago = $pagoformat;

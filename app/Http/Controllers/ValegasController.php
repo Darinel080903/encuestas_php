@@ -13,6 +13,9 @@ use App\Models\Auto;
 use App\Models\Vale;
 use App\Models\Factura;
 use App\Models\Folio;
+use App\Models\Vfolio;
+use App\Models\Desglose;
+use App\Models\Funcionario;
 use App\Models\Bitacora;
 
 class ValegasController extends Controller
@@ -78,7 +81,80 @@ class ValegasController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->authorize('create', Vvale::class);
+
+        $request->validate([
+            'fecha' => 'required',
+            'auto' => 'required',
+            'funcionario' => 'required'
+        ]);
+
+        $folios = json_decode($request->vdetalle);
+
+        if($folios)
+        {
+            foreach ($folios as $item)
+            {   
+                $numero = Desglose::where('iddesglose', $item->concepto)->value('numero');
+                $unidades = Folio::where('fkdesglose', $item->concepto)->sum('numero');
+                $disponible = $numero - $unidades;
+                if($disponible < $item->numero)
+                {
+                    return redirect('/vales?page='.$request->page.'&vfecha='.$request->vfecha.'&vbusqueda='.$request->vbusqueda)->with('mensajeerror','¡Error no se pudo realizar la operación, verifique las unidades disponibles!');
+                }             
+            }
+        }
+
+        $nuevo = new Vale();
+        $fechaformat = date('Y-m-d', strtotime(str_replace('/', '-', $request->fecha)));
+        $nuevo->fecha = $fechaformat;
+        $nuevo->fkauto = $request->auto;
+        $nuevo->fkfuncionario = $request->funcionario;
+        $nuevo->kmini = $request->kmini;
+        $nuevo->kmfin = $request->kmfin;
+        $monto = str_replace(',', "", $request->monto);
+        $nuevo->monto = $monto;
+        $nuevo->recibe = $request->recibe;
+        $nuevo->observacion = $request->observacion;
+        $nuevo->fkusuario = auth()->user()->id;
+        $nuevo->save();
+
+        if($folios)
+        {
+            foreach ($folios as $item)
+            {   
+                $numero = Desglose::where('iddesglose', $item->concepto)->value('numero');
+                $unidades = Folio::where('fkdesglose', $item->concepto)->sum('numero');
+                $disponible = $numero - $unidades;
+                if($disponible >= $item->numero)
+                {
+                    $agregar = new Folio();
+                    $agregar->fkvale = $nuevo->idvale;
+                    $agregar->fkfactura = $item->factura;
+                    $agregar->fkdesglose = $item->concepto;
+                    $agregar->folioini = $item->folioini;
+                    $agregar->foliofin = $item->foliofin;
+                    $agregar->numero = $item->numero;
+                    $agregar->unitario = $item->unitario;
+                    $agregar->monto = $item->monto;
+                    $agregar->save();
+                }
+                else
+                {
+                    return redirect('/vales?page='.$request->page.'&vfecha='.$request->vfecha.'&vbusqueda='.$request->vbusqueda)->with('mensajeerror','¡Error al guardar verifique las unidades disponibles!');
+                }             
+            }
+        }
+
+        $bitacora = new Bitacora();
+        $bitacora->fkusuario = auth()->user()->id;
+        $bitacora->operacion = 'Vale agregado con id:'.$nuevo->idvale;
+        $bitacora->fecha = date('Y-m-d H:i:s');
+        $bitacora->ip = $request->ip();
+        $bitacora->pc = gethostname();
+        $bitacora->save();
+
+        return redirect('/vales?page='.$request->page.'&vfecha='.$request->vfecha.'&vbusqueda='.$request->vbusqueda)->with('mensaje','¡Vale agregado correctamente!');
     }
 
     /**
@@ -98,9 +174,32 @@ class ValegasController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request, $id)
     {
-        //
+        $modelo = Vvale::findOrFail($id);
+        $this->authorize('update', $modelo);
+
+        $page = $request->page;
+        $vfecha = $request->vfecha;
+        $vbusqueda = $request->vbusqueda;
+
+        $usuario = auth()->user()->id;
+        $usuariorole = User::findOrFail($usuario);
+
+        if($usuariorole->hasRole('administrador'))
+        {
+            $datos = Vale::findOrFail($id);
+        }
+        else
+        {
+            $datos = Vale::where('fkusuario', $usuario)->findOrFail($id);
+        }
+        $autos = Auto::whereNotNull('fkfuncionario')->where('activo', 1)->get();
+        $funcionarios = Funcionario::where('idfuncionario', $datos->fkfuncionario)->get();
+        $facturas = Factura::where('activo', 1)->get(); 
+        $folios = Vfolio::where('fkvale', $id)->orderby('idfolio', 'asc')->get();
+
+        return view('vales.editar',compact('page', 'vfecha', 'vbusqueda', 'datos', 'autos', 'funcionarios', 'facturas', 'folios'));
     }
 
     /**
@@ -112,7 +211,83 @@ class ValegasController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $modelo = Vvale::findOrFail($id);
+        $this->authorize('update', $modelo);
+        
+        $request->validate([
+            'fecha' => 'required',
+            'auto' => 'required',
+            'funcionario' => 'required'
+        ]);
+
+        // if($folios)
+        // {
+        //     foreach ($folios as $item)
+        //     {   
+        //         $numero = Desglose::where('iddesglose', $item->concepto)->value('numero');
+        //         $unidades = Folio::where('fkdesglose', $item->concepto)->sum('numero');
+        //         $disponible = $numero - $unidades;
+        //         if($disponible < $item->numero)
+        //         {
+        //             return redirect('/vales?page='.$request->page.'&vfecha='.$request->vfecha.'&vbusqueda='.$request->vbusqueda)->with('mensajeerror','¡Error no se pudo realizar la operación, verifique las unidades disponibles!');
+        //         }             
+        //     }
+        // }
+    
+        $actualiza = Vale::findOrFail($id);
+        $fechaformat = date('Y-m-d', strtotime(str_replace('/', '-', $request->fecha)));
+        $actualiza->fecha = $fechaformat;
+        $actualiza->fkauto = $request->auto;
+        $actualiza->fkfuncionario = $request->funcionario;
+        $actualiza->kmini = $request->kmini;
+        $actualiza->kmfin = $request->kmfin;
+        $monto = str_replace(',', "", $request->monto);
+        $actualiza->monto = $monto;
+        $actualiza->recibe = $request->recibe;
+        $actualiza->observacion = $request->observacion;
+        $actualiza->save();
+
+        $eliminafolios = Folio::where('fkvale', $id);
+        $eliminafolios->delete();
+
+        $folios = json_decode($request->vdetalle);
+
+        if($folios)
+        {
+            foreach ($folios as $item)
+            {   
+                $numero = Desglose::where('iddesglose', $item->concepto)->value('numero');
+                $unidades = Folio::where('fkdesglose', $item->concepto)->sum('numero');
+                $disponible = $numero - $unidades;
+                if($disponible >= $item->numero)
+                {
+                    $agregar = new Folio();
+                    $agregar->fkvale = $id;
+                    $agregar->fkfactura = $item->factura;
+                    $agregar->fkdesglose = $item->concepto;
+                    $agregar->folioini = $item->folioini;
+                    $agregar->foliofin = $item->foliofin;
+                    $agregar->numero = $item->numero;
+                    $agregar->unitario = $item->unitario;
+                    $agregar->monto = $item->monto;
+                    $agregar->save();
+                }
+                else
+                {
+                    return redirect('/vales?page='.$request->page.'&vfecha='.$request->vfecha.'&vbusqueda='.$request->vbusqueda)->with('mensajeerror','¡Error al guardar verifique las unidades disponibles!');
+                }             
+            }
+        }
+
+        $bitacora = new Bitacora();
+        $bitacora->fkusuario = auth()->user()->id;
+        $bitacora->operacion = 'Vale editado con id:'.$id;
+        $bitacora->fecha = date('Y-m-d H:i:s');
+        $bitacora->ip = $request->ip();
+        $bitacora->pc = gethostname();
+        $bitacora->save();
+
+        return redirect('/vales?page='.$request->page.'&vfecha='.$request->vfecha.'&vbusqueda='.$request->vbusqueda)->with('mensaje','¡Vale editada correctamente!');
     }
 
     /**

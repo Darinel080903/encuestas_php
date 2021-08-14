@@ -53,12 +53,7 @@
                                     <div class="form-row">
                                         <div class="form-group col-md-2 mb-0">
                                             <label for="desglosenumero">Unidades:</label>
-                                            <div class="input-group">
-                                                <div class="input-group-prepend">
-                                                    <span class="input-group-text" id="validatedInputGroupPrepend">No.</span>
-                                                </div>
-                                                <input type="text" class="form-control" id="desglosenumero" name="desglosenumero" placeholder="Unidades" maxlength="11"/>
-                                            </div>
+                                            <input type="text" class="form-control" id="desglosenumero" name="desglosenumero" placeholder="Unidades" maxlength="11"/>
                                         </div>
         
                                         <div class="form-group col-md-5 mb-0">
@@ -108,7 +103,12 @@
                             </div>
 
                             <div class="form-row">
-                                <div class="form-group offset-md-9 col-md-2 pl-0 mr-2">
+                                <div class="form-group col-md-2">
+                                    <label for="activo">Activo:</label><br>
+                                    <input type="checkbox" class="form-control" id="activo" name="activo" data-toggle="toggle" data-on="Activo" data-off="Inactivo" data-onstyle="success" data-offstyle="danger" @if($datos->activo == 1) {{'checked'}} @endif>
+                                </div>
+
+                                <div class="form-group offset-md-7 col-md-2 pl-0 mr-2">
                                     <label for="monto">Monto:</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
@@ -118,23 +118,6 @@
                                     </div>
                                 </div>
                             </div>
-
-                            <div class="form-row">
-                                <div class="form-group col-md-2">
-                                    <label for="activo">Activo:</label><br>
-                                    <input type="checkbox" class="form-control" id="activo" name="activo" data-toggle="toggle" data-on="Activo" data-off="Inactivo" data-onstyle="success" data-offstyle="danger" @if($datos->activo == 1) {{'checked'}} @endif>
-                                </div>
-                                
-                                <div class="form-group offset-md-7 col-md-2 pl-0 mr-2">
-                                    <label for="saldo">Saldo:</label>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text" id="validatedInputGroupPrepend">$</span>
-                                        </div>
-                                        <input type="text" class="form-control" id="saldo" name="saldo" placeholder="Saldo" maxlength="15" value="{{$datos->saldo}}" readonly/>
-                                    </div>
-                                </div>
-                            </div> 
 
                             <input type="hidden" name="page" value="{{$page ?? ''}}">
                             <input type="hidden" name="vfecha" value="{{$vfecha ?? ''}}">

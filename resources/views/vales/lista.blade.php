@@ -28,8 +28,11 @@
                             </div>
 
                         </form>
-                        @if ( session('mensaje') )
-                            <div class="alert alert-success">{{ session('mensaje') }}</div>
+                        @if(session('mensaje'))
+                            <div class="alert alert-success">{{session('mensaje')}}</div>
+                        @endif
+                        @if(session('mensajeerror'))
+                            <div class="alert alert-danger">{{session('mensajeerror')}}</div>
                         @endif 
                         <div class="table-responsive">
                             <table class="table table-bordered">

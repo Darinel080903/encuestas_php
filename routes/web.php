@@ -87,3 +87,11 @@ Route::resource('/vales', 'App\Http\Controllers\ValegasController');
 Route::get('/vales/autos/{idauto}', 'App\Http\Controllers\AjaxController@cargafuncionario');
 
 Route::get('/vales/conceptos/{idfactura}', 'App\Http\Controllers\AjaxController@cargaconceptos');
+
+Route::get('/vales/montos/{idfactura}', 'App\Http\Controllers\AjaxController@cargamontos');
+
+Route::get('/vales/saldos/{idfactura}', 'App\Http\Controllers\AjaxController@cargasaldos');
+
+Route::get('/vales/unidades/{iddesglose}', 'App\Http\Controllers\AjaxController@cargaunidades');
+
+Route::get('/vales/unitarios/{iddesglose}', 'App\Http\Controllers\AjaxController@cargaunitarios');
