@@ -95,3 +95,5 @@ Route::get('/vales/saldos/{idfactura}', 'App\Http\Controllers\AjaxController@car
 Route::get('/vales/unidades/{iddesglose}', 'App\Http\Controllers\AjaxController@cargaunidades');
 
 Route::get('/vales/unitarios/{iddesglose}', 'App\Http\Controllers\AjaxController@cargaunitarios');
+
+Route::get('/imprimir/vale/{id}', 'App\Http\Controllers\PDFController@pdfvale');

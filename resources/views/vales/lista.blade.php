@@ -39,8 +39,7 @@
                                 <thead>
                                     <tr>
                                     <th class="text-center" width="10%" scope="col">Fecha</th>
-                                    <th class="text-center" scope="col">Número</th>
-                                    <th class="text-center" scope="col">Proveedor</th>
+                                    <th class="text-center" scope="col">Número económico</th>
                                     <th class="text-center" scope="col">Monto</th>
                                     <th class="text-center" width="36%" scope="col" colspan="3">
                                         @can('create', \App\Models\Vvale::class)
@@ -54,7 +53,6 @@
                                     <tr>
                                         <th class="align-middle text-center" scope="row">{{date('d/m/Y', strtotime($item->fecha))}}</th>
                                         <td class="align-middle">{{$item->numero}}</td>
-                                        <td class="align-middle">{{$item->proveedor}}</td>
                                         @if ($item->monto)
                                             <td class="align-middle">${!! number_format((float)($item->monto), 2) !!}</td>
                                         @else
@@ -66,11 +64,7 @@
                                             @endcan
                                         </td>
                                         <td class="text-center" width="12%">
-                                            <form id="frmimgpublicar{{$item->idvale}}" name="frmimgpublicar{{$item->idvale}}" method="POST" action="{{url('/vales/'.$item->idvale.'/update2')}}">
-                                                @method('PUT')
-                                                @csrf
-                                                <input type="checkbox" id="activo" name="activo" onchange="funpublicar('frmimgpublicar{{$item->idvale}}')"  data-toggle="toggle" data-on="Activo" data-off="Inactivo" data-onstyle="success" data-offstyle="danger" @if($item->activo == 1) {{'checked'}} @endif @if(!Auth::user()->hasRole('administrador')) disabled @endif>
-                                            </form>
+                                            <a class="btn btn-outline-danger" href="{{url('/imprimir/vale/'.$item->idvale)}}" target="_blank"><i class="fas fa-print"></i>&nbsp;Imprimir</a>
                                         </td>
                                         <td class="text-center" width="12%">
                                             @can('delete', $item)

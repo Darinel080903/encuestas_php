@@ -221,8 +221,10 @@
 
         var data = $("#vdetalle").val();
         $.each(JSON.parse(data), function(i, item){
-            Detalle.push({factura:item.fkfactura, facturafolio:item.folio, concepto:item.fkdesglose, conceptotexto:item.concepto, folioini:item.folioini, foliofin:item.foliofin, numero:item.numero, unitario:parseFloat(item.unitario).toFixed(2), monto:parseFloat(item.monto).toFixed(2)});
+            Detalle.push({factura:item.fkfactura, facturafolio:item.folio, concepto:item.fkdesglose, conceptotexto:item.concepto, folioini:item.folioini, foliofin:item.foliofin, numero:item.numero, unitario:parseFloat(item.unitario).toFixed(2), monto:parseFloat(item.monto).toFixed(2), tipo:"S"});
         });
+        $("#vdetalle").val("");
+        $("#vdetalle").val(JSON.stringify(Detalle));
         MostrarDesgloseTabla();
 
         $('#fecha').datepicker({
@@ -424,7 +426,7 @@
             var total = 0;
             $.each(Detalle, function(key, value)
             {
-                if(Concepto == Detalle[key].concepto)
+                if(Concepto == Detalle[key].concepto && Detalle[key].tipo == "N")
                 {
                     total = parseInt(total) + parseInt(Detalle[key].numero);
                 }
@@ -614,7 +616,7 @@
             
             if(valida == true)
             {
-                Detalle.push({factura:vfactura, facturafolio:vfacturafolio, concepto:vconcepto, conceptotexto:vconceptotexto, folioini:vfolioini, foliofin:vfoliofin, numero:vfolionumero, unitario:parseFloat(vfoliounitario).toFixed(2), monto:parseFloat(vfoliomonto).toFixed(2)});    
+                Detalle.push({factura:vfactura, facturafolio:vfacturafolio, concepto:vconcepto, conceptotexto:vconceptotexto, folioini:vfolioini, foliofin:vfoliofin, numero:vfolionumero, unitario:parseFloat(vfoliounitario).toFixed(2), monto:parseFloat(vfoliomonto).toFixed(2), tipo:"N"});    
                 $("#vdetalle").val("");
                 $("#vdetalle").val(JSON.stringify(Detalle));
                 MostrarDesgloseTabla();

@@ -17,7 +17,7 @@
                             <div class="form-row">
                                 <div class="form-group col-md-6">
                                     <label for="adscripcion">Área de adscripción:</label>
-                                    <select class="form-control @error('adscripcion') is-invalid @enderror" id="adscripcion" name="adscripcion" required>
+                                    <select class="form-control @error('adscripcion') is-invalid @enderror form-control-chosen" data-placeholder="Please" id="adscripcion" name="adscripcion" required>
                                         <option value="">Adscripcion</option>
                                         @foreach ($areas as $item)
                                             @if (old('adscripcion') == $item->idarea)
@@ -132,6 +132,7 @@
         </div>
     </div>
     <script>
+        
         $(function(){
             $("#imagen").change(function(){
                     var input = this;
@@ -154,6 +155,11 @@
 
         $(document).ready(function(){
             bsCustomFileInput.init();
+            // $(".form-control-chosen").chosen({
+            //     allow_single_deselect: false,
+            //     width: '100%'
+            // });
+            // $('#adscripcion').addClass('is-invalid');
         });
 
         // Example starter JavaScript for disabling form submissions if there are invalid fields

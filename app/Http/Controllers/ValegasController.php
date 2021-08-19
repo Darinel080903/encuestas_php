@@ -296,8 +296,25 @@ class ValegasController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        //
+        $modelo = Vvale::findOrFail($id);
+        $this->authorize('delete', $modelo);
+
+        $eliminafolios = Folio::where('fkvale', $id);
+        $eliminafolios->delete();
+
+        $elimina = Vale::findOrFail($id);    
+        $elimina->delete();
+
+        $bitacora = new Bitacora();
+        $bitacora->fkusuario = auth()->user()->id;
+        $bitacora->operacion = 'Vale eliminado con id:'.$id;
+        $bitacora->fecha = date('Y-m-d H:i:s');
+        $bitacora->ip = $request->ip();
+        $bitacora->pc = gethostname();
+        $bitacora->save();
+        
+        return back()->withInput()->with('mensaje', '¡Vale eliminado correctamente!');
     }
 }

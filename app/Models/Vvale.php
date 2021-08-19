@@ -35,7 +35,7 @@ class Vvale extends Model
     {
         if($busqueda)
         {
-            return $query->where('numero', 'like', "%$busqueda%")->orwhere('proveedor', 'like', "%$busqueda%")->orwhere('monto', 'like', "%$busqueda%");
+            return $query->where('numero', 'like', "%$busqueda%")->orwhere('monto', 'like', "%$busqueda%")->orwhere('observacion', 'like', "%$busqueda%");
         }
     }
 }

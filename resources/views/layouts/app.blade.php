@@ -53,6 +53,10 @@
     <!-- Custom Tag Input By CIRG -->
     <link rel="stylesheet" href="{{asset('tag-input/tagsinput.css')}}">
     <script src="{{asset('tag-input/tagsinput.js')}}"></script>
+
+    <!-- Custom Chosen By CIRG -->
+    <link rel="stylesheet" href="{{asset('chosen/component-chosen.min.css')}}">
+    <script src="{{asset('chosen/chosen.js')}}"></script>
     
     <!-- Maps By CIRG -->
     <script src="{{asset('maps/maps.add.js')}}"></script>
