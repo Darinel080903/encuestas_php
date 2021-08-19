@@ -9,8 +9,8 @@
         <link rel="icon" href="{{asset('storage/ico/favicon.ico')}}">
         
         <!-- Bootstrap CSS -->
-        <script src="{{asset('js/app.js')}}"></script>
-        <link href="{{asset('bootstrap/css/bootstrap.css')}}" rel="stylesheet">
+        <script src="{{public_path('/js/app.js')}}"></script>
+        <link href="{{public_path('/bootstrap/css/bootstrap.css')}}" rel="stylesheet">
         
         <style>
             .sub_div{
@@ -55,8 +55,8 @@
     </head>
     <body>
         <header>
-            <img class="float-left" src="{{url('/storage/escudo/secretaria-general-de-gobierno.png')}}" alt="SGG">
-            <img class="float-right mt-4" src="{{url('/storage/escudo/chiapas-corazon-claro.png')}}" alt="Chiapas de Corazón">
+            <img class="float-left" src="{{ public_path('/storage/escudo/secretaria-general-de-gobierno.png') }}" alt="SGG">
+            <img class="float-right mt-4" src="{{ public_path('/storage/escudo/chiapas-corazon-claro.png') }}" alt="Chiapas de Corazón">
         </header>
 
         <footer>
