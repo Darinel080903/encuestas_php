@@ -8,13 +8,10 @@
                     <div class="card-header justify-content-between align-items-centr text-center encabezadoform">
                         <h3 class="headerlistatitulo"><i class="fas fa-pen"></i> Editar usuario</h3>
                     </div>
-
                     <div class="card-body">     
-                
                         <form class="needs-validation" method="POST" enctype="multipart/form-data" action="{{ url('/usuarios/'.$usuarios->id) }}" novalidate>
-                            @method('PUT')
-                            @csrf
-
+                        @method('PUT')
+                        @csrf
                             <div class="form-row">
                                 <div class="form-group col-md-12">
                                     <label for="nombre">Nombre:</label>
@@ -24,7 +21,6 @@
                                     </div>
                                 </div>
                             </div>
-
                             <div class="form-row">
                                 <div class="form-group col-md-12">
                                     <label for="correo">Correo electrónico:</label>
@@ -34,7 +30,6 @@
                                     </div>
                                 </div>
                             </div>
-
                             <div class="form-row">
                                 <div class="form-group col-md-12">
                                     <label for="contraseña">Contraseña:</label>
@@ -46,14 +41,12 @@
                                     @enderror
                                 </div>
                             </div>
-
                             <div class="form-row">
                                 <div class="form-group col-md-12">
                                     <label for="contraseña_confirmation">Confirma contraseña:</label>
                                     <input type="password" class="form-control" id="contraseña_confirmation" name="contraseña_confirmation" maxlength="250">
                                 </div>
                             </div>
-
                             <div class="form-row">
                                 <div class="form-group col-md-12">
                                     <label for="role">Roles:</label>
@@ -73,14 +66,12 @@
                                     </select>
                                 </div>
                             </div>
-
                             <div class="form-row" id="permissions_box">
                                 <div class="form-group col-md-12">
                                     <label for="role">Permisos:</label>
                                     <div id="permissions_checkbox_lista"></div>
                                 </div>
                             </div>
-
                             @if ($usuarios->permissions->isNotEmpty())
                                 @if ($rolepermisos != null)
                                     <div class="form-row"  id="user_permissions_box">
@@ -96,10 +87,8 @@
                                     </div>
                                 @endif
                             @endif
-
                             <input type="hidden" name="page" value="{{$page ?? ''}}">
                             <input type="hidden" name="vbusqueda" value="{{$vbusqueda ?? ''}}">
-
                             <button type="submit" class="btn btn-outline-danger"><i class="fas fa-save"></i> Guardar</button>
                             <a class="btn btn-outline-danger" href="{{ url('/usuarios?page='.$page.'&vbusqueda='.$vbusqueda) }}"><i class="fas fa-sign-out-alt fa-rotate-180"></i> Regresar</a>
                         </form>
@@ -113,8 +102,6 @@
             var permissions_box = $("#permissions_box");
             var permissions_checkbox_lista = $("#permissions_checkbox_lista");
             var user_permissions_box = $("#user_permissions_box");
-
-
             permissions_box.hide();
 
             $("#role").on("change", function(){
@@ -124,7 +111,6 @@
 
                 permissions_checkbox_lista.empty();
                 user_permissions_box.empty();
-                //console.log(role_id);
                 
                 $.ajax({
                     url: "/usuarios/create",

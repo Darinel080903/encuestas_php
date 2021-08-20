@@ -4,29 +4,24 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-12">
-                <div class="card">
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                        <h4><i class="fas fa-file-invoice-dollar"></i> Listado de vales</h4>
+                <div class="card cardborde">
+                    <div class="card-header justify-content-between align-items-centr text-center encabezadoform">
+                        <img id="headerlistalogo" src="{{asset('storage/escudo/secretaria-general-de-gobierno.png')}}" alt="Organismo">
+                        <h3 class="headerlistatitulo">Listado de vales</h3>
                     </div>
-
                     <div class="card-body">
                         <form class="form-inline" id="frmbusqueda" action="{{url('/vales')}}" method="GET">
-                            @csrf
-
+                        @csrf
                             <div class="input-group mr-2 mb-2">
                                 <input type="text" class="form-control" id="vfecha" name="vfecha" placeholder="Fecha" aria-label="Fecha" value="{{ $vfecha }}" readonly>
                             </div>
-
                             <div class="input-group mr-2 mb-2">
-                                
                                 <input type="text" class="form-control" id="vbusqueda" name="vbusqueda" placeholder="Búsqueda" aria-label="Búsqueda" aria-describedby="button-addon2" value="{{$vbusqueda}}">
                                 <div class="input-group-append">
                                     <button type="submit" class="btn btn-outline-danger" id="button-addon2"><i class="fas fa-search"></i> Buscar</button>
                                     <a class="btn btn-outline-danger" href="{{url('/vales')}}"><i class="fas fa-broom"></i> Limpiar</a>
                                 </div>
-                                
                             </div>
-
                         </form>
                         @if(session('mensaje'))
                             <div class="alert alert-success">{{session('mensaje')}}</div>

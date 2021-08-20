@@ -4,15 +4,13 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-12">
-                <div class="card">
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                        <h4><i class="fas fa-file-invoice-dollar"></i> Nueva factura</h4>
+                <div class="card cardborde">
+                    <div class="card-header justify-content-between align-items-centr text-center encabezadoform">
+                        <h3 class="headerlistatitulo"><i class="fas fa-save"></i> Nueva factura</h3>
                     </div>
                     <div class="card-body">
-                       
                         <form class="needs-validation" method="POST" action="{{url('/facturas')}}" novalidate>
-                            @csrf
-
+                        @csrf
                             <div class="form-row">
                                 <div class="form-group col-md-2">
                                     <label for="fecha">Fecha:</label>
@@ -21,7 +19,6 @@
                                 <div class="invalid-feedback">
                                     ¡La <strong>fecha</strong> es un campo requerido!
                                 </div>
-
                                 <div class="form-group col-md-2">
                                     <label for="numero">No. factura:</label>
                                     <input type="text" class="form-control @error('numero') is-invalid @enderror" id="numero" name="numero" placeholder="Número de factura" maxlength="50" value="{{old('numero')}}" required/>
@@ -29,7 +26,6 @@
                                         ¡El <strong>número</strong> es un campo requerido!
                                     </div>  
                                 </div>
-
                                 <div class="form-group col-md-6">
                                     <label for="proveedor">Proveedor:</label>
                                     <input type="text" class="form-control @error('proveedor') is-invalid @enderror" id="proveedor" name="proveedor" placeholder="Proveedor" maxlength="250" value="{{old('proveedor')}}" required/>
@@ -37,13 +33,11 @@
                                         ¡El <strong>proveedor</strong> es un campo requerido!
                                     </div>  
                                 </div>
-
                                 <div class="form-group col-md-2">
                                     <label for="monto">Fecha:</label>
                                     <input type="text" class="form-control" id="pago" name="pago" aria-label="Fecha de pago" placeholder="Fecha de pago" readonly/>
                                 </div>
                             </div>
-
                             <div class="card mb-2">
                                 <div class="card-header">
                                     Desglose de la factura
@@ -54,12 +48,10 @@
                                             <label for="desglosenumero">Unidades:</label>
                                             <input type="text" class="form-control" id="desglosenumero" name="desglosenumero" placeholder="Unidades" maxlength="11"/>
                                         </div>
-        
                                         <div class="form-group col-md-5 mb-0">
                                             <label for="desgloseconcepto">Concepto:</label>
                                             <input type="text" class="form-control" id="desgloseconcepto" name="desgloseconcepto" placeholder="Concepto" maxlength="250"/>
                                         </div>
-        
                                         <div class="form-group col-md-2 mb-0">
                                             <label for="desgloseunitario">Precio:</label>
                                             <div class="input-group">
@@ -69,7 +61,6 @@
                                                 <input type="text" class="form-control" id="desgloseunitario" name="desgloseunitario" placeholder="Unitario" maxlength="11"/>
                                             </div>
                                         </div>
-        
                                         <div class="form-group col-md-2 mb-0">
                                             <label for="desglosemonto">Total:</label>
                                             <div class="input-group">
@@ -79,7 +70,6 @@
                                                 <input type="text" class="form-control" id="desglosemonto" name="desglosemonto" placeholder="Total" maxlength="11"/>
                                             </div>
                                         </div>
-        
                                         <div class="form-group col-md-1 mb-0">
                                             <label for="boton">&nbsp; Agregar</label>
                                             <a class="btn btn-outline-danger btn-block" href="javascript:DesgloseGuardar();"><i class="fas fa-plus"></i></a>
@@ -87,26 +77,26 @@
                                     </div>
                                 </div>
                                 <div class="card-footer">
-                                    <table class="table table-bordered" id="DesgloseTabla">
-                                        <thead>
-                                            <tr>
-                                                <th class="col-2">Unidades</th>
-                                                <th class="col-5">Concepto</th>
-                                                <th class="col-2">Precio</th>
-                                                <th class="col-2">Total</th>
-                                                <th class="col-1">Eliminar</th>
-                                            </tr>
-                                        </thead>
-                                    </table>
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered" id="DesgloseTabla">
+                                            <thead>
+                                                <tr>
+                                                    <th class="col-2">Unidades</th>
+                                                    <th class="col-5">Concepto</th>
+                                                    <th class="col-2">Precio</th>
+                                                    <th class="col-2">Total</th>
+                                                    <th class="col-1">Eliminar</th>
+                                                </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
-                        
                             <div class="form-row">
                                 <div class="form-group col-md-2">
                                     <label for="activo">Activo:</label><br>
                                     <input type="checkbox" class="form-control" id="activo" name="activo" data-toggle="toggle" data-on="Activo" data-off="Inactivo" data-onstyle="success" data-offstyle="danger" checked>
                                 </div>
-
                                 <div class="form-group offset-md-7 col-md-2 pl-0 mr-2">
                                     <label for="monto">Monto:</label>
                                     <div class="input-group">
@@ -116,25 +106,13 @@
                                         <input type="text" class="form-control" id="monto" name="monto" placeholder="Monto" maxlength="15" value="{{old('monto')}}" readonly/>
                                     </div>
                                 </div>
-
-                                {{-- <div class="form-group col-md-2">
-                                    <label for="saldo">Saldo:</label>
-                                    <input type="text" class="form-control" id="saldo" name="saldo" placeholder="Saldo" maxlength="15" value="{{old('saldo')}}" readonly/>
-                                </div> --}}
                             </div>
-
-                            <div class="form-row">
-                                    
-                            </div>
-
                             <input type="hidden" name="page" value="{{$page ?? ''}}">
                             <input type="hidden" name="vfecha" value="{{$vfecha ?? ''}}">
                             <input type="hidden" name="vbusqueda" value="{{$vbusqueda ?? ''}}">
                             <input type="hidden" id="vdetalle" name="vdetalle">
-
                             <button type="submit" class="btn btn-outline-danger"><i class="fas fa-save"></i> Guardar</button>
                             <a class="btn btn-outline-danger" href="{{url('/facturas?page='.$page.'&vfecha='.$vfecha.'&vbusqueda='.$vbusqueda)}}"><i class="fas fa-sign-out-alt fa-rotate-180"></i> Regresar</a>
-
                         </form>
                     </div>
                 </div>

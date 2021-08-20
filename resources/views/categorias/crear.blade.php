@@ -6,23 +6,24 @@
             <div class="col-md-12">
                 <div class="card cardborde">
                     <div class="card-header justify-content-between align-items-centr text-center encabezadoform">
-                        <h3 class="headerlistatitulo"><i class="fas fa-pen"></i> Editar sistema operativo</h3>
+                        <h3 class="headerlistatitulo"><i class="fas fa-save"></i> Nueva categoría</h3>
                     </div>
-                    <div class="card-body">     
-                        <form class="needs-validation" method="POST" action="{{url('/operativos/'.$operativos->idoperativo)}}" novalidate>
-                        @method('PUT')
+                    <div class="card-body">
+                        <form class="needs-validation" method="POST" action="{{url('/categorias')}}" novalidate>
                         @csrf
-                            <div class="form-group">
-                                <label for="operativo">Sistema operativo:</label>
-                                <input type="text" class="form-control  @error('operativo') is-invalid @enderror" id="operativo" name="operativo" placeholder="Sistema operativo" max="250" value="{{$operativos->operativo}}" required/>
-                                <div class="invalid-feedback">
-                                    ¡El <strong>sistema operativo</strong> es un campo requerido!
+                            <div class="form-row">
+                                <div class="form-group col-md-12">
+                                    <label for="descripcion">Categoría:</label>
+                                    <input class="form-control form-rounded @error('descripcion') is-invalid @enderror" id="descripcion" name="descripcion" placeholder="Categoría" value="{{old('descripcion')}}" required/>
+                                    <div class="invalid-feedback">
+                                        ¡La <strong>categoría</strong> es un campo requerido!
+                                    </div>
                                 </div>
                             </div>
-                            <input type="hidden" name="page" value="{{ $page ?? '' }}">
-                            <input type="hidden" name="vbusqueda" value="{{ $vbusqueda ?? '' }}">
+                            <input type="hidden" name="page" value="{{$page ?? ''}}">
+                            <input type="hidden" name="vbusqueda" value="{{$vbusqueda ?? ''}}">
                             <button type="submit" class="btn btn-outline-danger"><i class="fas fa-save"></i> Guardar</button>
-                            <a class="btn btn-outline-danger" href="{{ url('/operativos?page='.$page.'&vbusqueda='.$vbusqueda) }}"><i class="fas fa-sign-out-alt fa-rotate-180"></i> Regresar</a>
+                            <a class="btn btn-outline-danger" href="{{url('/categorias?page='.$page.'&vbusqueda='.$vbusqueda)}}"><i class="fas fa-sign-out-alt fa-rotate-180"></i> Regresar</a>
                         </form>
                     </div>
                 </div>

@@ -8,13 +8,10 @@
                     <div class="card-header justify-content-between align-items-centr text-center encabezadoform">
                         <h3 class="headerlistatitulo"><i class="fas fa-images"></i> Galeria de imagenes</h3>
                     </div>
-
                     <div class="card-body">
-                        
                         @if ( session('mensaje') )
                             <div class="alert alert-success">{{ session('mensaje') }}</div>
                         @endif
-
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="card">
@@ -35,13 +32,11 @@
                                                     </div>
                                                 </div>
                                             </div>
-
                                             <div class="form-row">
                                                 <div class="form-group col-md-12">
                                                     <input type="checkbox" class="form-control" id="activo" name="activo" data-toggle="toggle" data-on="<i class='fas fa-check'></i>" data-off="<i class='fas fa-times'></i>" data-onstyle="success" data-offstyle="danger" checked>
                                                 </div>
                                             </div>
-                
                                             <div class="form-row">
                                                 <div class="form-group col-md-12">
                                                     <input type="hidden" id="fkauto" name="fkauto" value="{{ $id }}">
@@ -53,45 +48,43 @@
                                     </div>
                                 </div>
                             </div>
-
                             <div class="col-md-8">
-                                <table class="table table-bordered">
-                                    <thead>
-                                        <tr>
-                                        <th class="text-center" width="76%" scope="col">Imagen</th>
-                                        {{-- <th class="text-center" scope="col">Orden</th> --}}
-                                        <th class="text-center" scope="col" width="6%">Publicar</th>
-                                        <th class="text-center" scope="col" width="18%">Borrar</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($imgs as $item)
-                                            @if (isset($item->imagen))
-                                                <tr>
-                                                    <td><img class="img-thumbnail" src="{{ asset('storage/auto/'.$item->imagen) }}" alt="{{ $item->imagen }}"></td>
-                                                    {{-- <td class="text-center">{{ $item->orden }}</td> --}}
-                                                    <td class="text-center">
-                                                        <form id="frmimgpublicar{{$item->idimg}}" name="frmimgpublicar{{$item->idimg}}" method="POST" action="{{url('/autosimgs/'.$item->idimg)}}">
-                                                            @method('PUT')
-                                                            @csrf
-                                                            <input type="checkbox" id="activo" name="activo" onchange="funpublicar('frmimgpublicar{{$item->idimg}}')"  data-toggle="toggle" data-on="<i class='fas fa-check'></i>" data-off="<i class='fas fa-times'></i>" data-onstyle="success" data-offstyle="danger" @if($item->activo == 1) {{'checked'}} @endif>
-                                                        </form>
-                                                    </td>
-                                                    <td class="text-center">
-                                                        <form method="POST" action="{{url('/autosimgs/'.$item->idimg)}}">
-                                                            @method('DELETE')
-                                                            @csrf
-                                                            <button class="btn btn-outline-danger" data-toggle="tooltip" data-placement="left" title="Eliminar" type="submit"><i class="fas fa-trash"></i> Eliminar</button>
-                                                        </form>
-                                                    </td>
-                                                </tr>
-                                            @endif
-                                        @endforeach
-                                    </tbody>
-                                </table>
+                                <div class="table-responsive">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                            <th class="text-center" width="76%" scope="col">Imagen</th>
+                                            <th class="text-center" scope="col" width="6%">Publicar</th>
+                                            <th class="text-center" scope="col" width="18%">Borrar</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($imgs as $item)
+                                                @if (isset($item->imagen))
+                                                    <tr>
+                                                        <td><img class="img-thumbnail" src="{{ asset('storage/auto/'.$item->imagen) }}" alt="{{ $item->imagen }}"></td>
+                                                        <td class="text-center">
+                                                            <form id="frmimgpublicar{{$item->idimg}}" name="frmimgpublicar{{$item->idimg}}" method="POST" action="{{url('/autosimgs/'.$item->idimg)}}">
+                                                                @method('PUT')
+                                                                @csrf
+                                                                <input type="checkbox" id="activo" name="activo" onchange="funpublicar('frmimgpublicar{{$item->idimg}}')"  data-toggle="toggle" data-on="<i class='fas fa-check'></i>" data-off="<i class='fas fa-times'></i>" data-onstyle="success" data-offstyle="danger" @if($item->activo == 1) {{'checked'}} @endif>
+                                                            </form>
+                                                        </td>
+                                                        <td class="text-center">
+                                                            <form method="POST" action="{{url('/autosimgs/'.$item->idimg)}}">
+                                                                @method('DELETE')
+                                                                @csrf
+                                                                <button class="btn btn-outline-danger" data-toggle="tooltip" data-placement="left" title="Eliminar" type="submit"><i class="fas fa-trash"></i> Eliminar</button>
+                                                            </form>
+                                                        </td>
+                                                    </tr>
+                                                @endif
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
-                
                     </div>
                 </div>
             </div>

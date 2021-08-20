@@ -8,14 +8,10 @@
                     <div class="card-header justify-content-between align-items-centr text-center encabezadoform">
                         <h3 class="headerlistatitulo"><i class="fas fa-save"></i> Nueva cédula</h3>
                     </div>
-                
                     <div class="card-body">
-                        
                         <form class="needs-validation" method="POST" enctype="multipart/form-data" action="{{ url('/cedulas') }}" novalidate>
-                            @csrf
-
+                        @csrf
                             <div class="form-row">
-
                                 <div class="form-group col-md-4">
                                     <label for="fecha">Fecha:</label>
                                     <input type="text" class="form-control @error('fecha') is-invalid @enderror" id="fecha" name="fecha" aria-label="Fecha" placeholder="Fecha" value="{{ date("d/m/Y") }}" readonly/>
@@ -23,7 +19,6 @@
                                         ¡La <strong>fecha</strong> es un campo requerido!
                                     </div>
                                 </div>
-
                                 <div class="form-group col-md-8">
                                     <label for="cedula">Cédula:</label>
                                     <input type="text" class="form-control  @error('cedula') is-invalid @enderror" id="cedula" name="cedula" value="{{old('cedula')}}" maxlength="250" required>
@@ -31,13 +26,10 @@
                                         ¡La <strong>cédula</strong> es un campo requerido!
                                     </div>
                                 </div> 
-
                             </div>
-                            
                             <input type="hidden" name="page" value="{{$page ?? ''}}">
                             <input type="hidden" name="vfecha" value="{{$vfecha ?? ''}}">
                             <input type="hidden" name="vbusqueda" value="{{$vbusqueda ?? ''}}">
-
                             <button type="submit" class="btn btn-outline-danger"><i class="fas fa-save"></i> Guardar</button>
                             <a class="btn btn-outline-danger" href="{{ url('/cedulas?page='.$page.'&vfecha='.$vfecha.'&vbusqueda='.$vbusqueda) }}"><i class="fas fa-sign-out-alt fa-rotate-180"></i> Regresar</a>
                         </form>

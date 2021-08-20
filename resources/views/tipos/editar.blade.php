@@ -8,15 +8,11 @@
                     <div class="card-header justify-content-between align-items-centr text-center encabezadoform">
                         <h3 class="headerlistatitulo"><i class="fas fa-pen"></i> Editar tipo</h3>
                     </div>
-                
                     <div class="card-body">     
-                
                         <form class="needs-validation" method="POST" action="{{url('/tipos/'.$tipos->idtipo)}}" novalidate>
-                            @method('PUT')
-                            @csrf
-
+                        @method('PUT')
+                        @csrf
                             <div class="form-row">
-
                                 <div class="form-group col-md-6">
                                     <label for="fabrica">Fabrica:</label>
                                     <select class="form-control @error('fabrica') is-invalid @enderror" id="fabrica" name="fabrica" required>
@@ -33,7 +29,6 @@
                                         ¡La <strong>fabrica</strong> es un campo requerido!
                                     </div>
                                 </div>
-
                                 <div class="form-group col-md-6">
                                     <label for="tipo">Tipo:</label>
                                     <input class="form-control form-rounded @error('tipo') is-invalid @enderror" id="tipo" name="tipo" placeholder="Tipo" value="{{$tipos->tipo}}" required/>
@@ -41,12 +36,9 @@
                                         ¡El <strong>tipo</strong> es un campo requerido!
                                     </div>
                                 </div>
-                            
                             </div>
-
                             <input type="hidden" name="page" value="{{$page ?? ''}}">
                             <input type="hidden" name="vbusqueda" value="{{$vbusqueda ?? ''}}">
-
                             <button type="submit" class="btn btn-outline-danger"><i class="fas fa-save"></i> Guardar</button>
                             <a class="btn btn-outline-danger" href="{{url('/tipos?page='.$page.'&vbusqueda='.$vbusqueda)}}"><i class="fas fa-sign-out-alt fa-rotate-180"></i> Regresar</a>
                         </form>

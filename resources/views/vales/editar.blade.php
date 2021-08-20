@@ -4,16 +4,14 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-12">
-                <div class="card">
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                        <h4><i class="fas fa-file-invoice-dollar"></i> Editar vale</h4>
+                <div class="card cardborde">
+                    <div class="card-header justify-content-between align-items-centr text-center encabezadoform">
+                        <h3 class="headerlistatitulo"><i class="fas fa-pen"></i> Editar vale</h3>
                     </div>
                     <div class="card-body">     
-                        
                         <form class="needs-validation" method="POST" action="{{url('/vales/'.$datos->idvale)}}" novalidate>
                         @method('PUT')
                         @csrf
-
                             <div class="form-row">
                                 <div class="form-group col-md-2">
                                     <label for="fecha">Fecha:</label>
@@ -22,7 +20,6 @@
                                 <div class="invalid-feedback">
                                     ¡La <strong>fecha</strong> es un campo requerido!
                                 </div>
-
                                 <div class="form-group col-md-3">
                                     <label for="auto">Autos / Activos / Resguardo:</label>
                                     <select class="form-control" id="auto" name="auto" required>
@@ -39,7 +36,6 @@
                                         ¡El <strong>auto</strong> es un campo requerido!
                                     </div>
                                 </div>
-
                                 <div class="form-group col-md-3">
                                     <label for="funcionario">Funcionarios:</label>
                                     <select class="form-control" id="funcionario" name="funcionario" required>
@@ -56,18 +52,15 @@
                                         ¡El <strong>funcionario</strong> es un campo requerido!
                                     </div>
                                 </div>
-
                                 <div class="form-group col-md-2 mb-0">
                                     <label for="kmini">Km inicial:</label>
                                     <input type="text" class="form-control" id="kmini" name="kmini" placeholder="Km inicial" maxlength="11" value="{{$datos->kmini}}"/>
                                 </div>
-
                                 <div class="form-group col-md-2 mb-0">
                                     <label for="kmfin">Km final:</label>
                                     <input type="text" class="form-control" id="kmfin" name="kmfin" placeholder="Km final" maxlength="11" value="{{$datos->kmfin}}"/>
                                 </div>
                             </div>
-
                             <div class="card mb-2">
                                 <div class="card-header">
                                     Desglose de los folios
@@ -106,35 +99,29 @@
                                             </div>
                                         </div>
                                     </div>
-
                                     <div class="form-row">
                                         <div class="form-group col-md-1 mb-0">
                                             <label for="disponible">Disponible:</label>
                                             <input type="text" class="form-control" id="disponible" name="disponible" placeholder="No." maxlength="11" readonly/>
                                         </div>
-
                                         <div class="form-group col-md-3">
                                             <label for="factura">Conceptos:</label>
                                             <select class="form-control" id="concepto" name="concepto">
                                                 <option value="">Concepto</option>
                                             </select>
                                         </div>
-
                                         <div class="form-group col-md-1 mb-0">
                                             <label for="folioini">Folio inicial:</label>
                                             <input type="text" class="form-control" id="folioini" name="folioini" placeholder="Inicio" maxlength="11"/>
                                         </div>
-
                                         <div class="form-group col-md-1 mb-0">
                                             <label for="foliofin">Folio final:</label>
                                             <input type="text" class="form-control" id="foliofin" name="foliofin" placeholder="Final" maxlength="11"/>
                                         </div>
-
                                         <div class="form-group col-md-1 mb-0">
                                             <label for="desglosenumero">Unidades:</label>
                                             <input type="text" class="form-control" id="folionumero" name="folionumero" placeholder="No." maxlength="11"/>
                                         </div>
-
                                         <div class="form-group col-md-2 mb-0">
                                             <label for="desgloseunitario">Precio:</label>
                                             <div class="input-group">
@@ -144,7 +131,6 @@
                                                 <input type="text" class="form-control" id="foliounitario" name="foliounitario" placeholder="Unitario" maxlength="11" readonly/>
                                             </div>
                                         </div>
-        
                                         <div class="form-group col-md-2 mb-0">
                                             <label for="desglosemonto">Total:</label>
                                             <div class="input-group">
@@ -154,30 +140,29 @@
                                                 <input type="text" class="form-control" id="foliomonto" name="foliomonto" placeholder="Total" maxlength="11"/>
                                             </div>
                                         </div>
-        
                                         <div class="form-group col-md-1 mb-0">
                                             <label for="boton">&nbsp; Agregar</label>
                                             <a class="btn btn-outline-danger btn-block" href="javascript:FolioGuardar();"><i class="fas fa-plus"></i></a>
                                         </div>
                                     </div>
                                 </div>
-                                
                                 <div class="card-footer">
-                                    <table class="table table-bordered" id="DesgloseTabla">
-                                        <thead>
-                                            <tr>
-                                                <th class="col-2">Factura</th>
-                                                <th class="col-3">Concepto</th>
-                                                <th class="col-2">Unidades</th>
-                                                <th class="col-2">Precio</th>
-                                                <th class="col-2">Total</th>
-                                                <th class="col-1">Eliminar</th>
-                                            </tr>
-                                        </thead>
-                                    </table>
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered" id="DesgloseTabla">
+                                            <thead>
+                                                <tr>
+                                                    <th class="col-2">Factura</th>
+                                                    <th class="col-3">Concepto</th>
+                                                    <th class="col-2">Unidades</th>
+                                                    <th class="col-2">Precio</th>
+                                                    <th class="col-2">Total</th>
+                                                    <th class="col-1">Eliminar</th>
+                                                </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
-
                             <div class="form-row">
                                 <div class="form-group offset-md-9 col-md-2 pl-0 mr-2">
                                     <label for="monto">Monto:</label>
@@ -189,27 +174,22 @@
                                     </div>
                                 </div>
                             </div>
-
                             <div class="form-row">
                                 <div class="form-group col-md-4">
                                     <label for="recibe">Recibe:</label>    
                                     <input type="text" class="form-control" id="recibe" name="recibe" placeholder="Recibe" maxlength="250" value="{{$datos->recibe}}"/>
                                 </div>
-
                                 <div class="form-group col-md-8">
                                     <label for="observacion">Observaciones:</label>    
                                     <textarea class="form-control" name="observacion" id="observacion" cols="30" rows="2" placeholder="Observaciones">{{$datos->observacion}}</textarea>
                                 </div>
                             </div>
-
                             <input type="hidden" name="page" value="{{$page ?? ''}}">
                             <input type="hidden" name="vfecha" value="{{$vfecha ?? ''}}">
                             <input type="hidden" name="vbusqueda" value="{{$vbusqueda ?? ''}}">
                             <input type="hidden" id="vdetalle" name="vdetalle" value="{{$folios ?? ''}}">
-
                             <button type="submit" class="btn btn-outline-danger"><i class="fas fa-save"></i> Guardar</button>
                             <a class="btn btn-outline-danger" href="{{url('/vales?page='.$page.'&vfecha='.$vfecha.'&vbusqueda='.$vbusqueda)}}"><i class="fas fa-sign-out-alt fa-rotate-180"></i> Regresar</a>
-
                         </form>
                     </div>
                 </div>

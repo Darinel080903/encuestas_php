@@ -8,12 +8,9 @@
                     <div class="card-header justify-content-between align-items-centr text-center encabezadoform">
                         <h3 class="headerlistatitulo"><i class="fas fa-save"></i> Nuevo rol</h3>
                     </div>
-                    
                     <div class="card-body">
-                        
-                        <form class="needs-validation" method="POST" action="{{ url('/roles') }}" novalidate>
-                            @csrf
-
+                        <form class="needs-validation" method="POST" action="{{url('/roles')}}" novalidate>
+                        @csrf
                             <div class="form-row">
                                 <div class="form-group col-md-12">
                                     <label for="nombre">Nombre:</label>
@@ -23,7 +20,6 @@
                                     </div>
                                 </div>
                             </div>
-
                             <div class="form-row">
                                 <div class="form-group col-md-12">
                                     <label for="slug">Slug:</label>
@@ -33,7 +29,6 @@
                                     </div>
                                 </div>
                             </div>
-
                             <div class="form-row">
                                 <div class="form-group col-md-12">
                                     <label for="permiso">Permisos:</label>
@@ -43,31 +38,8 @@
                                     </div>
                                 </div>
                             </div>
-                            
-                            <div class="form-row">
-
-                                {{-- <div class="form-group col-md-6">
-                                    <label for="partido">Partidos:</label>
-                                    <select class="form-control @error('partido') is-invalid @enderror" id="partido" name="partido" required>
-                                        <option value="">Partido</option>
-                                        @foreach ($partidos as $item)
-                                            @if (old('partido') == $item->idpartido)
-                                                <option value="{{$item->idpartido}}" selected>{{$item->sigla}}</option>
-                                            @else
-                                                <option value="{{$item->idpartido}}">{{$item->sigla}}</option>
-                                            @endif
-                                        @endforeach  
-                                    </select>
-                                    <div class="invalid-feedback">
-                                        ¡El <strong>partido</strong> es un campo requerido!
-                                    </div>
-                                </div> --}}
-                                
-                            </div>
-
                             <input type="hidden" name="page" value="{{$page ?? ''}}">
                             <input type="hidden" name="vbusqueda" value="{{$vbusqueda ?? ''}}">
-
                             <button type="submit" class="btn btn-outline-danger"><i class="fas fa-save"></i> Guardar</button>
                             <a class="btn btn-outline-danger" href="{{ url('/roles?page='.$page.'&vbusqueda='.$vbusqueda) }}"><i class="fas fa-sign-out-alt fa-rotate-180"></i> Regresar</a>
                         </form>

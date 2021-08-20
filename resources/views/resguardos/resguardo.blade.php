@@ -9,12 +9,9 @@
                     <div class="card-header justify-content-between align-items-centr text-center encabezadoform">
                         <h3 class="headerlistatitulo"><i class="fas fa-list"></i> Resguardos</h3>
                     </div>                   
-                    
-                    <div class="card-body">
-                                                
+                    <div class="card-body">                  
                         <form class="needs-validation" method="POST" action="{{url('/resguardos')}}" novalidate>
                         @csrf
-
                             <div class="form-row">                                
                                 <div class="form-group col-md-4">
                                     <div> 
@@ -33,9 +30,7 @@
                                     </div>
                                 </div>                        
                             </div>
-                            
                             <br>
-
                             <div class="form-row">    
                                 <div class="form-group col-md-4">
                                     <div>                                        
@@ -54,16 +49,11 @@
                                     </div>
                                 </div>
                             </div>
-                            
-                            <br>
-                                                        
+                            <br>                     
                             <a class="btn btn-outline-danger" href="{{ url('/resguardo/funcionario/1') }}"><i class="fas fa-print"></i> Imprimir</a>                            
                             <a class="btn btn-outline-danger" href="{{ url('/bienes?page='.$page.'&vbusqueda='.$vbusqueda) }}"><i class="fas fa-sign-out-alt fa-rotate-180"></i> Regresar</a>
-                                
-                        </form>                    
-                                              
+                        </form>                                       
                     </div>
-                    
                 </div>
             </div>
         </div>

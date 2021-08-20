@@ -8,13 +8,10 @@
                     <div class="card-header justify-content-between align-items-centr text-center encabezadoform">
                         <h3 class="headerlistatitulo"><i class="fas fa-pen"></i> Editar área</h3>
                     </div>
-                    
                     <div class="card-body">     
-                
                         <form class="needs-validation" method="POST" action="{{ url('/areas/'.$area->idarea) }}" novalidate>
-                            @method('PUT')
-                            @csrf
-
+                        @method('PUT')
+                        @csrf
                             <div class="form-row">
                                 <div class="form-group col-md-12">
                                     <label for="fkarea">Areas:</label>
@@ -30,7 +27,6 @@
                                     </select>
                                 </div>
                             </div>
-
                             <div class="form-row">
                                 <div class="form-group col-md-12">
                                     <label for="area">Area:</label>
@@ -40,17 +36,14 @@
                                     </div>
                                 </div>
                             </div>
-
                             <div class="form-row">
                                 <div class="form-group col-md-12">
                                     <label for="activo">Activo:</label><br>
                                     <input type="checkbox" class="form-control" id="activo" name="activo" data-toggle="toggle" data-on="Activo" data-off="Inactivo" data-onstyle="success" data-offstyle="danger" @if($area->activo == 1) {{ 'checked' }} @endif>
                                 </div>
                             </div>  
-
                             <button type="submit" class="btn btn-outline-danger"><i class="fas fa-save"></i> Guardar</button>
                             <a class="btn btn-outline-danger" href="{{ url('/areas') }}"><i class="fas fa-sign-out-alt fa-rotate-180"></i> Regresar</a>
-
                         </form>
                     </div>
                 </div>

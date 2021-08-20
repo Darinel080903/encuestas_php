@@ -94,76 +94,63 @@
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                                     @can('viewAny', \App\Models\Articulo::class)
                                         <a class="dropdown-item" href="{{url('/articulos')}}">
-                                            <i class="fas fa-project-diagram icon-color"></i> Artículos
+                                            <i class="fas fa-desktop icon-color"></i> Artículos
                                         </a>
                                     @endcan
-                                    <a class="dropdown-item" href="{{url('/catalogos?vtabla=marcas&vdescripcion=marca')}}">
-                                        <i class="fas fa-project-diagram icon-color"></i> Marcas
-                                    </a>
+                                    @can('viewAny', \App\Models\Marca::class)
+                                        <a class="dropdown-item" href="{{url('/marcas')}}">
+                                            <i class="fas fa-tag icon-color"></i> Marcas
+                                        </a>
+                                    @endcan
                                     @can('viewAny', \App\Models\Operativo::class)
                                         <a class="dropdown-item" href="{{url('/operativos')}}">
-                                            <i class="fas fa-project-diagram icon-color"></i> Sistemas operativos
+                                            <i class="fab fa-microsoft icon-color"></i> Sistemas operativos
                                         </a>
                                     @endcan
                                     @can('viewAny', \App\Models\Area::class)
                                         <a class="dropdown-item" href="{{url('/areas')}}">
-                                            <i class="fas fa-project-diagram icon-color"></i> Áreas
+                                            <i class="fas fa-building icon-color"></i> Áreas
                                         </a>
                                     @endcan
-                                    <a class="dropdown-item" href="{{url('/catalogos?vtabla=categorias&vdescripcion=categoria')}}">
-                                        <i class="fas fa-project-diagram icon-color"></i> Categorías
-                                    </a>
-                                    <a class="dropdown-item" href="{{url('/catalogos?vtabla=puestos&vdescripcion=puesto')}}">
-                                        <i class="fas fa-project-diagram icon-color"></i> Puestos
-                                    </a>
+                                    @can('viewAny', \App\Models\Categoria::class)
+                                        <a class="dropdown-item" href="{{url('/categorias')}}">
+                                            <i class="fas fa-user-tag icon-color"></i> Categorías
+                                        </a>
+                                    @endcan
+                                    @can('viewAny', \App\Models\Puesto::class)
+                                        <a class="dropdown-item" href="{{url('/puestos')}}">
+                                            <i class="fas fa-user-shield icon-color"></i> Puestos
+                                        </a>
+                                    @endcan
                                     @can('viewAny', \App\Models\Funcionario::class)
                                         <a class="dropdown-item" href="{{url('/funcionarios')}}">
-                                            <i class="fas fa-project-diagram icon-color"></i> Funcionarios
+                                            <i class="fas fa-user-tie icon-color"></i> Funcionarios
                                         </a>
                                     @endcan
                                     @can('viewAny', \App\Models\Cedula::class)
                                         <a class="dropdown-item" href="{{url('/cedulas')}}">
-                                            <i class="fas fa-project-diagram icon-color"></i> Cédulas
+                                            <i class="fas fa-file-alt icon-color"></i> Cédulas
                                         </a>
                                     @endcan
                                     <div class="dropdown-divider"></div>
                                     @can('viewAny', \App\Models\Fabrica::class)
                                         <a class="dropdown-item" href="{{url('/fabricas')}}">
-                                            <i class="fas fa-project-diagram icon-color"></i> Fabricas
+                                            <i class="fas fa-industry icon-color"></i> Fabricas
                                         </a>
                                     @endcan
                                     @can('viewAny', \App\Models\Vtipo::class)
                                         <a class="dropdown-item" href="{{url('/tipos')}}">
-                                            <i class="fas fa-project-diagram icon-color"></i> Tipos
+                                            <i class="fas fa-car icon-color"></i> Tipos
                                         </a>
                                     @endcan
                                     @can('viewAny', \App\Models\Transmision::class)
                                         <a class="dropdown-item" href="{{url('/transmisiones')}}">
-                                            <i class="fas fa-project-diagram icon-color"></i> Transmisiones
+                                            <i class="fas fa-cogs icon-color"></i> Transmisiones
                                         </a>
                                     @endcan
                                     @can('viewAny', \App\Models\Combustible::class)
                                         <a class="dropdown-item" href="{{url('/combustibles')}}">
-                                            <i class="fas fa-project-diagram icon-color"></i> Combustibles
-                                        </a>
-                                    @endcan
-                                </div>
-                            </li>
-                
-                            @can('viewAny', \App\Models\Bien::class)
-                                <li class="nav-item">
-                                    <a class="nav-link text-white" href="{{url('/bienes')}}"><i class="fas fa-desktop icon-color"></i> Bienes</a>
-                                </li>
-                            @endcan
-
-                            <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle text-white" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    <i class="fas fa-car-side icon-color"></i> Autos<span class="caret"></span>
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                    @can('viewAny', \App\Models\Factura::class)
-                                        <a class="dropdown-item" href="{{url('/facturas')}}">
-                                            <i class="fas fa-file-invoice-dollar icon-color"></i> Facturas
+                                            <i class="fas fa-gas-pump icon-color"></i> Combustibles
                                         </a>
                                     @endcan
                                     @can('viewAny', \App\Models\Vauto::class)
@@ -171,35 +158,56 @@
                                             <i class="fas fa-car-side icon-color"></i> Autos
                                         </a>
                                     @endcan
+                                </div>
+                            </li>
+                
+                            @can('viewAny', \App\Models\Bien::class)
+                                <li class="nav-item dropdown">
+                                    <a id="navbarDropdown" class="nav-link dropdown-toggle text-white" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                        <i class="fas fa-desktop icon-color"></i> Bienes<span class="caret"></span>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                        
+                                        <a class="dropdown-item" href="{{url('/bienes')}}"><i class="fas fa-desktop icon-color"></i> Bienes</a>
+                                        
+                                        @can('viewAny', \App\Models\Vresguardo::class)
+                                            <a class="dropdown-item" href="{{url('/resguardos')}}">
+                                                <i class="fas fa-retweet icon-color"></i> Resguardos
+                                            </a>
+                                        @endcan
+                                    
+                                        <a class="dropdown-item" href="{{url('/funcionarios')}}">
+                                            <i class="fas fa-barcode icon-color"></i> Etiquetas
+                                        </a>
+
+                                        @can('viewAny', \App\Models\vsalida::class)
+                                            <a class="dropdown-item" href="{{url('/valesalidas')}}">
+                                                <i class="fas fa-file-alt icon-color"></i> Vale de Salida
+                                            </a>
+                                        @endcan
+                                        
+                                    </div>                                
+                                </li>
+                               
+                            @endcan
+
+                            
+
+                            <li class="nav-item dropdown">
+                                <a id="navbarDropdown" class="nav-link dropdown-toggle text-white" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                    <i class="fas fa-file-invoice-dollar icon-color"></i> Facturas<span class="caret"></span>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                    @can('viewAny', \App\Models\Factura::class)
+                                        <a class="dropdown-item" href="{{url('/facturas')}}">
+                                            <i class="fas fa-file-invoice-dollar icon-color"></i> Facturas
+                                        </a>
+                                    @endcan
                                     @can('viewAny', \App\Models\Vvale::class)
                                         <a class="dropdown-item" href="{{url('/vales')}}">
                                             <i class="fas fa-file-alt icon-color"></i> Vales
                                         </a>
                                     @endcan
-                                </div>                                
-                            </li>
-
-                            <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle text-white" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    <i class="fas fa-poll-h icon-color"></i> Reportes<span class="caret"></span>
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                    @can('viewAny', \App\Models\Vresguardo::class)
-                                        <a class="dropdown-item" href="{{url('/resguardos')}}">
-                                            <i class="fas fa-retweet icon-color"></i> Resguardos
-                                        </a>
-                                    @endcan
-                                   
-                                    <a class="dropdown-item" href="{{url('/funcionarios')}}">
-                                        <i class="fas fa-barcode icon-color"></i> Etiquetas
-                                    </a>
-
-                                    @can('viewAny', \App\Models\vsalida::class)
-                                        <a class="dropdown-item" href="{{url('/valesalidas')}}">
-                                            <i class="fas fa-file-alt icon-color"></i> Vale de Salida
-                                        </a>
-                                    @endcan
-                                    
                                 </div>                                
                             </li>
 

@@ -8,12 +8,9 @@
                     <div class="card-header justify-content-between align-items-centr text-center encabezadoform">
                         <h3 class="headerlistatitulo"><i class="fas fa-save"></i> Nuevo usuario</h3>
                     </div>
-                    
                     <div class="card-body">
-                        
                         <form class="needs-validation" method="POST" action="{{ url('/usuarios') }}" novalidate>
-                            @csrf
-
+                        @csrf
                             <div class="form-row">
                                 <div class="form-group col-md-12">
                                     <label for="nombre">Nombre:</label>
@@ -23,7 +20,6 @@
                                     </div>
                                 </div>
                             </div>
-
                             <div class="form-row">
                                 <div class="form-group col-md-12">
                                     <label for="correo">Correo electrónico:</label>
@@ -33,7 +29,6 @@
                                     </div>
                                 </div>
                             </div>
-
                             <div class="form-row">
                                 <div class="form-group col-md-12">
                                     <label for="contraseña">Contraseña:</label>
@@ -43,7 +38,6 @@
                                     </div>
                                 </div>
                             </div>
-
                             <div class="form-row">
                                 <div class="form-group col-md-12">
                                     <label for="contraseña_confirmation">Confirma contraseña:</label>
@@ -53,7 +47,6 @@
                                     </div>
                                 </div>
                             </div>
-
                             <div class="form-row">
                                 <div class="form-group col-md-12">
                                     <label for="role">Roles:</label>
@@ -69,17 +62,14 @@
                                     </select>
                                 </div>
                             </div>
-
                             <div class="form-row" id="permissions_box">
                                 <div class="form-group col-md-12">
                                     <label for="role">Permisos:</label>
                                     <div id="permissions_checkbox_lista"></div>
                                 </div>
                             </div>
-
                             <input type="hidden" name="page" value="{{$page ?? ''}}">
                             <input type="hidden" name="vbusqueda" value="{{$vbusqueda ?? ''}}">
-
                             <button type="submit" class="btn btn-outline-danger"><i class="fas fa-save"></i> Guardar</button>
                             <a class="btn btn-outline-danger" href="{{ url('/usuarios?page='.$page.'&vbusqueda='.$vbusqueda) }}"><i class="fas fa-sign-out-alt fa-rotate-180"></i> Regresar</a>
                         </form>

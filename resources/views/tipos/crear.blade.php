@@ -6,16 +6,12 @@
             <div class="col-md-12">
                 <div class="card cardborde">
                     <div class="card-header justify-content-between align-items-centr text-center encabezadoform">
-                        <h3 class="headerlistatitulo"><i class="fas fa-save"></i> Nuevo requisito</h3>
+                        <h3 class="headerlistatitulo"><i class="fas fa-save"></i> Nuevo tipo</h3>
                     </div>
-                
                     <div class="card-body">
-                        
                         <form class="needs-validation" method="POST" action="{{url('/tipos')}}" novalidate>
-                            @csrf
-
+                        @csrf
                             <div class="form-row">
-
                                 <div class="form-group col-md-6">
                                     <label for="fabrica">Fabricas:</label>
                                     <select class="form-control @error('fabrica') is-invalid @enderror" id="fabrica" name="fabrica" required>
@@ -32,7 +28,6 @@
                                         ¡La <strong>fabrica</strong> es un campo requerido!
                                     </div>
                                 </div>
-
                                 <div class="form-group col-md-6">
                                     <label for="tipo">Tipo:</label>
                                     <input class="form-control form-rounded @error('tipo') is-invalid @enderror" id="tipo" name="tipo" placeholder="Tipo" value="{{old('tipo')}}" required/>
@@ -40,12 +35,9 @@
                                         ¡El <strong>tipo</strong> es un campo requerido!
                                     </div>
                                 </div>
-                            
                             </div>
-
                             <input type="hidden" name="page" value="{{$page ?? ''}}">
                             <input type="hidden" name="vbusqueda" value="{{$vbusqueda ?? ''}}">
-
                             <button type="submit" class="btn btn-outline-danger"><i class="fas fa-save"></i> Guardar</button>
                             <a class="btn btn-outline-danger" href="{{url('/tipos?page='.$page.'&vbusqueda='.$vbusqueda)}}"><i class="fas fa-sign-out-alt fa-rotate-180"></i> Regresar</a>
                         </form>

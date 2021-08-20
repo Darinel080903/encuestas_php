@@ -98,7 +98,6 @@
             </div>
         </div>
     </div>
-  
 
     <div class="container">
         <div class="row justify-content-center">
@@ -107,12 +106,9 @@
                     <div class="card-header justify-content-between align-items-centr text-center encabezadoform">
                         <h3 class="headerlistatitulo"><i class="fas fa-save"></i> Nuevo bien</h3>
                     </div>
-                
                     <div class="card-body">
-                        
                         <form class="needs-validation" method="POST" action="{{url('/bienes')}}" novalidate>
-                            @csrf
-
+                        @csrf
                             <div class="form-row">
                                 <div class="form-group col-md-4">
                                     <label for="articulo">Artículos:</label>
@@ -151,7 +147,6 @@
                                     <input type="text" class="form-control" id="modelo" name="modelo" placeholder="Modelo" max="250" value="{{old('modelo')}}"/>
                                 </div>
                             </div>
-
                             <div class="form-row d-none" id="divcampos">
                                 <div class="form-group col-md-3">
                                     <label for="procesador">Procesador:</label>
@@ -186,7 +181,6 @@
                                     </div>
                                 </div>
                             </div>
-
                             <div class="form-row">
                                 <div class="form-group col-md-3">
                                     <label for="serie">Número de serie:</label>
@@ -232,14 +226,12 @@
                                     </div> 
                                 </div>
                             </div>
-
                             <div class="form-row">
                                 <div class="form-group col-md-12">
                                     <label for="observacion">Observaciones:</label>
                                     <textarea class="form-control" id="observacion" name="observacion" cols="30" rows="2">{{old('observacion')}}</textarea>
                                 </div> 
                             </div>
-
                             <div class="form-row">
                                 <div class="form-group col-md-4">
                                     <label for="area">Áreas:</label>
@@ -266,41 +258,34 @@
                                             @endif
                                         @endforeach  
                                     </select> 
-                                </div>
-                                                                
+                                </div>                         
                                 <div class="form-group col-md-4">
                                     <label for="fecha">Fecha:</label>
                                     <input type="text" class="form-control @error('fecha') is-invalid @enderror" id="fecha" name="fecha" aria-label="Fecha" placeholder="Fecha" value="{{ date('d/m/Y') }}" readonly/>
                                 </div>
                                 <div class="invalid-feedback">
                                     ¡La <strong>fecha</strong> es un campo requerido!
-                               
                                 </div>
-                            
-
                             </div>
-
                             <div class="form-row d-none" id="divbienes">
                                 <div class="form-group col-md-12">
-                                    {{-- <label for="area">Áreas:</label> --}}
                                     <button type="button" class="btn btn-outline-danger btn-block" data-toggle="modal" data-target="#exampleModal">
                                         <i class="fas fa-plus"></i> <i class="fas fa-keyboard"></i> <i class="fas fa-mouse"></i> Agregar artículos dependientes...
                                     </button>                                    
-                                </div>                        
-                                <table class="table table-bordered" id="listaarticulos"> </table>   
+                                </div>
+                                <div class="table-responsive">                        
+                                    <table class="table table-bordered" id="listaarticulos"></table>
+                                </div>
                             </div>
-
                             <div class="form-row">
                                 <div class="form-group col-md-12">
                                     <label for="activo">Activo:</label><br>
                                     <input type="checkbox" class="form-control" id="activo" name="activo" data-toggle="toggle" data-on="Activo" data-off="Inactivo" data-onstyle="success" data-offstyle="danger" checked>
                                 </div>
                             </div>
-
                             <input type="hidden" name="page" value="{{$page ?? ''}}">
                             <input type="hidden" name="vfecha" value="{{$vfecha ?? ''}}">
                             <input type="hidden" name="vbusqueda" value="{{$vbusqueda ?? ''}}">
-
                             <button type="submit" class="btn btn-outline-danger"><i class="fas fa-save"></i> Guardar</button>
                             <a class="btn btn-outline-danger" href="{{ url('/bienes?page='.$page.'&vfecha='.$vfecha.'&vbusqueda='.$vbusqueda) }}"><i class="fas fa-sign-out-alt fa-rotate-180"></i> Regresar</a>
                         </form>
@@ -398,7 +383,6 @@
                 type: 'get',
                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                 dataType: "json",
-                
                 success: function(response, textStatus, xhr) 
                 {
                     $("#listaarticulos").empty();
@@ -406,8 +390,7 @@
 
                     for(let i = 0; i< response.length; i++) 
                     {                               
-                        $('#listaarticulos').append("<tr><td>"+response[i].articulo+"</td><td>"+response[i].marca+"</td><td>"+response[i].modelo+"</td><td>"+response[i].serie+"</td><td>"+response[i].patrimonio+"</td><td>"+response[i].estado+"</td><td>"+response[i].observacion+"</td><td><a class='btn btn-primary id='message-delete' href='javascript:eliminartmpbien("+response[i].idtmpbien+");'>Eliminar</a></td></tr>");
-                                                
+                        $('#listaarticulos').append("<tr><td>"+response[i].articulo+"</td><td>"+response[i].marca+"</td><td>"+response[i].modelo+"</td><td>"+response[i].serie+"</td><td>"+response[i].patrimonio+"</td><td>"+response[i].estado+"</td><td>"+response[i].observacion+"</td><td><a class='btn btn-primary id='message-delete' href='javascript:eliminartmpbien("+response[i].idtmpbien+");'>Eliminar</a></td></tr>");                       
                     }   
                 }
             });
@@ -419,17 +402,14 @@
 
         function limpiartmpbien()
         {
-            var url = "{{url('limpiatmpbien')}}";
-            //url = url.replace("id", id); 
+            var url = "{{url('limpiatmpbien')}}"; 
             var token = $("#token").val();
-            
             $.ajax
             ({
                 url: url,
                 type: 'get',
                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                 dataType: "text",
-                
                 success: function(response, textStatus, xhr)
                 {
                     if(response != "Y")
@@ -452,6 +432,7 @@
                 format: 'dd/mm/yyyy'
             });
         });
+
         // Example starter JavaScript for disabling form submissions if there are invalid fields
         (function() 
         {

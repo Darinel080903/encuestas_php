@@ -18,7 +18,7 @@ class Vtipo extends Model
     {
         if($busqueda)
         {
-            return $query->where('tipo', 'like', "%$busqueda%");
+            return $query->where('fabrica', 'like', "%$busqueda%")->orWhere('tipo', 'like', "%$busqueda%");
         }
     }
 }

@@ -8,12 +8,9 @@
                     <div class="card-header justify-content-between align-items-centr text-center encabezadoform">
                         <h3 class="headerlistatitulo"><i class="fas fa-save"></i> Nuevo sistema operativo</h3>
                     </div>
-                    
                     <div class="card-body">
-                        
                         <form class="needs-validation" method="POST" action="{{ url('/operativos') }}" novalidate>
-                            @csrf
-
+                        @csrf
                             <div class="form-group">
                                 <label for="operativo">Sistema operativo:</label>
                                 <input type="text" class="form-control" id="operativo" name="operativo" placeholder="Sistema operativo" max="250" value="{{old('operativo')}}" required/>
@@ -21,12 +18,10 @@
                                     ¡El <strong>sistema operativo</strong> es un campo requerido!
                                 </div>
                             </div>
-                            
                             <input type="hidden" name="page" value="{{$page ?? ''}}">
                             <input type="hidden" name="vbusqueda" value="{{$vbusqueda ?? ''}}">
-                            
                             <button type="submit" class="btn btn-outline-danger"><i class="fas fa-save"></i> Guardar</button>
-                            <a class="btn btn-outline-danger" href="{{ url('/operativos?page='.$page.'&vbusqueda='.$vbusqueda) }}"><i class="fas fa-sign-out-alt fa-rotate-180"></i> Regresar</a>
+                            <a class="btn btn-outline-danger" href="{{url('/operativos?page='.$page.'&vbusqueda='.$vbusqueda)}}"><i class="fas fa-sign-out-alt fa-rotate-180"></i> Regresar</a>
                         </form>
                     </div>
                 </div>

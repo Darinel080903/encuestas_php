@@ -18,7 +18,7 @@ class Funcionario extends Model
     {
         if($busqueda)
         {
-            return $query->where([['nombre', 'like', "%$busqueda%"], ['paterno', 'like', "%$busqueda%"], ['materno', 'like', "%$busqueda%"]]);
+            return $query->where('nombre', 'like', "%$busqueda%")->orWhere('paterno', 'like', "%$busqueda%")->orWhere('materno', 'like', "%$busqueda%");
         }
     }
 }

@@ -223,11 +223,11 @@ class FuncionarioController extends Controller
         $bitacora->fkusuario = auth()->user()->id;
         if(isset($request->activo))
         {
-            $bitacora->operacion = 'Publicación del funcionario con id:'.$id;
+            $bitacora->operacion = 'Funcionario activado correctamente con id:'.$id;
         }
         else
         {
-            $bitacora->operacion = 'Escondida el funcionario con id:'.$id;
+            $bitacora->operacion = 'Funcionario desactivado correctamente con id:'.$id;
         }
         $bitacora->fecha = date('Y-m-d H:i:s');
         $bitacora->ip = $request->ip();
@@ -236,11 +236,11 @@ class FuncionarioController extends Controller
 
         if(isset($request->activo))
         {
-            return back()->withInput()->with('mensaje', '¡Funcionario publicado correctamente!');
+            return back()->withInput()->with('mensaje', '¡Funcionario activado correctamente!');
         }
         else
         {
-            return back()->withInput()->with('mensaje', '¡Funcionario escondido correctamente!');
+            return back()->withInput()->with('mensaje', '¡Funcionario desactivado correctamente!');
         }
     }
 

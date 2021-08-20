@@ -172,11 +172,11 @@ class AreaController extends Controller
         $bitacora->fkusuario = auth()->user()->id;
         if(isset($request->activo))
         {
-            $bitacora->operacion = 'Publicación de la área con id:'.$id;
+            $bitacora->operacion = 'Área activada correctamente con id:'.$id;
         }
         else
         {
-            $bitacora->operacion = 'Escondida la área con id:'.$id;
+            $bitacora->operacion = 'Área desactivada correctamente con id:'.$id;
         }
         $bitacora->fecha = date('Y-m-d H:i:s');
         $bitacora->ip = $request->ip();
@@ -185,11 +185,11 @@ class AreaController extends Controller
 
         if(isset($request->activo))
         {
-            return back()->withInput()->with('mensaje', '¡Área publicada correctamente!');
+            return back()->withInput()->with('mensaje', '¡Área activada correctamente!');
         }
         else
         {
-            return back()->withInput()->with('mensaje', '¡Área escondida correctamente!');
+            return back()->withInput()->with('mensaje', '¡Área desactivada correctamente!');
         }
     }
 

@@ -4,17 +4,14 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-12">
-                <div class="card">
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                        <h4><i class="fas fa-car"></i> Nuevo Auto</h4>
+                <div class="card cardborde">
+                    <div class="card-header justify-content-between align-items-centr text-center encabezadoform">
+                        <h3 class="headerlistatitulo"><i class="fas fa-save"></i> Nuevo auto</h3>
                     </div>
                     <div class="card-body">
-                       
                         <form class="needs-validation" method="POST" action="{{url('/autos')}}" novalidate>
-                            @csrf
-
-                            <div class="form-row">
-                                
+                        @csrf
+                            <div class="form-row">   
                                 <div class="form-group col-md-3">
                                     <label for="fecha">Fecha:</label>
                                     <input type="text" class="form-control @error('fecha') is-invalid @enderror" id="fecha" name="fecha" aria-label="Fecha" placeholder="Fecha" value="{{ date("d/m/Y") }}" readonly/>
@@ -22,7 +19,6 @@
                                 <div class="invalid-feedback">
                                     ¡La <strong>fecha</strong> es un campo requerido!
                                 </div>
-
                                 <div class="form-group col-md-3">
                                     <label for="numero">Número económico:</label>
                                     <input type="text" class="form-control @error('numero') is-invalid @enderror" id="numero" name="numero" placeholder="Número económico" maxlength="11" value="{{old('numero')}}" required/>
@@ -30,11 +26,8 @@
                                         ¡El <strong>número </strong> es un campo requerido!
                                     </div>  
                                 </div>
-
                             </div>
-
                             <div class="form-row">
-
                                 <div class="form-group col-md-3">
                                     <label for="fabrica">Fabricas:</label>
                                     <select class="form-control @error('fabrica') is-invalid @enderror" id="fabrica" name="fabrica" required>
@@ -51,7 +44,6 @@
                                         ¡La <strong>fabrica</strong> es un campo requerido!
                                     </div>
                                 </div>
-
                                 <div class="form-group col-md-3">
                                     <label for="tipo">Tipos:</label>
                                     <select class="form-control @error('tipo') is-invalid @enderror" id="tipo" name="tipo" required>
@@ -61,7 +53,6 @@
                                         ¡El <strong>tipo</strong> es un campo requerido!
                                     </div>
                                 </div>
-
                                 <div class="form-group col-md-3">
                                     <label for="modelo">Modelo:</label>
                                     <input type="text" class="form-control @error('modelo') is-invalid @enderror" id="modelo" name="modelo" placeholder="modelo" maxlength="4" value="{{old('modelo')}}" required/>
@@ -69,25 +60,20 @@
                                         ¡El <strong>modelo</strong> es un campo requerido!
                                     </div>                                
                                 </div>
-
                                 <div class="form-group col-md-3">
                                     <label for="placa">Número de placas:</label>
                                     <input type="text" class="form-control" id="placa" name="placa" placeholder="Número de placas" maxlength="10" value="{{old('placa')}}"/>
                                 </div>
-
                             </div>
-
                             <div class="form-row">
                                 <div class="form-group col-md-3">
                                     <label for="serie">Número de serie (NIV):</label>
                                     <input type="text" class="form-control" name="serie" placeholder="Número de serie" maxlength="20" value="{{old('serie')}}"/>                                
                                 </div>
-
                                 <div class="form-group col-md-3">
                                     <label for="motor">Número de motor:</label>
                                     <input type="text" class="form-control" name="motor" placeholder="Motor" maxlength="20" value="{{old('motor')}}"/>                                
                                 </div>
-                                
                                 <div class="form-group col-md-3">
                                     <label for="transmision">Transmisiones:</label>
                                     <select class="form-control" id="transmision" name="transmision">
@@ -101,7 +87,6 @@
                                         @endforeach  
                                     </select>
                                 </div>
-                                
                                 <div class="form-group col-md-3">
                                     <label for="combustible">Combustibles:</label>
                                     <select class="form-control" id="combustible" name="combustible">
@@ -115,9 +100,7 @@
                                         @endforeach  
                                     </select>
                                 </div>
-
                             </div>
-                    
                             <div class="form-row">
                                 <div class="form-group col-md-6">
                                     <label for="descripcion">Descripción u observaciones:</label>
@@ -138,51 +121,24 @@
                                     </select>
                                 </div>
                             </div>
-
                             <div class="form-row">
                                 <div class="form-group col-md-2">
                                     <label for="activo">Activo:</label><br>
                                     <input type="checkbox" class="form-control" id="activo" name="activo" data-toggle="toggle" data-on="Activo" data-off="Inactivo" data-onstyle="success" data-offstyle="danger" checked>
                                 </div>
                             </div>
-
-                            {{-- <div class="form-row">
-                                
-                                <div class="form-group col-md-4">
-                                    <label for="telefono">Teléfono:</label>
-                                    <input type="tel" class="form-control" name="telefono" placeholder="Teléfono" max="250" value="{{old('telefono')}}"/>                                
-                                </div>
-                                
-                                <div class="form-group col-md-4">
-                                    <label for="ubicacion">Ubicación:</label>
-                                    <input type="text" class="form-control" name="ubicacion" placeholder="Ubicación" max="250" value="{{old('ubicacion')}}"/>                                
-                                </div>
-                                
-                                <div class="form-group col-md-4">
-                                    <label for="precio">Precio $:</label>
-                                    <input type="text" class="form-control @error('precio') is-invalid @enderror" id="precio" name="precio" placeholder="Precio" max="250" value="{{old('precio')}}" required/>
-                                    <div class="invalid-feedback">
-                                        ¡El <strong>precio</strong> es un campo requerido!
-                                    </div>  
-                                </div>
-                                
-                            </div> --}}
-
                             <input type="hidden" name="page" value="{{$page ?? ''}}">
                             <input type="hidden" name="vfecha" value="{{$vfecha ?? ''}}">
                             <input type="hidden" name="vactivo" value="{{$vactivo ?? ''}}">
                             <input type="hidden" name="vbusqueda" value="{{$vbusqueda ?? ''}}">
-
                             <button type="submit" class="btn btn-outline-danger"><i class="fas fa-save"></i> Guardar</button>
                             <a class="btn btn-outline-danger" href="{{url('/autos?page='.$page.'&vfecha='.$vfecha.'&vactivo='.$vactivo.'&vbusqueda='.$vbusqueda)}}"><i class="fas fa-sign-out-alt fa-rotate-180"></i> Regresar</a>
-
                             <div class="d-none justify-content-center" id="divloading">
                                 <div class="spinner-grow divloading" role="status">
                                     <span class="sr-only">Loading...</span>
                                 </div>
                                 <p class="font-weight-bolder text-muted font-italic mt-1 mb-2">&nbsp;Cargando...</p>
                             </div>
-
                         </form>
                     </div>
                 </div>
@@ -236,7 +192,6 @@
 
         $(function(){
             $("#modelo").validCampoFranz("0123456789");	
-    		// $("#precio").validCampoFranz(".,0123456789");	
     	});
 
         // Example starter JavaScript for disabling form submissions if there are invalid fields
