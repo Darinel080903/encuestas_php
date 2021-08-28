@@ -23,6 +23,9 @@
                                             @else
                                                 <option value="{{ $item->idarea }}">{{ $item->area }}</option>
                                             @endif
+                                            @if(count($item->childs))
+                                                @include('areas.option',['childs' => $item->childs])
+                                            @endif
                                         @endforeach  
                                     </select>
                                 </div>

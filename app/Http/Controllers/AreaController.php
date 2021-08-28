@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Area;
 Use App\Models\Bitacora;
@@ -76,9 +77,14 @@ class AreaController extends Controller
         }
         $nuevaarea->save();
 
+        $actualizaarea = Area::findOrFail($nuevaarea->idarea);
+        $queries = DB::select("SELECT FindRootNode($nuevaarea->idarea) AS ruta;");
+        $actualizaarea->ruta = $queries[0]->ruta;
+        $actualizaarea->save();
+
         $bitacora = new Bitacora();
         $bitacora->fkusuario = auth()->user()->id;
-        $bitacora->operacion = 'Nueva área con id:'.$nuevaarea->idarea;
+        $bitacora->operacion = 'Área agregada con id:'.$nuevaarea->idarea;
         $bitacora->fecha = date('Y-m-d H:i:s');
         $bitacora->ip = $request->ip();
         $bitacora->pc = gethostname();
@@ -143,9 +149,14 @@ class AreaController extends Controller
         }
         $actualizaarea->save();
 
+        $actualizaarea = Area::findOrFail($id);
+        $queries = DB::select("SELECT FindRootNode($id) AS ruta;");
+        $actualizaarea->ruta = $queries[0]->ruta;
+        $actualizaarea->save();
+        
         $bitacora = new Bitacora();
         $bitacora->fkusuario = auth()->user()->id;
-        $bitacora->operacion = 'Edición de la área con id:'.$id;
+        $bitacora->operacion = 'Área editada con id:'.$id;
         $bitacora->fecha = date('Y-m-d H:i:s');
         $bitacora->ip = $request->ip();
         $bitacora->pc = gethostname();
