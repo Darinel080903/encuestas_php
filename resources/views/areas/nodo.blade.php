@@ -1,6 +1,15 @@
 @foreach($childs as $child)
     <tr>
-        <td class="text-justify align-middle" scope="row">{{$child->area}}</td>
+        @php($cadena='')
+        @for ($i = 0; $i < $child->nivel; $i++)
+            {{-- @if ($i == 0)
+                @php($cadena = $cadena.'<i class="fas fa-minus fa-rotate-90"></i>')    
+            @else
+                @php($cadena = $cadena.' <i class="fas fa-minus"></i> ')
+            @endif --}}
+            @php($cadena = $cadena.'<i class="fas fa-ellipsis-h"></i>')
+        @endfor
+        <td class="text-justify align-middle" scope="row">{!! $cadena.'&nbsp;'.$child->area !!}</td>
         <td class="text-center" width="11%">
             @can('update', $item)
                 <a class="btn btn-outline-danger" href="{{url('/areas/'.$child->idarea.'/edit')}}"><i class="fas fa-pen"></i> Editar</a>
