@@ -24,6 +24,11 @@ class Area extends Model
 
     public function childs()
     {
-        return $this->hasMany('App\Models\Area','fkarea','idarea') ;
+        return $this->hasMany('App\Models\Area','fkarea','idarea');
+    }
+
+    public function childsactivos()
+    {
+        return $this->hasMany('App\Models\Area','fkarea','idarea')->where('activo', 1);
     }
 }

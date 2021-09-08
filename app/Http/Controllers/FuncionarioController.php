@@ -47,7 +47,8 @@ class FuncionarioController extends Controller
         $page = $request->page;
         $vbusqueda = $request->vbusqueda;
 
-        $areas = Area::orderBy('area', 'asc')->get();
+        // $areas = Area::orderBy('area', 'asc')->get();
+        $areas = Area::whereNull('fkarea')->get();
         $categorias = Categoria::orderBy('categoria', 'asc')->get();
         $puestos = Puesto::orderBy('puesto', 'asc')->get();
 
@@ -138,7 +139,8 @@ class FuncionarioController extends Controller
         $vbusqueda = $request->vbusqueda;
 
         $funcionarios = Funcionario::findOrFail($id);
-        $areas = Area::orderBy('area', 'asc')->get();
+        // $areas = Area::orderBy('area', 'asc')->get();
+        $areas = Area::whereNull('fkarea')->get();
         $categorias = Categoria::orderBy('categoria', 'asc')->get();
         $puestos = Puesto::orderBy('puesto', 'asc')->get();
 

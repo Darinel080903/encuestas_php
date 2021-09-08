@@ -19,12 +19,12 @@
                                         <option value="">Area</option>
                                         @foreach ($areas as $item)
                                             @if ($area->fkarea == $item->idarea)
-                                                <option value="{{ $item->idarea }}" selected>{{ $item->area }}</option>
+                                                <option value="{{$item->idarea}}" selected>{{$item->area}}</option>
                                             @else
-                                                <option value="{{ $item->idarea }}">{{ $item->area }}</option>
+                                                <option value="{{$item->idarea}}">{{$item->area}}</option>
                                             @endif
                                             @if(count($item->childs))
-                                                @include('areas.option',['childs' => $item->childs])
+                                                @include('areas.editaroption',['childs' => $item->childs])
                                             @endif
                                         @endforeach  
                                     </select>
@@ -54,6 +54,9 @@
         </div>
     </div>
     <script>
+        $(document).ready(function(){
+            $("#fkarea").chosen();
+        });
         // Example starter JavaScript for disabling form submissions if there are invalid fields
         (function() {
           'use strict';

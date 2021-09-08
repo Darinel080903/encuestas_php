@@ -22,6 +22,9 @@
                                             @else
                                                 <option value="{{$item->idarea}}">{{$item->area}}</option>
                                             @endif
+                                            @if(count($item->childs))
+                                                @include('areas.crearoption',['childs' => $item->childs])
+                                            @endif
                                         @endforeach  
                                     </select>
                                 </div>
@@ -50,6 +53,9 @@
         </div>
     </div>
     <script>
+        $(document).ready(function(){
+            $("#fkarea").chosen();
+        });
         // Example starter JavaScript for disabling form submissions if there are invalid fields
         (function() {
           'use strict';

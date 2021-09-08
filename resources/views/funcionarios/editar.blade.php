@@ -15,13 +15,16 @@
                             <div class="form-row">
                                 <div class="form-group col-md-6">
                                     <label for="adscripcion">Área de adscripción:</label>
-                                    <select class="form-control @error('adscripcion') is-invalid @enderror" id="adscripcion" name="adscripcion" required>
+                                    <select class="form-control @error('adscripcion') is-invalid @enderror form-control-chosen" id="adscripcion" name="adscripcion" required>
                                         <option value="">Adscripcion</option>
                                         @foreach ($areas as $item)
                                             @if ($funcionarios->fkadscripcion == $item->idarea)
                                                 <option value="{{$item->idarea}}" selected>{{$item->area}}</option>
                                             @else
                                                 <option value="{{$item->idarea}}">{{$item->area}}</option>
+                                            @endif
+                                            @if(count($item->childsactivos))
+                                                @include('funcionarios.editoptionadsc',['childsactivos' => $item->childsactivos])
                                             @endif
                                         @endforeach  
                                     </select>
@@ -31,13 +34,16 @@
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="area">Areas:</label>
-                                    <select class="form-control @error('area') is-invalid @enderror" id="area" name="area" required>
+                                    <select class="form-control @error('area') is-invalid @enderror form-control-chosen" id="area" name="area" required>
                                         <option value="">Area</option>
                                         @foreach ($areas as $item)
                                             @if ($funcionarios->fkarea == $item->idarea)
                                                 <option value="{{$item->idarea}}" selected>{{$item->area}}</option>
                                             @else
                                                 <option value="{{$item->idarea}}">{{$item->area}}</option>
+                                            @endif
+                                            @if(count($item->childsactivos))
+                                                @include('funcionarios.editoptionarea',['childsactivos' => $item->childsactivos])
                                             @endif
                                         @endforeach  
                                     </select>
@@ -72,7 +78,7 @@
                             <div class="form-row">
                                 <div class="form-group col-md-6">
                                     <label for="categoria">Categorías:</label>
-                                    <select class="form-control" id="categoria" name="categoria">
+                                    <select class="form-control form-control-chosen" id="categoria" name="categoria">
                                         <option value="">Categoría</option>
                                         @foreach ($categorias as $item)
                                             @if ($funcionarios->fkcategoria == $item->idcategoria)
@@ -85,7 +91,7 @@
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="puesto">Puestos:</label>
-                                    <select class="form-control" id="puesto" name="puesto">
+                                    <select class="form-control form-control-chosen" id="puesto" name="puesto">
                                         <option value="">Puesto</option>
                                         @foreach ($puestos as $item)
                                             @if ($funcionarios->fkpuesto == $item->idpuesto)
@@ -120,28 +126,46 @@
         </div>
     </div>
     <script>
-        $(function(){
-            $('#imagen').change(function(){
-                    var input = this;
-                    var url = $(this).val();
-                    var ext = url.substring(url.lastIndexOf('.') + 1).toLowerCase();
-                    if (input.files && input.files[0]&& (ext == "gif" || ext == "png" || ext == "jpeg" || ext == "jpg")) 
-                    {
-                        var reader = new FileReader();
-                        reader.onload = function (e) {
-                        $('#img').attr('src', e.target.result);
-                    }
-                    reader.readAsDataURL(input.files[0]);
-                }
-                else
-                {
-                    $('#img').attr('src', '/storage/img/default.png');
-                }
-            });
+        $(document).ready(function(){
+            $(".form-control-chosen").chosen();
         });
 
-        $(document).ready(function(){
-            bsCustomFileInput.init();
+        $("#adscripcion").change(function(){
+            if($("#adscripcion").val() != "")
+            {
+                if($("#adscripcion_chosen").hasClass("is-invalid") === true)
+                {
+                    $("#adscripcion_chosen").removeClass("is-invalid");
+                    $("#adscripcion_chosen").addClass("is-valid");
+                }
+            }
+            else
+            {
+                if($("#adscripcion_chosen").hasClass("is-valid") === true)
+                {
+                    $("#adscripcion_chosen").removeClass("is-valid");
+                    $("#adscripcion_chosen").addClass("is-invalid");
+                }
+            }
+        });
+
+        $("#area").change(function(){
+            if($("#area").val() != "")
+            {
+                if($("#area_chosen").hasClass("is-invalid") === true)
+                {
+                    $("#area_chosen").removeClass("is-invalid");
+                    $("#area_chosen").addClass("is-valid");
+                }
+            }
+            else
+            {
+                if($("#area_chosen").hasClass("is-valid") === true)
+                {
+                    $("#area_chosen").removeClass("is-valid");
+                    $("#area_chosen").addClass("is-invalid");
+                }
+            }
         });
 
         // Example starter JavaScript for disabling form submissions if there are invalid fields
@@ -154,10 +178,38 @@
             var validation = Array.prototype.filter.call(forms, function(form) {
               form.addEventListener('submit', function(event) {
                 if (form.checkValidity() === false) {
-                  event.preventDefault();
-                  event.stopPropagation();
+                    event.preventDefault();
+                    event.stopPropagation();
+                    if($("#adscripcion").val() == "")
+                    {
+                        $('#adscripcion_chosen').addClass('is-invalid');
+                    }
+                    else
+                    {
+                        $('#adscripcion_chosen').addClass('is-valid');
+                    }
+                    if($("#area").val() == "")
+                    {
+                        $('#area_chosen').addClass('is-invalid');
+                    }
+                    else
+                    {
+                        $('#area_chosen').addClass('is-valid');
+                    }
+                    $('#categoria_chosen').addClass('is-valid');
+                    $('#puesto_chosen').addClass('is-valid');
                 }
                 form.classList.add('was-validated');
+                if($("#adscripcion").val() != "")
+                {
+                    $('#adscripcion_chosen').addClass('is-valid');
+                }
+                if($("#area").val() != "")
+                {
+                    $('#area_chosen').addClass('is-valid');
+                }
+                $('#categoria_chosen').addClass('is-valid');
+                $('#puesto_chosen').addClass('is-valid');
               }, false);
             });
           }, false);

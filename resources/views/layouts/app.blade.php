@@ -35,6 +35,7 @@
     <link rel="stylesheet" href="{{asset('fontawesome/css/fontawesome.css')}}">
     <link rel="stylesheet" href="{{asset('fontawesome/css/brands.css')}}">
     <link rel="stylesheet" href="{{asset('fontawesome/css/solid.css')}}">
+    <link rel="stylesheet" href="{{asset('fontawesome/css/regular.css')}}">
 
     <!-- Detepicker By CIRG -->
     <script src="{{asset('datetimepicker/js/gijgo.min.js')}}"></script>

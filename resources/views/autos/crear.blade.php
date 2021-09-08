@@ -30,7 +30,7 @@
                             <div class="form-row">
                                 <div class="form-group col-md-3">
                                     <label for="fabrica">Fabricas:</label>
-                                    <select class="form-control @error('fabrica') is-invalid @enderror" id="fabrica" name="fabrica" required>
+                                    <select class="form-control @error('fabrica') is-invalid @enderror form-control-chosen" id="fabrica" name="fabrica" required>
                                         <option value="">Fabrica</option>
                                         @foreach ($fabricas as $item)
                                             @if (old('fabrica') == $item->idfabrica)
@@ -46,7 +46,7 @@
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label for="tipo">Tipos:</label>
-                                    <select class="form-control @error('tipo') is-invalid @enderror" id="tipo" name="tipo" required>
+                                    <select class="form-control @error('tipo') is-invalid @enderror form-control-chosen" id="tipo" name="tipo" required>
                                         <option value="">Tipo</option>  
                                     </select>
                                     <div class="invalid-feedback">
@@ -150,6 +150,10 @@
             uiLibrary: 'bootstrap4',
             locale: 'es-es',
             format: 'dd/mm/yyyy'
+        });
+
+        $(document).ready(function(){
+            $(".form-control-chosen").chosen();
         });
 
         $(function(){

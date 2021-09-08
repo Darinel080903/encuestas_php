@@ -14,7 +14,7 @@
                             <div class="form-row">
                                 <div class="form-group col-md-6">
                                     <label for="fabrica">Fabricas:</label>
-                                    <select class="form-control @error('fabrica') is-invalid @enderror" id="fabrica" name="fabrica" required>
+                                    <select class="form-control @error('fabrica') is-invalid @enderror form-control-chosen" id="fabrica" name="fabrica" required>
                                         <option value="">Fabrica</option>
                                         @foreach ($fabricas as $item)
                                             @if (old('fabrica') == $item->idfabrica)
@@ -47,6 +47,29 @@
         </div>
     </div>
     <script>
+        $(document).ready(function(){
+            $(".form-control-chosen").chosen();
+        });
+
+        $("#fabrica").change(function(){
+            if($("#fabrica").val() != "")
+            {
+                if($("#fabrica_chosen").hasClass("is-invalid") === true)
+                {
+                    $("#fabrica_chosen").removeClass("is-invalid");
+                    $("#fabrica_chosen").addClass("is-valid");
+                }
+            }
+            else
+            {
+                if($("#fabrica_chosen").hasClass("is-valid") === true)
+                {
+                    $("#fabrica_chosen").removeClass("is-valid");
+                    $("#fabrica_chosen").addClass("is-invalid");
+                }
+            }
+        });
+
         // Example starter JavaScript for disabling form submissions if there are invalid fields
         (function() {
           'use strict';
@@ -57,10 +80,22 @@
             var validation = Array.prototype.filter.call(forms, function(form) {
               form.addEventListener('submit', function(event) {
                 if (form.checkValidity() === false) {
-                  event.preventDefault();
-                  event.stopPropagation();
+                    event.preventDefault();
+                    event.stopPropagation();
+                    if($("#fabrica").val() == "")
+                    {
+                        $('#fabrica_chosen').addClass('is-invalid');
+                    }
+                    else
+                    {
+                        $('#fabrica_chosen').addClass('is-valid');
+                    }
                 }
                 form.classList.add('was-validated');
+                if($("#fabrica").val() != "")
+                {
+                    $('#fabrica_chosen').addClass('is-valid');
+                }
               }, false);
             });
           }, false);

@@ -46,7 +46,7 @@ class AreaController extends Controller
     {
         $this->authorize('create', Area::class);
 
-        $areas = Area::orderBy('area', 'asc')->get();
+        $areas = Area::whereNull('fkarea')->get();
         return view('areas.crear', compact('areas'));
     }
 
@@ -80,6 +80,16 @@ class AreaController extends Controller
         $actualizaarea = Area::findOrFail($nuevaarea->idarea);
         $queries = DB::select("SELECT FindRootNode($nuevaarea->idarea) AS ruta;");
         $actualizaarea->ruta = $queries[0]->ruta;
+        $data = $queries[0]->ruta;
+        $j = 0;
+        foreach (count_chars($data, 1) as $i => $val)
+        {
+            if(chr($i) == '.')
+            {
+                $j = $val;
+            }
+        }
+        $actualizaarea->nivel = $j;
         $actualizaarea->save();
 
         $bitacora = new Bitacora();
@@ -116,7 +126,6 @@ class AreaController extends Controller
         $this->authorize('update', $modelo);
 
         $area = Area::findOrFail($id);
-        // $areas = Area::orderBy('area', 'asc')->get();
         $areas = Area::whereNull('fkarea')->get();
         return view('areas.editar',compact('areas', 'area'));
     }
