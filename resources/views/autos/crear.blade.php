@@ -76,7 +76,7 @@
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label for="transmision">Transmisiones:</label>
-                                    <select class="form-control" id="transmision" name="transmision">
+                                    <select class="form-control form-control-chosen" id="transmision" name="transmision">
                                         <option value="">Transmisión</option>
                                         @foreach ($transmisiones as $item)
                                             @if (old('transmision') == $item->idtransmision)
@@ -89,7 +89,7 @@
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label for="combustible">Combustibles:</label>
-                                    <select class="form-control" id="combustible" name="combustible">
+                                    <select class="form-control form-control-chosen" id="combustible" name="combustible">
                                         <option value="">Combustible</option>
                                         @foreach ($combustibles as $item)
                                             @if (old('combustible') == $item->idcombustible)
@@ -109,7 +109,7 @@
 
                                 <div class="form-group col-md-6">
                                     <label for="funcionario">Funcionario resguardo:</label>
-                                    <select class="form-control" id="funcionario" name="funcionario">
+                                    <select class="form-control form-control-chosen" id="funcionario" name="funcionario">
                                         <option value="">Funcionario</option>
                                         @foreach ($funcionarios as $item)
                                             @if (old('funcionario') == $item->idfuncionario)
@@ -157,13 +157,14 @@
         });
 
         $(function(){
-            $("#fabrica").change(function(){
+            $("#fabrica").chosen().change(function(){
                 $("#divloading").addClass("d-flex").removeClass("d-none");
-                if(event.target.value)
+                var identificador = $("#fabrica").chosen().val();
+                if(identificador)
                 {
                     // Ini Ajax
                     var url = "{{url('/autos/fabrica/idfabrica')}}";
-                    url = url.replace("idfabrica", event.target.value);
+                    url = url.replace("idfabrica", identificador);
                     $.ajax({type:"get",
                         headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                         url:url,
@@ -177,6 +178,7 @@
                                 $("#tipo").append("<option value='"+response[i].idtipo+"'>"+response[i].tipo+"</option>"); 
                             }
                             $("#divloading").addClass("d-none").removeClass("d-flex");
+                            $("#tipo").trigger("chosen:updated");
                         },
                         error: function(xhr, textStatus, errorThrown)
                         {
@@ -190,6 +192,7 @@
                     $("#tipo").empty();
                     $("#tipo").append("<option value=''>Tipo</option>");
                     $("#divloading").addClass("d-none").removeClass("d-flex");
+                    $("#tipo").trigger("chosen:updated");
                 } 
             });
         });
@@ -197,6 +200,44 @@
         $(function(){
             $("#modelo").validCampoFranz("0123456789");	
     	});
+
+        $("#fabrica").change(function(){
+            if($("#fabrica").val() != "")
+            {
+                if($("#fabrica_chosen").hasClass("is-invalid") === true)
+                {
+                    $("#fabrica_chosen").removeClass("is-invalid");
+                    $("#fabrica_chosen").addClass("is-valid");
+                }
+            }
+            else
+            {
+                if($("#fabrica_chosen").hasClass("is-valid") === true)
+                {
+                    $("#fabrica_chosen").removeClass("is-valid");
+                    $("#fabrica_chosen").addClass("is-invalid");
+                }
+            }
+        });
+
+        $("#tipo").change(function(){
+            if($("#tipo").val() != "")
+            {
+                if($("#tipo_chosen").hasClass("is-invalid") === true)
+                {
+                    $("#tipo_chosen").removeClass("is-invalid");
+                    $("#tipo_chosen").addClass("is-valid");
+                }
+            }
+            else
+            {
+                if($("#tipo_chosen").hasClass("is-valid") === true)
+                {
+                    $("#tipo_chosen").removeClass("is-valid");
+                    $("#tipo_chosen").addClass("is-invalid");
+                }
+            }
+        });
 
         // Example starter JavaScript for disabling form submissions if there are invalid fields
         (function() {
@@ -208,10 +249,47 @@
             var validation = Array.prototype.filter.call(forms, function(form) {
               form.addEventListener('submit', function(event) {
                 if (form.checkValidity() === false) {
-                  event.preventDefault();
-                  event.stopPropagation();
+                    event.preventDefault();
+                    event.stopPropagation();
+                    
+                    if($("#fabrica").val() == "")
+                    {
+                        $('#fabrica_chosen').addClass('is-invalid');
+                    }
+                    else
+                    {
+                        $('#fabrica_chosen').addClass('is-valid');
+                    }
+
+                    if($("#tipo").val() == "")
+                    {
+                        $('#tipo_chosen').addClass('is-invalid');
+                    }
+                    else
+                    {
+                        $('#tipo_chosen').addClass('is-valid');
+                    }
+
+                    $('#transmision_chosen').addClass('is-valid');
+                    $('#combustible_chosen').addClass('is-valid');
+                    $('#funcionario_chosen').addClass('is-valid');
                 }
                 form.classList.add('was-validated');
+                
+                if($("#fabrica").val() != "")
+                {
+                    $('#fabrica_chosen').addClass('is-valid');
+                }
+
+                if($("#tipo").val() != "")
+                {
+                    $('#tipo_chosen').addClass('is-valid');
+                }
+
+                $('#transmision_chosen').addClass('is-valid');
+                $('#combustible_chosen').addClass('is-valid');
+                $('#funcionario_chosen').addClass('is-valid');
+
               }, false);
             });
           }, false);

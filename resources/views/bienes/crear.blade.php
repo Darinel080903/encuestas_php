@@ -10,7 +10,7 @@
                         <div class="form-row">
                             <div class="form-group col-md-4">
                                 <label for="articulomodal">Artículos:</label>
-                                <select class="form-control @error('articulomodal') is-invalid @enderror" id="articulomodal" name="articulomodal" required>
+                                <select class="form-control @error('articulomodal') is-invalid @enderror form-control-chosen" id="articulomodal" name="articulomodal" required>
                                     <option value="">Artículo</option>
                                     @foreach ($articulosmodal as $itemarticulomodal)
                                     
@@ -27,7 +27,7 @@
                             </div>
                             <div class="form-group col-md-4">
                                 <label for="marcamodal">Marcas:</label>
-                                <select class="form-control @error('marcamodal') is-invalid @enderror" id="marcamodal" name="marcamodal" required>
+                                <select class="form-control @error('marcamodal') is-invalid @enderror form-control-chosen" id="marcamodal" name="marcamodal" required>
                                     <option value="">Marca</option>
                                     @foreach ($marcas as $itemmarca)
                                         @if (old('articulo') == $itemmarca->idmarca)
@@ -112,7 +112,7 @@
                             <div class="form-row">
                                 <div class="form-group col-md-4">
                                     <label for="articulo">Artículos:</label>
-                                    <select class="form-control @error('articulo') is-invalid @enderror" id="articulo" name="articulo" required>
+                                    <select class="form-control @error('articulo') is-invalid @enderror form-control-chosen" id="articulo" name="articulo" required>
                                         <option value="">Artículo</option>
                                         @foreach ($articulos as $itemarticulo)
                                             @if (old('articulo') == $itemarticulo->idarticulo)
@@ -128,7 +128,7 @@
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="marca">Marcas:</label>
-                                    <select class="form-control @error('marca') is-invalid @enderror" id="marca" name="marca" required>
+                                    <select class="form-control @error('marca') is-invalid @enderror form-control-chosen" id="marca" name="marca" required>
                                         <option value="">Marca</option>
                                         @foreach ($marcas as $itemmarca)
                                             @if (old('articulo') == $itemmarca->idmarca)
@@ -166,7 +166,7 @@
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label for="operativo">Sistemas operativos:</label>
-                                    <select class="form-control @error('operativo') is-invalid @enderror" id="operativo" name="operativo">
+                                    <select class="form-control form-control-chosen" id="operativo" name="operativo">
                                         <option value="">Sistema operativo</option>
                                         @foreach ($operativos as $itemoperativo)
                                             @if (old('operativo') == $itemoperativo->idoperativo)
@@ -176,9 +176,6 @@
                                             @endif
                                         @endforeach  
                                     </select> 
-                                    <div class="invalid-feedback">
-                                        ¡El <strong>artículo</strong> es un campo requerido!
-                                    </div>
                                 </div>
                             </div>
                             <div class="form-row">
@@ -198,7 +195,7 @@
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label for="cedula">Cédulas:</label>
-                                    <select class="form-control" id="cedula" name="cedula">
+                                    <select class="form-control form-control-chosen" id="cedula" name="cedula">
                                         <option value="">Cédula</option>
                                         @foreach ($cedulas as $itemcedula)
                                             @if (old('cedula') == $itemcedula->idcedula)
@@ -211,7 +208,7 @@
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label for="estado">Estados:</label>
-                                    <select class="form-control @error('estado') is-invalid @enderror" id="estado" name="estado" required>
+                                    <select class="form-control @error('estado') is-invalid @enderror form-control-chosen" id="estado" name="estado" required>
                                         <option value="">Estado</option>
                                         @foreach ($estados as $itemestado)
                                             @if (old('estado') == $itemestado->idestado)
@@ -235,7 +232,7 @@
                             <div class="form-row">
                                 <div class="form-group col-md-4">
                                     <label for="area">Áreas:</label>
-                                    <select class="form-control" id="area" name="area">
+                                    <select class="form-control form-control-chosen" id="area" name="area">
                                         <option value="">Area</option>
                                         @foreach ($areas as $itemarea)
                                             @if (old('area') == $itemarea->idarea)
@@ -248,7 +245,7 @@
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="funcionario">Funcionarios:</label>
-                                    <select class="form-control" id="funcionario" name="funcionario">
+                                    <select class="form-control form-control-chosen" id="funcionario" name="funcionario">
                                         <option value="">Funcionario</option>
                                         @foreach ($funcionarios as $itemfuncionario)
                                             @if (old('funcionario') == $itemfuncionario->idfuncionario)
@@ -294,10 +291,15 @@
             </div>
         </div>
     </div>
-    <script>                        
+    <script>
+        $(document).ready(function(){
+            $(".form-control-chosen").chosen();
+        });
+
         $(function(){
-            $("#articulo").change(function(){
-                $.get("campos/"+event.target.value+"", function(response, state){
+            $("#articulo").chosen().change(function(){
+                var identificador = $("#articulo").chosen().val();
+                $.get("campos/"+identificador+"", function(response, state){
                     if(response.dato == 1)
                     {
                         $("#procesador").val("");
@@ -433,6 +435,63 @@
             });
         });
 
+        $("#articulo").change(function(){
+            if($("#articulo").val() != "")
+            {
+                if($("#articulo_chosen").hasClass("is-invalid") === true)
+                {
+                    $("#articulo_chosen").removeClass("is-invalid");
+                    $("#articulo_chosen").addClass("is-valid");
+                }
+            }
+            else
+            {
+                if($("#articulo_chosen").hasClass("is-valid") === true)
+                {
+                    $("#articulo_chosen").removeClass("is-valid");
+                    $("#articulo_chosen").addClass("is-invalid");
+                }
+            }
+        });
+
+        $("#marca").change(function(){
+            if($("#marca").val() != "")
+            {
+                if($("#marca_chosen").hasClass("is-invalid") === true)
+                {
+                    $("#marca_chosen").removeClass("is-invalid");
+                    $("#marca_chosen").addClass("is-valid");
+                }
+            }
+            else
+            {
+                if($("#marca_chosen").hasClass("is-valid") === true)
+                {
+                    $("#marca_chosen").removeClass("is-valid");
+                    $("#marca_chosen").addClass("is-invalid");
+                }
+            }
+        });
+
+        $("#estado").change(function(){
+            if($("#estado").val() != "")
+            {
+                if($("#estado_chosen").hasClass("is-invalid") === true)
+                {
+                    $("#estado_chosen").removeClass("is-invalid");
+                    $("#estado_chosen").addClass("is-valid");
+                }
+            }
+            else
+            {
+                if($("#estado_chosen").hasClass("is-valid") === true)
+                {
+                    $("#estado_chosen").removeClass("is-valid");
+                    $("#estado_chosen").addClass("is-invalid");
+                }
+            }
+        });
+
         // Example starter JavaScript for disabling form submissions if there are invalid fields
         (function() 
         {
@@ -448,10 +507,65 @@
                         {
                             if (form.checkValidity() === false) 
                             {
-                            event.preventDefault();
-                            event.stopPropagation();
+                                event.preventDefault();
+                                event.stopPropagation();
+
+                                if($("#articulo").val() == "")
+                                {
+                                    $("#articulo_chosen").addClass("is-invalid");
+                                }
+                                else
+                                {
+                                    $("#articulo_chosen").addClass("is-valid");
+                                }
+
+                                if($("#marca").val() == "")
+                                {
+                                    $("#marca_chosen").addClass("is-invalid");
+                                }
+                                else
+                                {
+                                    $("#marca_chosen").addClass("is-valid");
+                                }
+                                
+                                $("#operativo_chosen").addClass("is-valid");
+                                $("#cedula_chosen").addClass("is-valid");
+                                
+                                if($("#estado").val() == "")
+                                {
+                                    $("#estado_chosen").addClass("is-invalid");
+                                }
+                                else
+                                {
+                                    $("#estado_chosen").addClass("is-valid");
+                                }
+
+                                $("#area_chosen").addClass("is-valid");
+                                $("#funcionario_chosen").addClass("is-valid");
                             }
                             form.classList.add('was-validated');
+                            
+                            if($("#articulo").val() != "")
+                            {
+                                $("#articulo_chosen").addClass("is-valid");
+                            }
+
+                            if($("#marca").val() != "")
+                            {
+                                $("#marca_chosen").addClass("is-valid");
+                            }
+
+                            $("#operativo_chosen").addClass("is-valid");
+                            $("#cedula_chosen").addClass("is-valid");
+                            
+                            if($("#estado").val() != "")
+                            {
+                                $("#estado_chosen").addClass("is-valid");
+                            }
+
+                            $("#area_chosen").addClass("is-valid");
+                            $("#funcionario_chosen").addClass("is-valid");
+
                         }, false);
                     });
             }, false);
