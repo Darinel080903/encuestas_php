@@ -86,9 +86,9 @@
                         <button type="submit" class="btn btn-outline-danger"><i class="fas fa-save"></i> Guardar</button>
                         <button type="button" class="btn btn-outline-danger" data-dismiss="modal"><i class="fas fa-sign-out-alt fa-rotate-180"></i> Cerrar</button>
                         <!-- mensaje de error de bootstrap -->
-                        <div id="message-delete" class="alert alert-info" role="alert" style="display:none">
+                        {{-- <div id="message-delete" class="alert alert-info" role="alert" style="display:none">
                             <strong> El registro se elimino correctamente.</strong>
-                        </div>
+                        </div> --}}
                     </form>
                 </div>
             </div>
@@ -103,7 +103,7 @@
                         <h3 class="headerlistatitulo"><i class="fas fa-save"></i> Nuevo bien</h3>
                     </div>
                     <div class="card-body">
-                        <form class="needs-validation" id="formmain" method="POST" action="{{url('/bienes')}}" novalidate>
+                        <form class="needs-validation" id="formmain" action="{{url('/bienes')}}" method="POST" novalidate>
                         @csrf
                             <div class="form-row">
                                 <div class="form-group col-md-4">

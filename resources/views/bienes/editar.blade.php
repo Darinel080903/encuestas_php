@@ -60,7 +60,7 @@
 
                             <div class="form-group col-md-4">
                                 <label for="estadomodal">Estados:</label>
-                                <select class="form-control" id="estadomodal" name="estadomodal">
+                                <select class="form-control @error('estadomodal') is-invalid @enderror form-control-chosen" id="estadomodal" name="estadomodal" required>
                                     <option value="">Estado</option>
                                     @foreach ($estados as $itemestado)
                                         @if ($bienes->fkestado == $itemestado->idestado)
@@ -70,6 +70,9 @@
                                         @endif
                                     @endforeach  
                                 </select>
+                                <div class="invalid-feedback">
+                                    ¡El <strong>estado</strong> es un campo requerido!
+                                </div>
                             </div>
                         </div>
 
@@ -95,13 +98,13 @@
                         <h3 class="headerlistatitulo"><i class="fas fa-pen"></i> Editar bien</h3>
                     </div>
                     <div class="card-body">     
-                        <form class="needs-validation" id="formmodal" action="{{ url('/bienes/'.$bienes->idbien) }}" novalidate>
+                        <form class="needs-validation" id="formmain" action="{{url('/bienes/'.$bienes->idbien)}}" method="POST" novalidate>
                         @method('PUT')
                         @csrf
                             <div class="form-row">
                                 <div class="form-group col-md-4">
                                     <label for="articulo">Artículos:</label>
-                                    <select class="form-control @error('articulo') is-invalid @enderror" id="articulo" name="articulo" required>
+                                    <select class="form-control @error('articulo') is-invalid @enderror form-control-chosen" id="articulo" name="articulo" required>
                                         <option value="">Artículo</option>
                                         @foreach ($articulos as $itemarticulo)
                                             @if ($bienes->fkarticulo == $itemarticulo->idarticulo)
@@ -117,7 +120,7 @@
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="marca">Marcas:</label>
-                                    <select class="form-control" id="marca" name="marca">
+                                    <select class="form-control @error('marca') is-invalid @enderror form-control-chosen" id="marca" name="marca">
                                         <option value="">Marca</option>
                                         @foreach ($marcas as $itemmarca)
                                             @if ($bienes->fkmarca == $itemmarca->idmarca)
@@ -126,7 +129,10 @@
                                                 <option value="{{$itemmarca->idmarca}}">{{$itemmarca->marca}}</option>
                                             @endif
                                         @endforeach  
-                                    </select> 
+                                    </select>
+                                    <div class="invalid-feedback">
+                                        ¡La <strong>marca</strong> es un campo requerido!
+                                    </div>
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="modelo">Modelo:</label>
@@ -152,7 +158,7 @@
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label for="operativo">Sistemas operativos:</label>
-                                    <select class="form-control" id="operativo" name="operativo">
+                                    <select class="form-control form-control-chosen" id="operativo" name="operativo">
                                         <option value="">Sistema operativo</option>
                                         @foreach ($operativos as $itemoperativo)
                                             @if ($bienes -> fkoperativo == $itemoperativo->idoperativo)
@@ -175,7 +181,7 @@
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label for="cedula">Cédulas:</label>
-                                    <select class="form-control" id="cedula" name="cedula">
+                                    <select class="form-control form-control-chosen" id="cedula" name="cedula">
                                         <option value="">Cédula</option>
                                         @foreach ($cedulas as $itemcedula)
                                             @if ($bienes -> fkcedula == $itemcedula->idcedula)
@@ -188,7 +194,7 @@
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label for="estado">Estados:</label>
-                                    <select class="form-control" id="estado" name="estado" required>
+                                    <select class="form-control @error('estado') is-invalid @enderror form-control-chosen" id="estado" name="estado" required>
                                         <option value="">Estado</option>
                                         @foreach ($estados as $itemestado)
                                             @if ($bienes->fkestado == $itemestado->idestado)
@@ -198,6 +204,9 @@
                                             @endif
                                         @endforeach  
                                     </select>
+                                    <div class="invalid-feedback">
+                                        ¡El <strong>estado</strong> es un campo requerido!
+                                    </div>
                                 </div>
                             </div>    
                             <div class="form-row">
@@ -209,7 +218,7 @@
                             <div class="form-row">
                                 <div class="form-group col-md-4">
                                     <label for="area">Áreas:</label>
-                                    <select class="form-control" id="area" name="area">
+                                    <select class="form-control form-control-chosen" id="area" name="area">
                                         <option value="">Area</option>
                                         @foreach ($areas as $itemarea)
                                             @if ($bienes->fkarea == $itemarea->idarea)
@@ -222,13 +231,13 @@
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="funcionario">Funcionarios:</label>
-                                    <select class="form-control" id="funcionario" name="funcionario">
+                                    <select class="form-control form-control-chosen" id="funcionario" name="funcionario">
                                         <option value="">Funcionario</option>
                                         @foreach ($funcionarios as $itemfuncionario)
                                             @if ($bienes ->fkfuncionario == $itemfuncionario->idfuncionario)
-                                                <option value="{{$itemfuncionario->idfuncionario}}" selected>{{$itemfuncionario->nombre}}</option>
+                                                <option value="{{$itemfuncionario->idfuncionario}}" selected>{{$itemfuncionario->nombre.' '.$itemfuncionario->paterno.' '.$itemfuncionario->materno}}</option>
                                                 @else
-                                                <option value="{{$itemfuncionario->idfuncionario}}">{{$itemfuncionario->nombre}}</option>
+                                                <option value="{{$itemfuncionario->idfuncionario}}">{{$itemfuncionario->nombre.' '.$itemfuncionario->paterno.' '.$itemfuncionario->materno}}</option>
                                             @endif
                                         @endforeach  
                                     </select> 

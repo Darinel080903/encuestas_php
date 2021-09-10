@@ -365,7 +365,6 @@ class BienController extends Controller
             }
         }
 
-
         $bitacora = new Bitacora();
         $bitacora->fkusuario = auth()->user()->id;
         $bitacora->operacion = 'Edición del bien con id:'.$actualizabien->idbien;
