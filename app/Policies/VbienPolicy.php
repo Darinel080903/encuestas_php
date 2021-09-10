@@ -2,11 +2,11 @@
 
 namespace App\Policies;
 
-use App\Models\Bien;
 use App\Models\User;
+use App\Models\Vbien;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class BienPolicy
+class VbienPolicy
 {
     use HandlesAuthorization;
 
@@ -35,10 +35,10 @@ class BienPolicy
      * Determine whether the user can view the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Bien  $bien
+     * @param  \App\Models\Vbien  $vbien
      * @return mixed
      */
-    public function view(User $user, Bien $bien)
+    public function view(User $user, Vbien $vbien)
     {
         //
     }
@@ -61,10 +61,10 @@ class BienPolicy
      * Determine whether the user can update the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Bien  $bien
+     * @param  \App\Models\Vbien  $vbien
      * @return mixed
      */
-    public function update(User $user, Bien $bien)
+    public function update(User $user, Vbien $vbien)
     {
         if($user->permissions->contains('slug','bien-editar'))
         {
@@ -76,10 +76,10 @@ class BienPolicy
      * Determine whether the user can delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Bien  $bien
+     * @param  \App\Models\Vbien  $vbien
      * @return mixed
      */
-    public function delete(User $user, Bien $bien)
+    public function delete(User $user, Vbien $vbien)
     {
         if($user->permissions->contains('slug','bien-eliminar'))
         {
@@ -91,10 +91,10 @@ class BienPolicy
      * Determine whether the user can restore the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Bien  $bien
+     * @param  \App\Models\Vbien  $vbien
      * @return mixed
      */
-    public function restore(User $user, Bien $bien)
+    public function restore(User $user, Vbien $vbien)
     {
         //
     }
@@ -103,10 +103,10 @@ class BienPolicy
      * Determine whether the user can permanently delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Bien  $bien
+     * @param  \App\Models\Vbien  $vbien
      * @return mixed
      */
-    public function forceDelete(User $user, Bien $bien)
+    public function forceDelete(User $user, Vbien $vbien)
     {
         //
     }

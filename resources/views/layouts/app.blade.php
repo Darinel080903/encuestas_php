@@ -162,7 +162,7 @@
                                 </div>
                             </li>
                 
-                            @can('viewAny', \App\Models\Bien::class)
+                            @can('viewAny', \App\Models\Vbien::class)
                                 <li class="nav-item dropdown">
                                     <a id="navbarDropdown" class="nav-link dropdown-toggle text-white" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                         <i class="fas fa-desktop icon-color"></i> Bienes<span class="caret"></span>

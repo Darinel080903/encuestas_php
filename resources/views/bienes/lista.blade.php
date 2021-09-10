@@ -39,7 +39,9 @@
                                         <th class="text-center" scope="col">Funcionario</th>
                                         <th class="text-center" scope="col">Fecha</th>
                                         <th class="text-center" scope="col" width="33%" colspan="3">
-                                            <a class="btn btn-outline-danger" href="{{url('/bienes/create?page='.$page.'&vfecha='.$vfecha.'&vbusqueda='.$vbusqueda)}}"><i class="fas fa-save"></i> Nuevo</a>
+                                            @can('create', \App\Models\Vbien::class)
+                                                <a class="btn btn-outline-danger" href="{{url('/bienes/create?page='.$page.'&vfecha='.$vfecha.'&vbusqueda='.$vbusqueda)}}"><i class="fas fa-save"></i> Nuevo</a>
+                                            @endcan
                                         </th>
                                     </tr>
                                 </thead>
@@ -54,21 +56,27 @@
                                             <td class="text-justify align-middle" scope="row">{{$item->nombre.' '.$item->paterno.' '.$item->materno}}</td>
                                             <td class="text-center align-middle" scope="row">{{date('d/m/Y', strtotime("$item->fecha"))}}</td>                                           
                                             <td class="text-center" width="11%">
-                                                <a class="btn btn-outline-danger" href="{{url('/bienes/'.$item->idbien.'/edit?page='.$page.'&vfecha='.$vfecha.'&vbusqueda='.$vbusqueda)}}"><i class="fas fa-pen"></i> Editar</a>
+                                                @can('update', $item)
+                                                    <a class="btn btn-outline-danger" href="{{url('/bienes/'.$item->idbien.'/edit?page='.$page.'&vfecha='.$vfecha.'&vbusqueda='.$vbusqueda)}}"><i class="fas fa-pen"></i> Editar</a>
+                                                @endcan
                                             </td>
                                             <td class="text-center" width="11%">
-                                                <form id="frmimgpublicar{{$item->idbien}}" name="frmimgpublicar{{$item->idbien}}" method="POST" action="{{url('/bienes/'.$item->idbien.'/update2')}}">
-                                                    @method('PUT')
-                                                    @csrf
-                                                    <input type="checkbox" id="activo" name="activo" onchange="funpublicar('frmimgpublicar{{$item->idbien}}')" data-toggle="toggle" data-on="Activo" data-off="Inactivo" data-onstyle="success" data-offstyle="danger" @if($item->activo == 1) {{'checked'}} @endif>
-                                                </form>
+                                                @can('update', $item)
+                                                    <form id="frmimgpublicar{{$item->idbien}}" name="frmimgpublicar{{$item->idbien}}" method="POST" action="{{url('/bienes/'.$item->idbien.'/update2')}}">
+                                                        @method('PUT')
+                                                        @csrf
+                                                        <input type="checkbox" id="activo" name="activo" onchange="funpublicar('frmimgpublicar{{$item->idbien}}')" data-toggle="toggle" data-on="Activo" data-off="Inactivo" data-onstyle="success" data-offstyle="danger" @if($item->activo == 1) {{'checked'}} @endif>
+                                                    </form>
+                                                @endcan
                                             </td>
                                             <td class="text-center" width="11%">
-                                                <form method="POST" action="{{url('/bienes/'.$item->idbien)}}">
-                                                    @method('DELETE')
-                                                    @csrf
-                                                    <button class="btn btn-outline-danger" type="submit"><i class="fas fa-trash"></i> Borrar</button>
-                                                </form>
+                                                @can('delete', $item)
+                                                    <form method="POST" action="{{url('/bienes/'.$item->idbien)}}">
+                                                        @method('DELETE')
+                                                        @csrf
+                                                        <button class="btn btn-outline-danger" type="submit"><i class="fas fa-trash"></i> Borrar</button>
+                                                    </form>
+                                                @endcan
                                             </td>
                                         </tr>
                                     @endforeach

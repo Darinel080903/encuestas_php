@@ -6,14 +6,14 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-body">
-                    <form class="needs-validation" action="javascript:tmpguardarbien();" novalidate>
+                    <form class="needs-validation" id="formmodal" action="javascript:tmpguardarbien();" novalidate>
                         <div class="form-row">
                             <div class="form-group col-md-4">
                                 <label for="articulomodal">Artículos:</label>
-                                <select class="form-control @error('articulomodal') is-invalid @enderror" id="articulomodal" name="articulomodal" required>
+                                <select class="form-control @error('articulomodal') is-invalid @enderror form-control-chosen" id="articulomodal" name="articulomodal" required>
                                     <option value="">Artículo</option>
                                     @foreach ($articulosmodal as $itemarticulomodal)
-                                        @if ($bienes->fkarticulo) == $itemarticulomodal->idarticulo)
+                                        @if (old('articulomodal') == $itemarticulomodal->idarticulo)
                                             <option value="{{$itemarticulomodal->idarticulo}}" selected>{{$itemarticulomodal->articulo}}</option>
                                         @else
                                             <option value="{{$itemarticulomodal->idarticulo}}">{{$itemarticulomodal->articulo}}</option>
@@ -27,16 +27,19 @@
 
                             <div class="form-group col-md-4">
                                 <label for="marcamodal">Marcas:</label>
-                                <select class="form-control" id="marcamodal" name="marcamodal" >
+                                <select class="form-control @error('marcamodal') is-invalid @enderror form-control-chosen" id="marcamodal" name="marcamodal" required>
                                     <option value="">Marca</option>
                                     @foreach ($marcas as $itemmarca)
-                                        @if ($bienes->fkmarca) == $itemmarca->idmarca)
+                                        @if (old('articulo') == $itemmarca->idmarca)
                                             <option value="{{$itemmarca->idmarca}}" selected>{{$itemmarca->marca}}</option>
                                         @else
                                             <option value="{{$itemmarca->idmarca}}">{{$itemmarca->marca}}</option>
                                         @endif
                                     @endforeach  
-                                </select> 
+                                </select>
+                                <div class="invalid-feedback">
+                                    ¡La <strong>marca</strong> es un campo requerido!
+                                </div>
                             </div>
                             <div class="form-group col-md-4">
                                 <label for="modelomodal">Modelo:</label>
@@ -92,7 +95,7 @@
                         <h3 class="headerlistatitulo"><i class="fas fa-pen"></i> Editar bien</h3>
                     </div>
                     <div class="card-body">     
-                        <form class="needs-validation" method="POST" action="{{ url('/bienes/'.$bienes->idbien) }}" novalidate>
+                        <form class="needs-validation" id="formmodal" action="{{ url('/bienes/'.$bienes->idbien) }}" novalidate>
                         @method('PUT')
                         @csrf
                             <div class="form-row">
@@ -294,6 +297,10 @@
         </div>
     </div>
     <script>
+        $(document).ready(function(){
+            $(".form-control-chosen").chosen();
+        });
+
         $(document).ready(function()
         {
             $("#fecha").datepicker({

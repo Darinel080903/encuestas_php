@@ -70,6 +70,8 @@ Route::put('/bienes/{funcionario}/update2', 'App\Http\Controllers\BienController
 
 Route::get('/bienes/campos/{id}', 'App\Http\Controllers\AjaxController@cargarcampos');
 
+Route::get('/bienes/funcionarios/{id}', 'App\Http\Controllers\AjaxController@cargarfuncionarios');
+
 Route::get('/bienes/agregar', 'App\Http\Controllers\AjaxController@cargarcampos');
 
 Route::get('savetmp', 'App\Http\Controllers\AjaxController@tmpguardarbien');

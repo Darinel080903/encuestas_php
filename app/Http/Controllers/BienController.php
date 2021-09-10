@@ -33,7 +33,7 @@ class BienController extends Controller
      */
     public function index(Request $request)
     {
-        $this->authorize('viewAny', Bien::class);
+        $this->authorize('viewAny', Vbien::class);
 
         $page = $request->page;
         $vfecha = $request->vfecha;
@@ -51,7 +51,7 @@ class BienController extends Controller
      */
     public function create(Request $request)
     {
-        $this->authorize('create', Bien::class);
+        $this->authorize('create', Vbien::class);
 
         $page = $request->page;
         $vfecha = $request->vfecha;
@@ -78,7 +78,7 @@ class BienController extends Controller
      */
     public function store(Request $request)
     {
-        $this->authorize('create', Bien::class);
+        $this->authorize('create', Vbien::class);
 
         $request->validate([
             'articulo' => 'required',
@@ -202,7 +202,7 @@ class BienController extends Controller
      */
     public function edit(Request $request, $id)
     {
-        $modelo = Bien::findOrFail($id);
+        $modelo = Vbien::findOrFail($id);
         $this->authorize('update', $modelo);
 
         $page = $request->page;
@@ -269,7 +269,7 @@ class BienController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $modelo = Bien::findOrFail($id);
+        $modelo = Vbien::findOrFail($id);
         $this->authorize('update', $modelo);
 
         $request->validate([
@@ -386,7 +386,7 @@ class BienController extends Controller
      */
     public function destroy(Request $request,$id)
     {
-        $modelo = Bien::findOrFail($id);
+        $modelo = Vbien::findOrFail($id);
         $this->authorize('delete', $modelo);
 
         $eliminabien = Bien::findOrFail($id);
@@ -400,8 +400,6 @@ class BienController extends Controller
         $bitacora->pc = gethostname();
         $bitacora->save();
         
-        return back()->withInput()->with('mensaje', '¡Bien, eliminado correctamente!');
-
-       
+        return back()->withInput()->with('mensaje', '¡Bien, eliminado correctamente!');       
     }
 }

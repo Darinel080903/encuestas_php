@@ -226,7 +226,7 @@
                                 </div> 
                             </div>
                             <div class="form-row">
-                                <div class="form-group col-md-4">
+                                <div class="form-group col-md-6">
                                     <label for="area">Áreas:</label>
                                     <select class="form-control form-control-chosen" id="area" name="area">
                                         <option value="">Area</option>
@@ -248,14 +248,14 @@
                                         <option value="">Funcionario</option>
                                         @foreach ($funcionarios as $itemfuncionario)
                                             @if (old('funcionario') == $itemfuncionario->idfuncionario)
-                                                <option value="{{$itemfuncionario->idfuncionario}}" selected>{{$itemfuncionario->nombre}}</option>
+                                                <option value="{{$itemfuncionario->idfuncionario}}" selected>{{$itemfuncionario->nombre.' '.$itemfuncionario->paterno.' '.$itemfuncionario->materno}}</option>
                                             @else
-                                                <option value="{{$itemfuncionario->idfuncionario}}">{{$itemfuncionario->nombre}}</option>
+                                                <option value="{{$itemfuncionario->idfuncionario}}">{{$itemfuncionario->nombre.' '.$itemfuncionario->paterno.' '.$itemfuncionario->materno}}</option>
                                             @endif
                                         @endforeach  
                                     </select> 
                                 </div>                         
-                                <div class="form-group col-md-4">
+                                <div class="form-group col-md-2">
                                     <label for="fecha">Fecha:</label>
                                     <input type="text" class="form-control @error('fecha') is-invalid @enderror" id="fecha" name="fecha" aria-label="Fecha" placeholder="Fecha" value="{{ date('d/m/Y') }}" readonly/>
                                 </div>
@@ -284,6 +284,12 @@
                             <input type="hidden" name="vbusqueda" value="{{$vbusqueda ?? ''}}">
                             <button type="submit" class="btn btn-outline-danger"><i class="fas fa-save"></i> Guardar</button>
                             <a class="btn btn-outline-danger" href="{{ url('/bienes?page='.$page.'&vfecha='.$vfecha.'&vbusqueda='.$vbusqueda) }}"><i class="fas fa-sign-out-alt fa-rotate-180"></i> Regresar</a>
+                            <div class="d-none justify-content-center" id="divloading">
+                                <div class="spinner-grow divloading" role="status">
+                                    <span class="sr-only">Loading...</span>
+                                </div>
+                                <p class="font-weight-bolder text-muted font-italic mt-1 mb-2">&nbsp;Cargando...</p>
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -566,6 +572,47 @@
                     $("#estado_chosen").addClass("is-invalid");
                 }
             }
+        });
+
+        $(function(){
+            $("#area").chosen().change(function(){
+                $("#divloading").addClass("d-flex").removeClass("d-none");
+                var identificador = $("#area").chosen().val();
+                if(identificador)
+                {
+                    // Ini Ajax
+                    var url = "{{url('/bienes/funcionarios/idarea')}}";
+                    url = url.replace("idarea", identificador);
+                    $.ajax({type:"get",
+                        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                        url:url,
+                        dataType: "json",
+                        success: function(response, textStatus, xhr)
+                        {
+                            $("#funcionario").empty();
+                            $("#funcionario").append("<option value=''>Funcionario</option>");
+                            for(let i = 0; i< response.length; i++)
+                            {
+                                $("#funcionario").append("<option value='"+response[i].idfuncionario+"'>"+response[i].nombre+' '+response[i].paterno+' '+response[i].materno+"</option>"); 
+                            }
+                            $("#divloading").addClass("d-none").removeClass("d-flex");
+                            $("#funcionario").trigger("chosen:updated");
+                        },
+                        error: function(xhr, textStatus, errorThrown)
+                        {
+                            alert("¡Error al cargar el funcionario!");
+                        }
+                    });
+                    // Fin Ajax
+                }
+                else
+                {
+                    $("#funcionario").empty();
+                    $("#funcionario").append("<option value=''>Funcionario</option>");
+                    $("#divloading").addClass("d-none").removeClass("d-flex");
+                    $("#funcionario").trigger("chosen:updated");
+                } 
+            });
         });
 
         // Example starter JavaScript for disabling form submissions if there are invalid fields

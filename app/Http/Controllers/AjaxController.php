@@ -13,6 +13,8 @@ use App\Models\Funcionario;
 use App\Models\Desglose;
 use App\Models\Factura;
 use App\Models\Folio;
+use App\Models\Area;
+use App\Models\Vfuncionario;
 
 class AjaxController extends Controller
 {
@@ -153,6 +155,24 @@ class AjaxController extends Controller
         {
             $unitario = Desglose::where('iddesglose', $id)->value('unitario');
             return response()->json($unitario);
+        }
+    }
+
+    public function cargarfuncionarios(Request $request, $id)
+    {
+        if($request->ajax())
+        {
+            $valida = Area::where('idarea', $id)->value('fkarea');
+            if($valida)
+            {
+                $area = '.'.$id;
+            }
+            else
+            {
+                $area = $id;
+            }            
+            $funcionario = Vfuncionario::where('ruta', 'like', "%$area%")->get();
+            return response()->json($funcionario);
         }
     }
 }
