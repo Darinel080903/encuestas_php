@@ -61,7 +61,8 @@ class BienController extends Controller
         $articulosmodal = Articulo::where('raiz', '<>', 1)->orwhereNull('raiz')->orderBy('articulo', 'asc')->get();
         $marcas = Marca::orderBy('marca', 'asc')->get();
         $operativos = Operativo::orderBy('operativo', 'asc')->get();
-        $areas = Area::orderBy('area', 'asc')->get();
+        // $areas = Area::orderBy('area', 'asc')->get();
+        $areas = Area::whereNull('fkarea')->get();
         $funcionarios = Funcionario::orderBy('nombre', 'asc')->get();
         $estados = Estado::orderBy('idestado', 'asc')->get();
         $cedulas = Cedula::orderBy('fecha', 'asc')->get();

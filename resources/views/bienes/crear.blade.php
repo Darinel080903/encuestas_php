@@ -6,14 +6,13 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-body">
-                    <form class="needs-validation" action="javascript:tmpguardarbien();" novalidate>
+                    <form class="needs-validation" id="formmodal" action="javascript:tmpguardarbien();" novalidate>
                         <div class="form-row">
                             <div class="form-group col-md-4">
                                 <label for="articulomodal">Artículos:</label>
                                 <select class="form-control @error('articulomodal') is-invalid @enderror form-control-chosen" id="articulomodal" name="articulomodal" required>
                                     <option value="">Artículo</option>
                                     @foreach ($articulosmodal as $itemarticulomodal)
-                                    
                                         @if (old('articulomodal') == $itemarticulomodal->idarticulo)
                                             <option value="{{$itemarticulomodal->idarticulo}}" selected>{{$itemarticulomodal->articulo}}</option>
                                             @else
@@ -63,7 +62,7 @@
                             </div>
                             <div class="form-group col-md-4">
                                 <label for="estadomodal">Estados:</label>
-                                <select class="form-control @error('estadomodal') is-invalid @enderror" id="estadomodal" name="estadomodal" required>
+                                <select class="form-control @error('estadomodal') is-invalid @enderror form-control-chosen" id="estadomodal" name="estadomodal" required>
                                     <option value="">Estado</option>
                                     @foreach ($estados as $itemestado)
                                         @if (old('estado') == $itemestado->idestado)
@@ -86,13 +85,10 @@
                         </div>
                         <button type="submit" class="btn btn-outline-danger"><i class="fas fa-save"></i> Guardar</button>
                         <button type="button" class="btn btn-outline-danger" data-dismiss="modal"><i class="fas fa-sign-out-alt fa-rotate-180"></i> Cerrar</button>
-
                         <!-- mensaje de error de bootstrap -->
                         <div id="message-delete" class="alert alert-info" role="alert" style="display:none">
                             <strong> El registro se elimino correctamente.</strong>
                         </div>
-
-
                     </form>
                 </div>
             </div>
@@ -107,7 +103,7 @@
                         <h3 class="headerlistatitulo"><i class="fas fa-save"></i> Nuevo bien</h3>
                     </div>
                     <div class="card-body">
-                        <form class="needs-validation" method="POST" action="{{url('/bienes')}}" novalidate>
+                        <form class="needs-validation" id="formmain" method="POST" action="{{url('/bienes')}}" novalidate>
                         @csrf
                             <div class="form-row">
                                 <div class="form-group col-md-4">
@@ -240,6 +236,9 @@
                                             @else
                                                 <option value="{{$itemarea->idarea}}">{{$itemarea->area}}</option>
                                             @endif
+                                            @if(count($itemarea->childsactivos))
+                                                @include('bienes.crearoption',['childsactivos' => $itemarea->childsactivos])
+                                            @endif
                                         @endforeach  
                                     </select> 
                                 </div>
@@ -338,9 +337,8 @@
             var estado = $("#estadomodal").val();
             var observacion = $("#observacionmodal").val();
 
-            var url = "{{url('savetmp')}}";    //sirve para colocar el nombre de la pagina completa 
-            // url = url.replace("año", event.target.value);
-                 
+            var url = "{{url('savetmp')}}";    
+         
             $.ajax({                  
                 type: "get",
                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}, 
@@ -349,7 +347,6 @@
                 data: {articulomodal:articulo, marcamodal:marca, modelomodal:modelo, seriemodal:serie, patrimoniomodal:patrimonio, estadomodal:estado, observacionmodal:observacion},
                 success: function(response, textStatus, xhr)
                 {
-                    //alert(response);
                     if(response == "R")
                     {
                         alert("registro existente");
@@ -358,13 +355,11 @@
                     {
                         $("#listaarticulos").empty();
                         $('#listaarticulos').append("<tr><th>Articulo</th><th>Marca</th><th>Modelo</th><th>Serie</th><th>Patrimonio</th><th>Estado</th><th>Observacion</th><th>Eliminar</th></tr>");
-
                         for(let i = 0; i< response.length; i++) 
                         {   
-                            // $("#listaarticulos").append("<li class='list-group-item d-flex justify-content-between align-items-center'>"+response[i].fkarticulo+"</li>");                        
-                            $('#listaarticulos').append("<tr><td>"+response[i].articulo+"</td><td>"+response[i].marca+"</td><td>"+response[i].modelo+"</td><td>"+response[i].serie+"</td><td>"+response[i].patrimonio+"</td><td>"+response[i].estado+"</td><td>"+response[i].observacion+"</td><td><a class='btn btn-primary id='message-delete' href='javascript:eliminartmpbien("+response[i].idtmpbien+");'>Eliminar</a></td></tr>");
-                                                
-                        }   
+                            $('#listaarticulos').append("<tr><td>"+response[i].articulo+"</td><td>"+response[i].marca+"</td><td>"+response[i].modelo+"</td><td>"+response[i].serie+"</td><td>"+response[i].patrimonio+"</td><td>"+response[i].estado+"</td><td>"+response[i].observacion+"</td><td><a class='btn btn-primary id='message-delete' href='javascript:eliminartmpbien("+response[i].idtmpbien+");'>Eliminar</a></td></tr>");                    
+                        }
+                        limpiar();   
                     }
                 },
                 error: function(xhr, textStatus, errorThrown)
@@ -372,6 +367,29 @@
                     alert("¡Error al guardar la dependencia!");                 
                 }                
             });              
+        }
+
+        function limpiar()
+        {
+            $("#formmodal").removeClass("was-validated");
+
+            $("#articulomodal option:selected").prop("selected", false);
+            $("#articulomodal").trigger("chosen:updated");
+            $("#articulomodal_chosen").removeClass("is-valid");
+
+            $("#marcamodal option:selected").prop("selected", false);
+            $("#marcamodal").trigger("chosen:updated");
+            $("#marcamodal_chosen").removeClass("is-valid");
+            
+            $("#modelomodal").val("");
+            $("#seriemodal").val("");
+            $("#patrimoniomodal").val("");
+            
+            $("#estadomodal option:selected").prop("selected", false);
+            $("#estadomodal").trigger("chosen:updated");
+            $("#estadomodal_chosen").removeClass("is-valid");
+            
+            $("#observacionmodal").val("");
         }
         
         function eliminartmpbien(id)
@@ -398,7 +416,8 @@
             });
         }
 
-        $( document ).ready(function() {       //mandamos a llamar la funcion limpiar.
+        // Mandamos a llamar la funcion limpiar.
+        $(document).ready(function(){
             limpiartmpbien();
         });
 
@@ -433,6 +452,63 @@
                 locale: 'es-es',
                 format: 'dd/mm/yyyy'
             });
+        });
+
+        $("#articulomodal").change(function(){
+            if($("#articulomodal").val() != "")
+            {
+                if($("#articulomodal_chosen").hasClass("is-invalid") === true)
+                {
+                    $("#articulomodal_chosen").removeClass("is-invalid");
+                    $("#articulomodal_chosen").addClass("is-valid");
+                }
+            }
+            else
+            {
+                if($("#articulomodal_chosen").hasClass("is-valid") === true)
+                {
+                    $("#articulomodal_chosen").removeClass("is-valid");
+                    $("#articulomodal_chosen").addClass("is-invalid");
+                }
+            }
+        });
+
+        $("#marcamodal").change(function(){
+            if($("#marcamodal").val() != "")
+            {
+                if($("#marcamodal_chosen").hasClass("is-invalid") === true)
+                {
+                    $("#marcamodal_chosen").removeClass("is-invalid");
+                    $("#marcamodal_chosen").addClass("is-valid");
+                }
+            }
+            else
+            {
+                if($("#marcamodal_chosen").hasClass("is-valid") === true)
+                {
+                    $("#marcamodal_chosen").removeClass("is-valid");
+                    $("#marcamodal_chosen").addClass("is-invalid");
+                }
+            }
+        });
+        
+        $("#estadomodal").change(function(){
+            if($("#estadomodal").val() != "")
+            {
+                if($("#estadomodal_chosen").hasClass("is-invalid") === true)
+                {
+                    $("#estadomodal_chosen").removeClass("is-invalid");
+                    $("#estadomodal_chosen").addClass("is-valid");
+                }
+            }
+            else
+            {
+                if($("#estadomodal_chosen").hasClass("is-valid") === true)
+                {
+                    $("#estadomodal_chosen").removeClass("is-valid");
+                    $("#estadomodal_chosen").addClass("is-invalid");
+                }
+            }
         });
 
         $("#articulo").change(function(){
@@ -510,32 +586,110 @@
                                 event.preventDefault();
                                 event.stopPropagation();
 
-                                if($("#articulo").val() == "")
+                                console.log(form.id);
+
+                                if(form.id == "formmodal")
                                 {
-                                    $("#articulo_chosen").addClass("is-invalid");
+                                    if($("#articulomodal").val() == "")
+                                    {
+                                        $("#articulomodal_chosen").addClass("is-invalid");
+                                    }
+                                    else
+                                    {
+                                        $("#articulomodal_chosen").addClass("is-valid");
+                                    }
+
+                                    if($("#marcamodal").val() == "")
+                                    {
+                                        $("#marcamodal_chosen").addClass("is-invalid");
+                                    }
+                                    else
+                                    {
+                                        $("#marcamodal_chosen").addClass("is-valid");
+                                    }
+                                    
+                                    if($("#estadomodal").val() == "")
+                                    {
+                                        $("#estadomodal_chosen").addClass("is-invalid");
+                                    }
+                                    else
+                                    {
+                                        $("#estadomodal_chosen").addClass("is-valid");
+                                    }    
                                 }
-                                else
+
+                                if(form.id == "formmain")
+                                {
+                                    if($("#articulo").val() == "")
+                                    {
+                                        $("#articulo_chosen").addClass("is-invalid");
+                                    }
+                                    else
+                                    {
+                                        $("#articulo_chosen").addClass("is-valid");
+                                    }
+
+                                    if($("#marca").val() == "")
+                                    {
+                                        $("#marca_chosen").addClass("is-invalid");
+                                    }
+                                    else
+                                    {
+                                        $("#marca_chosen").addClass("is-valid");
+                                    }
+                                    
+                                    $("#operativo_chosen").addClass("is-valid");
+                                    $("#cedula_chosen").addClass("is-valid");
+                                    
+                                    if($("#estado").val() == "")
+                                    {
+                                        $("#estado_chosen").addClass("is-invalid");
+                                    }
+                                    else
+                                    {
+                                        $("#estado_chosen").addClass("is-valid");
+                                    }
+
+                                    $("#area_chosen").addClass("is-valid");
+                                    $("#funcionario_chosen").addClass("is-valid");
+                                }
+                            }
+                            form.classList.add('was-validated');
+                            
+                            if(form.id == "formmodal")
+                            {
+                                if($("#articulomodal").val() != "")
+                                {
+                                    $("#articulomodal_chosen").addClass("is-valid");
+                                }
+                                
+                                if($("#marcamodal").val() != "")
+                                {
+                                    $("#marcamodal_chosen").addClass("is-valid");
+                                }
+                                
+                                if($("#estadomodal").val() != "")
+                                {
+                                    $("#estadomodal_chosen").addClass("is-valid");
+                                }
+                            }
+
+                            if(form.id == "formmain")
+                            {
+                                if($("#articulo").val() != "")
                                 {
                                     $("#articulo_chosen").addClass("is-valid");
                                 }
 
-                                if($("#marca").val() == "")
-                                {
-                                    $("#marca_chosen").addClass("is-invalid");
-                                }
-                                else
+                                if($("#marca").val() != "")
                                 {
                                     $("#marca_chosen").addClass("is-valid");
                                 }
-                                
+
                                 $("#operativo_chosen").addClass("is-valid");
                                 $("#cedula_chosen").addClass("is-valid");
                                 
-                                if($("#estado").val() == "")
-                                {
-                                    $("#estado_chosen").addClass("is-invalid");
-                                }
-                                else
+                                if($("#estado").val() != "")
                                 {
                                     $("#estado_chosen").addClass("is-valid");
                                 }
@@ -543,28 +697,6 @@
                                 $("#area_chosen").addClass("is-valid");
                                 $("#funcionario_chosen").addClass("is-valid");
                             }
-                            form.classList.add('was-validated');
-                            
-                            if($("#articulo").val() != "")
-                            {
-                                $("#articulo_chosen").addClass("is-valid");
-                            }
-
-                            if($("#marca").val() != "")
-                            {
-                                $("#marca_chosen").addClass("is-valid");
-                            }
-
-                            $("#operativo_chosen").addClass("is-valid");
-                            $("#cedula_chosen").addClass("is-valid");
-                            
-                            if($("#estado").val() != "")
-                            {
-                                $("#estado_chosen").addClass("is-valid");
-                            }
-
-                            $("#area_chosen").addClass("is-valid");
-                            $("#funcionario_chosen").addClass("is-valid");
 
                         }, false);
                     });
