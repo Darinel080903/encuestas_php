@@ -28,15 +28,11 @@ class ResguardoController extends Controller
     {
         $this->authorize('viewAny', Vresguardo::class);
 
-        $page = $request->page;
-        $vbusqueda = $request->vbusqueda;
-        
-        //$areas = Area::all();
-        $areas = Area::orderBy('area', 'asc')->get();
-        $funcionarios = Funcionario::busqueda($vbusqueda)->orderBy('nombre', 'asc')->orderBy('paterno', 'asc')->orderBy('materno', 'asc')->paginate(10);
+        // $areas = Area::orderBy('area', 'asc')->get();
+        $areas = Area::whereNull('fkarea')->get();
+        $funcionarios = Funcionario::where('activo', 1)->orderBy('nombre', 'asc')->orderBy('paterno', 'asc')->orderBy('materno', 'asc')->get();
             
-        return view('resguardos.resguardo',compact('page', 'vbusqueda', 'areas', 'funcionarios'));          
-          
+        return view('resguardos.resguardo',compact('areas', 'funcionarios'));                    
     }
 
     /**

@@ -4,13 +4,13 @@
         @php($cadena = $cadena.'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;')
     @endfor
     
-    @if ($funcionarios->fkadscripcion == $child->idarea)
+    @if (old('area') == $child->idarea)
         <option value="{{$child->idarea}}" selected>{!! $cadena.$child->area !!}</option>
     @else
         <option value="{{$child->idarea}}">{!! $cadena.$child->area !!}</option>
     @endif
     
     @if(count($child->childsactivos))
-        @include('funcionarios.editoptionadsc',['childsactivos' => $child->childsactivos])
+        @include('resguardos.crearoption',['childsactivos' => $child->childsactivos])
     @endif
 @endforeach

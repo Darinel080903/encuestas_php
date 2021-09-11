@@ -168,19 +168,18 @@
                                         <i class="fas fa-desktop icon-color"></i> Bienes<span class="caret"></span>
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                        
-                                        <a class="dropdown-item" href="{{url('/bienes')}}"><i class="fas fa-desktop icon-color"></i> Bienes</a>
+                                        @can('viewAny', \App\Models\Vbien::class)
+                                            <a class="dropdown-item" href="{{url('/bienes')}}">
+                                                <i class="fas fa-desktop icon-color"></i> Bienes
+                                            </a>
+                                        @endcan
                                         
                                         @can('viewAny', \App\Models\Vresguardo::class)
                                             <a class="dropdown-item" href="{{url('/resguardos')}}">
                                                 <i class="fas fa-retweet icon-color"></i> Resguardos
                                             </a>
                                         @endcan
-                                    
-                                        <a class="dropdown-item" href="{{url('/funcionarios')}}">
-                                            <i class="fas fa-barcode icon-color"></i> Etiquetas
-                                        </a>
-
+                                
                                         @can('viewAny', \App\Models\vsalida::class)
                                             <a class="dropdown-item" href="{{url('/valesalidas')}}">
                                                 <i class="fas fa-file-alt icon-color"></i> Vale de Salida
@@ -189,31 +188,30 @@
                                         
                                     </div>                                
                                 </li>
-                               
                             @endcan
 
-                            
+                            @can('viewAny', \App\Models\Factura::class)
+                                <li class="nav-item dropdown">
+                                    <a id="navbarDropdown" class="nav-link dropdown-toggle text-white" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                        <i class="fas fa-file-invoice-dollar icon-color"></i> Facturas<span class="caret"></span>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                        @can('viewAny', \App\Models\Factura::class)
+                                            <a class="dropdown-item" href="{{url('/facturas')}}">
+                                                <i class="fas fa-file-invoice-dollar icon-color"></i> Facturas
+                                            </a>
+                                        @endcan
+                                        @can('viewAny', \App\Models\Vvale::class)
+                                            <a class="dropdown-item" href="{{url('/vales')}}">
+                                                <i class="fas fa-file-alt icon-color"></i> Vales
+                                            </a>
+                                        @endcan
+                                    </div>                                
+                                </li>
+                            @endcan
 
-                            <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle text-white" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    <i class="fas fa-file-invoice-dollar icon-color"></i> Facturas<span class="caret"></span>
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                    @can('viewAny', \App\Models\Factura::class)
-                                        <a class="dropdown-item" href="{{url('/facturas')}}">
-                                            <i class="fas fa-file-invoice-dollar icon-color"></i> Facturas
-                                        </a>
-                                    @endcan
-                                    @can('viewAny', \App\Models\Vvale::class)
-                                        <a class="dropdown-item" href="{{url('/vales')}}">
-                                            <i class="fas fa-file-alt icon-color"></i> Vales
-                                        </a>
-                                    @endcan
-                                </div>                                
-                            </li>
-
-                            <li class="nav-item dropdown">
-                                @can('viewAny', \App\Models\User::class)
+                            @can('viewAny', \App\Models\User::class)
+                                <li class="nav-item dropdown">
                                     <a id="navbarDropdown" class="nav-link dropdown-toggle text-white" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                         <i class="fas fa-users icon-color"></i> Usuarios<span class="caret"></span>
                                     </a>
@@ -229,11 +227,10 @@
                                             </a>
                                         @endcan
                                     </div>
-                                @endcan
-                            </li>
+                                </li>
+                            @endcan
 
                         @endauth
-
                     </ul>
 
                     <!-- Right Side Of Navbar -->

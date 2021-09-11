@@ -61,9 +61,8 @@ class BienController extends Controller
         $articulosmodal = Articulo::where('raiz', '<>', 1)->orwhereNull('raiz')->orderBy('articulo', 'asc')->get();
         $marcas = Marca::orderBy('marca', 'asc')->get();
         $operativos = Operativo::orderBy('operativo', 'asc')->get();
-        // $areas = Area::orderBy('area', 'asc')->get();
         $areas = Area::whereNull('fkarea')->get();
-        $funcionarios = Funcionario::orderBy('nombre', 'asc')->get();
+        $funcionarios = Funcionario::where('activo', 1)->orderBy('nombre', 'asc')->orderBy('paterno', 'asc')->orderBy('materno', 'asc')->get();
         $estados = Estado::orderBy('idestado', 'asc')->get();
         $cedulas = Cedula::orderBy('fecha', 'asc')->get();
 
@@ -163,8 +162,7 @@ class BienController extends Controller
                     {
                         $nuevotmpbien->activo = 0;
                     }
-                    $nuevotmpbien->save();
-                 
+                    $nuevotmpbien->save();             
                 }
                     
                 $limpiatmpbienes = Tmpbien::where('fkusuario', $usuario); //eliminamos los registros de la tabla temporal.
@@ -214,50 +212,44 @@ class BienController extends Controller
         $articulosmodal = Articulo::where('raiz', '<>', 1)->orwhereNull('raiz')->orderBy('articulo', 'asc')->get();
         $marcas = Marca::orderBy('marca', 'asc')->get();
         $operativos = Operativo::orderBy('operativo', 'asc')->get();
-        $areas = Area::orderBy('area', 'asc')->get();
-        $funcionarios = Funcionario::orderBy('nombre', 'asc')->get();
+        $areas = Area::whereNull('fkarea')->get();
+        $funcionarios = Funcionario::where('activo', 1)->orderBy('nombre', 'asc')->orderBy('paterno', 'asc')->orderBy('materno', 'asc')->get();
         $estados = Estado::orderBy('idestado', 'asc')->get();
         $cedulas = Cedula::orderBy('fecha', 'asc')->get();
 
-
         $raiz = Articulo::Where('idarticulo', $bienes->fkarticulo)->value('raiz');
 
-        $bienestotmp = Bien::Where('fkraiz', $bienes->idbien)->get(); // registros que se van a la tabla temporal.
+        // registros que se van a la tabla temporal.
+        $bienestotmp = Bien::Where('fkraiz', $bienes->idbien)->get();
 
-        $usuario = auth()->user()->id;        //obtenemos la instancia del usuario logueado
+        //obtenemos la instancia del usuario logueado
+        $usuario = auth()->user()->id;
 
-        $limpiartmpbienes = Tmpbien::where('fkusuario', $usuario); //eliminamos los registros de la tabla temporal.
+        //eliminamos los registros de la tabla temporal.
+        $limpiartmpbienes = Tmpbien::where('fkusuario', $usuario);
         $limpiartmpbienes->delete();
 
-        //se agregan los datos a la tabla Tmpbienes
-
+        //se agregan los datos a la tabla Tmpbienes                
+        foreach ($bienestotmp as $item)
+        {                
                 
-            foreach ($bienestotmp as $item)
-            {                
-                 
-                $agregabien = new Tmpbien();
-                $agregabien->fkarticulo = $item->fkarticulo;
-                $agregabien->fkmarca = $item->fkmarca;
-                $agregabien->modelo = $item->modelo;
-                $agregabien->serie = $item->serie;
-                $agregabien->patrimonio = $item->patrimonio;                            
-                $agregabien->fkestado = $item->fkestado;
-                $agregabien->observacion = $item->observacion;
-                $agregabien->fkusuario = auth()->user()->id;
-                $agregabien->save();
-                 
-            }
-                                                
-        $tmpbienes = Vtmpbien::Where('fkusuario', $usuario)->get(); // registros que se van a la tabla temporal.         
+            $agregabien = new Tmpbien();
+            $agregabien->fkarticulo = $item->fkarticulo;
+            $agregabien->fkmarca = $item->fkmarca;
+            $agregabien->modelo = $item->modelo;
+            $agregabien->serie = $item->serie;
+            $agregabien->patrimonio = $item->patrimonio;                            
+            $agregabien->fkestado = $item->fkestado;
+            $agregabien->observacion = $item->observacion;
+            $agregabien->fkusuario = auth()->user()->id;
+            $agregabien->save();
+                
+        }
+
+        // registros que se van a la tabla temporal.                                        
+        $tmpbienes = Vtmpbien::Where('fkusuario', $usuario)->get();          
 
         return view('bienes.editar',compact('page', 'vfecha', 'vbusqueda', 'articulos', 'articulosmodal', 'marcas', 'operativos', 'areas', 'funcionarios', 'estados', 'cedulas', 'bienes', 'raiz', 'tmpbienes'));
-
-        //mostramos los articulos dependientes.
-
-        //$articulos = Articulo::findOrFail($request->articulo);
-              
-
-        
     }
 
     /**

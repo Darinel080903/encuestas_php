@@ -171,7 +171,7 @@ class AjaxController extends Controller
             {
                 $area = $id;
             }            
-            $funcionario = Vfuncionario::where('ruta', 'like', "%$area%")->get();
+            $funcionario = Vfuncionario::where([['activo', 1], ['ruta', 'like', "%$area%"]])->orderBy('nombre', 'asc')->orderBy('paterno', 'asc')->orderBy('materno', 'asc')->get();
             return response()->json($funcionario);
         }
     }

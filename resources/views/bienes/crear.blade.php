@@ -24,12 +24,13 @@
                                     ¡El <strong>artículo</strong> es un campo requerido!
                                 </div>
                             </div>
+
                             <div class="form-group col-md-4">
                                 <label for="marcamodal">Marcas:</label>
                                 <select class="form-control @error('marcamodal') is-invalid @enderror form-control-chosen" id="marcamodal" name="marcamodal" required>
                                     <option value="">Marca</option>
                                     @foreach ($marcas as $itemmarca)
-                                        @if (old('articulo') == $itemmarca->idmarca)
+                                        @if (old('marcamodal') == $itemmarca->idmarca)
                                             <option value="{{$itemmarca->idmarca}}" selected>{{$itemmarca->marca}}</option>
                                             @else
                                             <option value="{{$itemmarca->idmarca}}">{{$itemmarca->marca}}</option>
@@ -40,32 +41,36 @@
                                     ¡La <strong>marca</strong> es un campo requerido!
                                 </div>
                             </div>
+                            
                             <div class="form-group col-md-4">
                                 <label for="modelomodal">Modelo:</label>
                                 <input type="text" class="form-control" id="modelomodal" name="modelomodal" placeholder="Modelo" max="250" value="{{old('modelomodal')}}"/>
                             </div>
                         </div>
+
                         <div class="form-row">
                             <div class="form-group col-md-4">
                                 <label for="seriemodal">Serie:</label>
-                                <input type="text" class="form-control @error('seriemodal') is-invalid @enderror" id="seriemodal" name="seriemodal" placeholder="Número de serie" max="250" value="{{old('serie')}}" required/>
+                                <input type="text" class="form-control @error('seriemodal') is-invalid @enderror" id="seriemodal" name="seriemodal" placeholder="Número de serie" max="250" value="{{old('seriemodal')}}" required/>
                                 <div class="invalid-feedback">
                                     ¡El <strong>número de serie</strong> es un campo requerido!
                                 </div>
                             </div>
+                        
                             <div class="form-group col-md-4">
                                 <label for="patrimoniomodal">Patrimonio:</label>
-                                <input type="text" class="form-control @error('patrimoniomodal') is-invalid @enderror" id="patrimoniomodal" name="patrimoniomodal" placeholder="Número de patrimonio" max="250" value="{{old('patrimonio')}}" required/>
+                                <input type="text" class="form-control @error('patrimoniomodal') is-invalid @enderror" id="patrimoniomodal" name="patrimoniomodal" placeholder="Número de patrimonio" max="250" value="{{old('patrimoniomodal')}}" required/>
                                 <div class="invalid-feedback">
                                     ¡El <strong>número de patrimonio</strong> es un campo requerido!
                                 </div>
                             </div>
+                        
                             <div class="form-group col-md-4">
                                 <label for="estadomodal">Estados:</label>
                                 <select class="form-control @error('estadomodal') is-invalid @enderror form-control-chosen" id="estadomodal" name="estadomodal" required>
                                     <option value="">Estado</option>
                                     @foreach ($estados as $itemestado)
-                                        @if (old('estado') == $itemestado->idestado)
+                                        @if (old('estadomodal') == $itemestado->idestado)
                                             <option value="{{$itemestado->idestado}}" selected>{{$itemestado->estado}}</option>
                                         @else
                                             <option value="{{$itemestado->idestado}}">{{$itemestado->estado}}</option>
@@ -77,12 +82,14 @@
                                 </div> 
                             </div>
                         </div>
+                        
                         <div class="form-row">
                             <div class="form-group col-md-12">
                                 <label for="observacionmodal">Observaciones:</label>
                                 <textarea class="form-control" id="observacionmodal" name="observacionmodal" cols="30" rows="2">{{old('observacionmodal')}}</textarea>
                             </div> 
                         </div>
+                        
                         <button type="submit" class="btn btn-outline-danger"><i class="fas fa-save"></i> Guardar</button>
                         <button type="button" class="btn btn-outline-danger" data-dismiss="modal"><i class="fas fa-sign-out-alt fa-rotate-180"></i> Cerrar</button>
                         <!-- mensaje de error de bootstrap -->
@@ -122,12 +129,13 @@
                                         ¡El <strong>artículo</strong> es un campo requerido!
                                     </div>
                                 </div>
+                        
                                 <div class="form-group col-md-4">
                                     <label for="marca">Marcas:</label>
                                     <select class="form-control @error('marca') is-invalid @enderror form-control-chosen" id="marca" name="marca" required>
                                         <option value="">Marca</option>
                                         @foreach ($marcas as $itemmarca)
-                                            @if (old('articulo') == $itemmarca->idmarca)
+                                            @if (old('marca') == $itemmarca->idmarca)
                                                 <option value="{{$itemmarca->idmarca}}" selected>{{$itemmarca->marca}}</option>
                                             @else
                                                 <option value="{{$itemmarca->idmarca}}">{{$itemmarca->marca}}</option>
@@ -138,28 +146,34 @@
                                         ¡La <strong>marca</strong> es un campo requerido!
                                     </div>
                                 </div>
+                        
                                 <div class="form-group col-md-4">
                                     <label for="modelo">Modelo:</label>
                                     <input type="text" class="form-control" id="modelo" name="modelo" placeholder="Modelo" max="250" value="{{old('modelo')}}"/>
                                 </div>
                             </div>
+                        
                             <div class="form-row d-none" id="divcampos">
                                 <div class="form-group col-md-3">
                                     <label for="procesador">Procesador:</label>
                                     <input type="text" class="form-control" id="procesador" name="procesador" placeholder="Procesador" max="250" value="{{old('procesador')}}"/>
                                 </div>
+                        
                                 <div class="form-group col-md-2">
                                     <label for="memoria">Memoria:</label>
                                     <input type="text" class="form-control" id="memoria" name="memoria" placeholder="Memoria" max="250" value="{{old('memoria')}}"/>
                                 </div>
+                        
                                 <div class="form-group col-md-2">
                                     <label for="disco">Disco:</label>
                                     <input type="text" class="form-control" id="disco" name="disco" placeholder="Disco" max="250" value="{{old('disco')}}"/>
                                 </div>
+                        
                                 <div class="form-group col-md-2">
                                     <label for="serie">Ip:</label>
                                     <input type="text" class="form-control" id="ip" name="ip" placeholder="Ip" max="250" value="{{old('ip')}}"/>                                    
                                 </div>
+                        
                                 <div class="form-group col-md-3">
                                     <label for="operativo">Sistemas operativos:</label>
                                     <select class="form-control form-control-chosen" id="operativo" name="operativo">
@@ -174,6 +188,7 @@
                                     </select> 
                                 </div>
                             </div>
+                        
                             <div class="form-row">
                                 <div class="form-group col-md-3">
                                     <label for="serie">Número de serie:</label>
@@ -182,6 +197,7 @@
                                         ¡El <strong>número de serie</strong> es un campo requerido!
                                     </div>
                                 </div>
+                        
                                 <div class="form-group col-md-3">
                                     <label for="patrimonio">Número de patrimonio:</label>
                                     <input type="text" class="form-control @error('patrimonio') is-invalid @enderror" id="patrimonio" name="patrimonio" placeholder="Número de patrimonio" max="250" value="{{old('patrimonio')}}" required/>
@@ -189,6 +205,7 @@
                                         ¡El <strong>número de patrimonio</strong> es un campo requerido!
                                     </div>
                                 </div>
+                        
                                 <div class="form-group col-md-3">
                                     <label for="cedula">Cédulas:</label>
                                     <select class="form-control form-control-chosen" id="cedula" name="cedula">
@@ -202,6 +219,7 @@
                                         @endforeach  
                                     </select> 
                                 </div>
+                        
                                 <div class="form-group col-md-3">
                                     <label for="estado">Estados:</label>
                                     <select class="form-control @error('estado') is-invalid @enderror form-control-chosen" id="estado" name="estado" required>
@@ -219,12 +237,14 @@
                                     </div> 
                                 </div>
                             </div>
+                        
                             <div class="form-row">
                                 <div class="form-group col-md-12">
                                     <label for="observacion">Observaciones:</label>
                                     <textarea class="form-control" id="observacion" name="observacion" cols="30" rows="2">{{old('observacion')}}</textarea>
                                 </div> 
                             </div>
+                        
                             <div class="form-row">
                                 <div class="form-group col-md-6">
                                     <label for="area">Áreas:</label>
@@ -242,6 +262,7 @@
                                         @endforeach  
                                     </select> 
                                 </div>
+                        
                                 <div class="form-group col-md-4">
                                     <label for="funcionario">Funcionarios:</label>
                                     <select class="form-control form-control-chosen" id="funcionario" name="funcionario">
@@ -255,14 +276,16 @@
                                         @endforeach  
                                     </select> 
                                 </div>                         
+                        
                                 <div class="form-group col-md-2">
                                     <label for="fecha">Fecha:</label>
-                                    <input type="text" class="form-control @error('fecha') is-invalid @enderror" id="fecha" name="fecha" aria-label="Fecha" placeholder="Fecha" value="{{ date('d/m/Y') }}" readonly/>
+                                    <input type="text" class="form-control @error('fecha') is-invalid @enderror" id="fecha" name="fecha" aria-label="Fecha" placeholder="Fecha" value="{{date('d/m/Y')}}" readonly/>
                                 </div>
                                 <div class="invalid-feedback">
                                     ¡La <strong>fecha</strong> es un campo requerido!
                                 </div>
                             </div>
+                        
                             <div class="form-row d-none" id="divbienes">
                                 <div class="form-group col-md-12">
                                     <button type="button" class="btn btn-outline-danger btn-block" data-toggle="modal" data-target="#exampleModal">
@@ -273,17 +296,21 @@
                                     <table class="table table-bordered" id="listaarticulos"></table>
                                 </div>
                             </div>
+                        
                             <div class="form-row">
                                 <div class="form-group col-md-12">
                                     <label for="activo">Activo:</label><br>
                                     <input type="checkbox" class="form-control" id="activo" name="activo" data-toggle="toggle" data-on="Activo" data-off="Inactivo" data-onstyle="success" data-offstyle="danger" checked>
                                 </div>
                             </div>
+                        
                             <input type="hidden" name="page" value="{{$page ?? ''}}">
                             <input type="hidden" name="vfecha" value="{{$vfecha ?? ''}}">
                             <input type="hidden" name="vbusqueda" value="{{$vbusqueda ?? ''}}">
+                            
                             <button type="submit" class="btn btn-outline-danger"><i class="fas fa-save"></i> Guardar</button>
                             <a class="btn btn-outline-danger" href="{{ url('/bienes?page='.$page.'&vfecha='.$vfecha.'&vbusqueda='.$vbusqueda) }}"><i class="fas fa-sign-out-alt fa-rotate-180"></i> Regresar</a>
+                            
                             <div class="d-none justify-content-center" id="divloading">
                                 <div class="spinner-grow divloading" role="status">
                                     <span class="sr-only">Loading...</span>
@@ -632,8 +659,6 @@
                             {
                                 event.preventDefault();
                                 event.stopPropagation();
-
-                                console.log(form.id);
 
                                 if(form.id == "formmodal")
                                 {
