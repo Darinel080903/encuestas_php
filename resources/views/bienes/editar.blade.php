@@ -278,7 +278,7 @@
                             <div class="form-row @if($raiz != 1) {{'d-none'}} @endif" id="divbienes">
                                 <div class="form-group col-md-12">
                                     {{-- <label for="area">Áreas:</label> --}}
-                                    <button type="button" class="btn btn-outline-danger btn-block" data-toggle="modal" data-target="#exampleModal">
+                                    <button type="button" class="btn btn-outline-danger btn-block" id="botonaddarticulos" data-toggle="modal" data-target="#exampleModal">
                                         <i class="fas fa-plus"></i> <i class="fas fa-keyboard"></i> <i class="fas fa-mouse"></i> Agregar artículos dependientes...
                                     </button>
                                 </div>
@@ -345,15 +345,10 @@
             $(".form-control-chosen").chosen();
         });
 
-        $(document).ready(function()
-        {
-            $("#fecha").datepicker({
-                uiLibrary: "bootstrap4",
-                locale: "es-es",
-                format: "dd/mm/yyyy"
-            });
+        $("#botonaddarticulos").on("click", function(){
+            limpiar(); 
         });
-        
+
         $(function(){
             $("#articulo").chosen().change(function(){
                 var url = "{{url('bienes/campos/idarticulo')}}";    //sirve para colocar el nombre de la pagina completa 
@@ -418,15 +413,15 @@
                         $('#listaarticulos').append("<tr><th>Articulo</th><th>Marca</th><th>Modelo</th><th>Serie</th><th>Patrimonio</th><th>Estado</th><th>Observacion</th><th>Eliminar</th></tr>");
                         for(let i = 0; i< response.length; i++) 
                         {
-                            var showobservacion = "";
-                            if(response[i].observacion)
-                            {
-                                var showobservacion = response[i].observacion;
-                            }
                             var showmodelo = "";
                             if(response[i].modelo)
                             {
                                 var showmodelo = response[i].modelo;
+                            }
+                            var showobservacion = "";
+                            if(response[i].observacion)
+                            {
+                                var showobservacion = response[i].observacion;
                             }
                             $('#listaarticulos').append("<tr><td>"+response[i].articulo+"</td><td>"+response[i].marca+"</td><td>"+showmodelo+"</td><td>"+response[i].serie+"</td><td>"+response[i].patrimonio+"</td><td>"+response[i].estado+"</td><td>"+showobservacion+"</td><td><a class='btn btn-primary id='message-delete' href='javascript:eliminartmpbien("+response[i].idtmpbien+");'>Eliminar</a></td></tr>");
                         }
@@ -447,10 +442,12 @@
             $("#articulomodal option:selected").prop("selected", false);
             $("#articulomodal").trigger("chosen:updated");
             $("#articulomodal_chosen").removeClass("is-valid");
+            $("#articulomodal_chosen").removeClass("is-invalid");
 
             $("#marcamodal option:selected").prop("selected", false);
             $("#marcamodal").trigger("chosen:updated");
             $("#marcamodal_chosen").removeClass("is-valid");
+            $("#marcamodal_chosen").removeClass("is-invalid");
             
             $("#modelomodal").val("");
             $("#seriemodal").val("");
@@ -459,6 +456,7 @@
             $("#estadomodal option:selected").prop("selected", false);
             $("#estadomodal").trigger("chosen:updated");
             $("#estadomodal_chosen").removeClass("is-valid");
+            $("#estadomodal_chosen").removeClass("is-invalid");
             
             $("#observacionmodal").val("");
         }
@@ -488,6 +486,15 @@
                 }
             });
         }
+
+        $(document).ready(function()
+        {
+            $("#fecha").datepicker({
+                uiLibrary: "bootstrap4",
+                locale: "es-es",
+                format: "dd/mm/yyyy"
+            });
+        });
 
         $("#articulomodal").change(function(){
             if($("#articulomodal").val() != "")

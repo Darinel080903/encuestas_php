@@ -64,6 +64,7 @@ Route::get('/autos/fabrica/{id}', 'App\Http\Controllers\AjaxController@cargartip
 
 Route::resource('/autosimgs', 'App\Http\Controllers\AutoimgController');
 
+
 Route::resource('/bienes', 'App\Http\Controllers\BienController');
 
 Route::put('/bienes/{funcionario}/update2', 'App\Http\Controllers\BienController@update2');
@@ -84,12 +85,7 @@ Route::get('resguardo/funcionario/{id}', 'App\Http\Controllers\PDFController@pdf
 
 Route::resource('/resguardos', 'App\Http\Controllers\ResguardoController');
 
-Route::resource('/valesalidas', 'App\Http\Controllers\valesalidaController');
-
-
-
-
-
+Route::resource('/pases', 'App\Http\Controllers\PaseController');
 
 Route::resource('/facturas', 'App\Http\Controllers\FacturaController');
 

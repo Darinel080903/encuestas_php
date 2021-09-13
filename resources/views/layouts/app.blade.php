@@ -180,9 +180,9 @@
                                             </a>
                                         @endcan
                                 
-                                        @can('viewAny', \App\Models\vsalida::class)
-                                            <a class="dropdown-item" href="{{url('/valesalidas')}}">
-                                                <i class="fas fa-file-alt icon-color"></i> Vale de Salida
+                                        @can('viewAny', \App\Models\Vpase::class)
+                                            <a class="dropdown-item" href="{{url('/pases')}}">
+                                                <i class="fas fa-file-alt icon-color"></i> Pase de salida
                                             </a>
                                         @endcan
                                         

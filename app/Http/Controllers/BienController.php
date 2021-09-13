@@ -39,7 +39,7 @@ class BienController extends Controller
         $vfecha = $request->vfecha;
         $vbusqueda = $request->vbusqueda;
 
-        $bienes = Vbien::busqueda($vbusqueda)->orderBy('patrimonio', 'asc')->paginate(10);
+        $bienes = Vbien::fecha($vfecha)->busqueda($vbusqueda)->orderBy('patrimonio', 'asc')->paginate(10);
     
         return view('bienes.lista',compact('page', 'vfecha', 'vbusqueda', 'bienes'));  
     }

@@ -5,14 +5,22 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Vbien extends Model
+class Vpase extends Model
 {
     use HasFactory;
 
-    protected $table = 'vbienes';
-    protected $primaryKey = 'idbien';
+    protected $table = 'vpases';
+    protected $primaryKey = 'idpase';
     //By CIRG para deshabilitar los campos created_at y updated_at
     public $timestamps = false;
+
+    public function scopeUsuario($query, $usuario)
+    {
+        if($usuario)
+        {
+            return $query->where('fkusuario', '=', $usuario);
+        }
+    }
 
     public function scopeFecha($query, $fecha)
     {
@@ -27,7 +35,7 @@ class Vbien extends Model
     {
         if($busqueda)
         {
-            return $query->where('articulo', 'like', "%$busqueda%")->orWhere('marca', 'like', "%$busqueda%")->orWhere('patrimonio', 'like', "%$busqueda%")->orWhere('funcionario', 'like', "%$busqueda%");
+            return $query->where('solicita', 'like', "%$busqueda%");
         }
     }
 }

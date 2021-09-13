@@ -3,10 +3,10 @@
 namespace App\Policies;
 
 use App\Models\User;
-use App\Models\Vsalida;
+use App\Models\Vpase;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class VsalidaPolicy
+class VpasePolicy
 {
     use HandlesAuthorization;
 
@@ -25,7 +25,7 @@ class VsalidaPolicy
      */
     public function viewAny(User $user)
     {
-        if($user->permissions->contains('slug','salida-lista'))
+        if($user->permissions->contains('slug','pase-lista'))
         {
             return true;
         }
@@ -35,10 +35,10 @@ class VsalidaPolicy
      * Determine whether the user can view the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Vsalida  $vsalida
+     * @param  \App\Models\Vpase  $vpase
      * @return mixed
      */
-    public function view(User $user, Vsalida $vsalida)
+    public function view(User $user, Vpase $vpase)
     {
         //
     }
@@ -51,7 +51,7 @@ class VsalidaPolicy
      */
     public function create(User $user)
     {
-        if($user->permissions->contains('slug','salida-crear'))
+        if($user->permissions->contains('slug','pase-crear'))
         {
             return true;
         }
@@ -61,12 +61,12 @@ class VsalidaPolicy
      * Determine whether the user can update the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Vsalida  $vsalida
+     * @param  \App\Models\Vpase  $vpase
      * @return mixed
      */
-    public function update(User $user, Vsalida $vsalida)
+    public function update(User $user, Vpase $vpase)
     {
-        if($user->permissions->contains('slug','salida-editar'))
+        if($user->permissions->contains('slug','pase-editar'))
         {
             return true;
         }
@@ -76,12 +76,12 @@ class VsalidaPolicy
      * Determine whether the user can delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Vsalida  $vsalida
+     * @param  \App\Models\Vpase  $vpase
      * @return mixed
      */
-    public function delete(User $user, Vsalida $vsalida)
+    public function delete(User $user, Vpase $vpase)
     {
-        if($user->permissions->contains('slug','salida-eliminar'))
+        if($user->permissions->contains('slug','pase-eliminar'))
         {
             return true;
         }
@@ -91,10 +91,10 @@ class VsalidaPolicy
      * Determine whether the user can restore the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Vsalida  $vsalida
+     * @param  \App\Models\Vpase  $vpase
      * @return mixed
      */
-    public function restore(User $user, Vsalida $vsalida)
+    public function restore(User $user, Vpase $vpase)
     {
         //
     }
@@ -103,10 +103,10 @@ class VsalidaPolicy
      * Determine whether the user can permanently delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Vsalida  $vsalida
+     * @param  \App\Models\Vpase  $vpase
      * @return mixed
      */
-    public function forceDelete(User $user, Vsalida $vsalida)
+    public function forceDelete(User $user, Vpase $vpase)
     {
         //
     }
