@@ -59,4 +59,19 @@ class PDFController extends Controller
         
         return \PDF::loadView('pdf.vale', compact('fecha', 'vales', 'folios', 'autoriza', 'entrega'))->stream('archivo.pdf');
     }
+
+    public function pdfpase(Request $request, $id)
+    {  
+        $pases = Vpase::findOrFail($id);
+
+        $dias = ['0' => 'Domingo', '1' => 'Lunes', '2' => 'Martes', '3' => 'Miércoles', '4' => 'Jueves', '5' => 'Viernes', '6' => 'Sábado'];
+        $diaespañol = Arr::get($dias, date('w', strtotime($pases->fecha)));
+        $meses = ['1' => 'Enero', '2' => 'Febrero', '3' => 'Marzo', '4' => 'Abril', '5' => 'Mayo', '6' => 'Junio', '7' => 'Julio', '8' => 'Agosto', '9' => 'Septiembre', '10' => 'Octubre', '11' => 'Noviembre', '12' => 'Diciembre'];
+        $mesespañol = Arr::get($meses, date('n', strtotime($pases->fecha)));
+        $fecha = $diaespañol.' '.date('d', strtotime($pases->fecha)).' de '.$mesespañol.' de '.date('Y', strtotime($pases->fecha));
+
+        $detalles = Detalle::where('fkpase', $id);
+            
+        return \PDF::loadView('pdf.pase', compact('fecha', 'pases', 'folios', 'autoriza', 'entrega'))->stream('archivo.pdf');
+    }
 }

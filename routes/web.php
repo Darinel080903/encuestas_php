@@ -87,6 +87,8 @@ Route::resource('/resguardos', 'App\Http\Controllers\ResguardoController');
 
 Route::resource('/pases', 'App\Http\Controllers\PaseController');
 
+Route::get('/pases/imprimir/{id}', 'App\Http\Controllers\PDFController@pdfpase');
+
 Route::resource('/facturas', 'App\Http\Controllers\FacturaController');
 
 Route::put('/facturas/{id}/update2', 'App\Http\Controllers\FacturaController@update2');

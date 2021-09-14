@@ -31,11 +31,11 @@
                                 <thead>
                                     <tr>
                                         <th class="text-center" scope="col" width="10%">Fecha</th>
-                                        <th class="text-center" scope="col">Hora</th>
+                                        <th class="text-center" scope="col" width="10%">Hora</th>
                                         <th class="text-center" scope="col">Solicita</th>
                                         <th class="text-center" scope="col">Funcionario</th>
                                         <th class="text-center" scope="col">Observación</th>
-                                        <th class="text-center" scope="col" width="33%" colspan="2">
+                                        <th class="text-center" scope="col" width="36%" colspan="3">
                                             @can('create', \App\Models\Vpase::class)
                                                 <a class="btn btn-outline-danger" href="{{url('/pases/create?page='.$page.'&vfecha='.$vfecha.'&vbusqueda='.$vbusqueda)}}"><i class="fas fa-save"></i> Nuevo</a>
                                             @endcan
@@ -46,16 +46,19 @@
                                     @foreach ($datos as $item)
                                     <tr>
                                         <td class="text-center align-middle" scope="row">{{date('d/m/Y', strtotime($item->fecha))}}</td>
-                                        <td class="text-justify align-middle">{{$item->hora}}</td>
+                                        <td class="text-justify align-middle">{{date('h:i A', strtotime($item->hora))}}</td>
                                         <td class="text-justify align-middle">{{$item->solicita}}</td>
                                         <td class="text-justify align-middle">{{$item->funcionario}}</td>
                                         <td class="text-justify align-middle">{{$item->observacion}}</td>
-                                        <td class="text-center" width="11%">
+                                        <td class="text-center" width="12%">
                                             @can('update', $item)
                                                 <a class="btn btn-outline-danger" href="{{url('/pases/'.$item->idpase.'/edit?page='.$page.'&vfecha='.$vfecha.'&vbusqueda='.$vbusqueda)}}"><i class="fas fa-pen"></i> Editar</a>
                                             @endcan
                                         </td>
-                                        <td class="text-center" width="11%">
+                                        <td class="text-center" width="12%">
+                                            <a class="btn btn-outline-danger" href="{{url('/pases/imprimir/'.$item->idpase)}}" target="_blank"><i class="fas fa-print"></i>&nbsp;Imprimir</a>
+                                        </td>
+                                        <td class="text-center" width="12%">
                                             @can('delete', $item)
                                                 <form action="{{url('/pases/'.$item->idpase)}}" method="POST">
                                                     @method('DELETE')
