@@ -20,6 +20,8 @@ use App\Models\Tmpbien;
 use App\Models\Vvale;
 use App\Models\Vfolio;
 use App\Models\Vfuncionario;
+use App\Models\Vpase;
+use App\Models\Detalle;
 
 class PDFController extends Controller
 {
@@ -70,8 +72,8 @@ class PDFController extends Controller
         $mesespañol = Arr::get($meses, date('n', strtotime($pases->fecha)));
         $fecha = $diaespañol.' '.date('d', strtotime($pases->fecha)).' de '.$mesespañol.' de '.date('Y', strtotime($pases->fecha));
 
-        $detalles = Detalle::where('fkpase', $id);
+        $detalles = Detalle::where('fkpase', $id)->get();
             
-        return \PDF::loadView('pdf.pase', compact('fecha', 'pases', 'folios', 'autoriza', 'entrega'))->stream('archivo.pdf');
+        return \PDF::loadView('pdf.pase', compact('fecha', 'pases', 'detalles'))->stream('archivo.pdf');
     }
 }
