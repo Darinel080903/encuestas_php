@@ -64,7 +64,6 @@ Route::get('/autos/fabrica/{id}', 'App\Http\Controllers\AjaxController@cargartip
 
 Route::resource('/autosimgs', 'App\Http\Controllers\AutoimgController');
 
-
 Route::resource('/bienes', 'App\Http\Controllers\BienController');
 
 Route::put('/bienes/{funcionario}/update2', 'App\Http\Controllers\BienController@update2');

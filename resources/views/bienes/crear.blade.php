@@ -109,6 +109,9 @@
                     <div class="card-header justify-content-between align-items-centr text-center encabezadoform">
                         <h3 class="headerlistatitulo"><i class="fas fa-save"></i> Nuevo bien</h3>
                     </div>
+                    @if (session('mensaje'))
+                        <div class="alert alert-danger">{{session('mensaje')}}</div>
+                    @endif 
                     <div class="card-body">
                         <form class="needs-validation" id="formmain" action="{{url('/bienes')}}" method="POST" novalidate>
                         @csrf
@@ -237,7 +240,7 @@
                                     </div> 
                                 </div>
                             </div>
-                        
+
                             <div class="form-row">
                                 <div class="form-group col-md-12">
                                     <label for="observacion">Observaciones:</label>
@@ -245,6 +248,22 @@
                                 </div> 
                             </div>
                         
+                            <div class="form-row d-none" id="divbienes">
+                                <div class="form-group col-md-6">
+                                    <button type="button" class="btn btn-outline-danger btn-block" id="botonaddarticulos" data-toggle="modal" data-target="#exampleModal">
+                                        <i class="fas fa-plus"></i> <i class="fas fa-keyboard"></i> <i class="fas fa-mouse"></i> Asociar artículos nuevos
+                                    </button>                                    
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <button type="button" class="btn btn-outline-danger btn-block" id="botonaddarticulos" data-toggle="modal" data-target="#exampleModal">
+                                        <i class="fas fa-plus"></i> <i class="fas fa-keyboard"></i> <i class="fas fa-mouse"></i> Agregar artículos dependientes...
+                                    </button>                                    
+                                </div>
+                                <div class="table-responsive">                        
+                                    <table class="table table-bordered" id="listaarticulos"></table>
+                                </div>
+                            </div>
+
                             <div class="form-row">
                                 <div class="form-group col-md-6">
                                     <label for="area">Áreas:</label>
@@ -263,7 +282,7 @@
                                     </select> 
                                 </div>
                         
-                                <div class="form-group col-md-4">
+                                <div class="form-group col-md-6">
                                     <label for="funcionario">Funcionarios:</label>
                                     <select class="form-control form-control-chosen" id="funcionario" name="funcionario">
                                         <option value="">Funcionario</option>
@@ -277,24 +296,13 @@
                                     </select> 
                                 </div>                         
                         
-                                <div class="form-group col-md-2">
+                                {{-- <div class="form-group col-md-2">
                                     <label for="fecha">Fecha:</label>
                                     <input type="text" class="form-control @error('fecha') is-invalid @enderror" id="fecha" name="fecha" aria-label="Fecha" placeholder="Fecha" value="{{date('d/m/Y')}}" readonly/>
                                 </div>
                                 <div class="invalid-feedback">
                                     ¡La <strong>fecha</strong> es un campo requerido!
-                                </div>
-                            </div>
-                        
-                            <div class="form-row d-none" id="divbienes">
-                                <div class="form-group col-md-12">
-                                    <button type="button" class="btn btn-outline-danger btn-block" id="botonaddarticulos" data-toggle="modal" data-target="#exampleModal">
-                                        <i class="fas fa-plus"></i> <i class="fas fa-keyboard"></i> <i class="fas fa-mouse"></i> Agregar artículos dependientes...
-                                    </button>                                    
-                                </div>
-                                <div class="table-responsive">                        
-                                    <table class="table table-bordered" id="listaarticulos"></table>
-                                </div>
+                                </div> --}}
                             </div>
                         
                             <div class="form-row">
@@ -326,6 +334,14 @@
     <script>
         $(document).ready(function(){
             $(".form-control-chosen").chosen();
+            if($("#articulo").chosen().val())
+            {
+                campos($("#articulo").chosen().val());
+            }
+            else
+            {
+                limpiartmpbien();
+            }
         });
 
         $("#botonaddarticulos").on("click", function(){
@@ -334,35 +350,42 @@
 
         $(function(){
             $("#articulo").chosen().change(function(){
-                var identificador = $("#articulo").chosen().val();
-                $.get("campos/"+identificador+"", function(response, state){
-                    if(response.dato == 1)
-                    {
-                        $("#procesador").val("");
-                        $("#memoria").val("");
-                        $("#disco").val(""); 
-                        $("#ip").val("");
-                        $("#divcampos").removeClass("d-none");
-                    }
-                    else
-                    {
-                        $("#procesador").val("");
-                        $("#memoria").val("");
-                        $("#disco").val("");
-                        $("#ip").val("");
-                        $("#divcampos").addClass("d-none");
-                    }
-                    if(response.raiz == 1)
-                    {
-                        $("#divbienes").removeClass("d-none");
-                    }
-                    else
-                    {
-                        $("#divbienes").addClass("d-none");
-                    }
-                }); 
+                campos($("#articulo").chosen().val());
             });
         });
+
+        function campos(identificador)
+        {
+            var url = "{{url('/bienes/campos/idarticulo')}}";
+            url = url.replace("idarticulo", identificador); 
+
+            $.get(url, function(response, state){
+                if(response.dato == 1)
+                {
+                    $("#procesador").val("");
+                    $("#memoria").val("");
+                    $("#disco").val(""); 
+                    $("#ip").val("");
+                    $("#divcampos").removeClass("d-none");
+                }
+                else
+                {
+                    $("#procesador").val("");
+                    $("#memoria").val("");
+                    $("#disco").val("");
+                    $("#ip").val("");
+                    $("#divcampos").addClass("d-none");
+                }
+                if(response.raiz == 1)
+                {
+                    $("#divbienes").removeClass("d-none");
+                }
+                else
+                {
+                    $("#divbienes").addClass("d-none");
+                }
+            });
+        }
 
         function tmpguardarbien()
         {       
@@ -466,11 +489,6 @@
             });
         }
 
-        // Mandamos a llamar la funcion limpiar.
-        $(document).ready(function(){
-            limpiartmpbien();
-        });
-
         function limpiartmpbien()
         {
             var url = "{{url('limpiatmpbien')}}"; 
@@ -496,13 +514,13 @@
             });
         }
 
-        $(document).ready(function(){
-            $('#fecha').datepicker({
-                uiLibrary: 'bootstrap4',
-                locale: 'es-es',
-                format: 'dd/mm/yyyy'
-            });
-        });
+        // $(document).ready(function(){
+        //     $('#fecha').datepicker({
+        //         uiLibrary: 'bootstrap4',
+        //         locale: 'es-es',
+        //         format: 'dd/mm/yyyy'
+        //     });
+        // });
 
         $("#articulomodal").change(function(){
             if($("#articulomodal").val() != "")

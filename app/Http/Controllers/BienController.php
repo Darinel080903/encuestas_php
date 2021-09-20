@@ -4,19 +4,19 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use App\Models\Vtmpbien;    // nuevo modelo agregado
-use App\Models\Vbien;
-use App\Models\Bien;
+use App\Models\Tmpbien;
+use App\Models\Vtmpbien;
 use App\Models\Articulo;
 use App\Models\Marca;
 use App\Models\Operativo;
+use App\Models\Cedula;
+use App\Models\Estado;
 use App\Models\Area;
 use App\Models\Funcionario;
-use App\Models\Estado;
-use App\Models\Cedula;
+use App\Models\Bien;
+use App\Models\Vbien;
+use App\Models\Historico;
 Use App\Models\Bitacora;
-use App\Models\Tmpbien;
-
 
 class BienController extends Controller
 {
@@ -90,7 +90,14 @@ class BienController extends Controller
         $page = $request->page;
         $vfecha = $request->vfecha;
         $vbusqueda = $request->vbusqueda;
+
+        $validar = Bien::where('serie', $request->serie)->orWhere('patrimonio', $request->patrimonio)->count();
         
+        if($validar > 0)
+        {
+            return back()->withInput()->with('mensaje', '¡Error, numero de serie o número de patrimonio existente en el inventario!');
+        }
+
         $nuevobien = new Bien();
         $nuevobien->fkarticulo = $request->articulo;
         $nuevobien->fkmarca = $request->marca;
@@ -105,9 +112,9 @@ class BienController extends Controller
         if($request->funcionario != null)
         {
             $nuevobien->fkfuncionario = $request->funcionario;
-            $fechaformat = date('Y-m-d', strtotime(str_replace('/', '-', $request->fecha)));
-            $nuevobien->fecha = $fechaformat;
         }
+        $fechaformat = date('Y-m-d');
+        $nuevobien->fecha = $fechaformat;
         $nuevobien->fkestado = $request->estado;
         $nuevobien->fkcedula = $request->cedula;
         $nuevobien->observacion = $request->observacion;
@@ -123,7 +130,6 @@ class BienController extends Controller
         $nuevobien->save();
 
         //tenemos que validar si la tabla Tmpbien tiene datos del cpu raiz de ser asi mandarlos a guardar los datos dependientes.
-
         $articulos = Articulo::findOrFail($request->articulo);
 
         if($articulos->raiz == 1 ) //condicion de busqueda en tablas
