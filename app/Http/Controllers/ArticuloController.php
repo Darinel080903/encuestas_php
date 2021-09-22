@@ -71,13 +71,13 @@ class ArticuloController extends Controller
             $nuevoarticulo->dato = 1;
         }
         else{
-            $nuevoarticulo->dato = 0;
+            $nuevoarticulo->dato = null;
         }
         if(isset($request->raiz)){
             $nuevoarticulo->raiz = 1;
         }
         else{
-            $nuevoarticulo->raiz = 0;
+            $nuevoarticulo->raiz = null;
         }
         $nuevoarticulo->save();
 
@@ -147,13 +147,13 @@ class ArticuloController extends Controller
             $actualizaarticulo->dato = 1;
         }
         else{
-            $actualizaarticulo->dato = 0;
+            $actualizaarticulo->dato = null;
         }
         if(isset($request->raiz)){
             $actualizaarticulo->raiz = 1;
         }
         else{
-            $actualizaarticulo->raiz = 0;
+            $actualizaarticulo->raiz = null;
         }
         $actualizaarticulo->save();
 

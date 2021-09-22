@@ -74,15 +74,17 @@ Route::get('/bienes/funcionarios/{id}', 'App\Http\Controllers\AjaxController@car
 
 Route::get('/bienes/agregar', 'App\Http\Controllers\AjaxController@cargarcampos');
 
+Route::get('/bienes/inventario/{id}', 'App\Http\Controllers\AjaxController@cargarbien');
+
 Route::get('savetmp', 'App\Http\Controllers\AjaxController@tmpguardarbien');
 
-Route::get('eliminatmpbien/{id}', 'App\Http\Controllers\AjaxController@eliminartmpbien'); // aumento
+Route::get('eliminatmpbien/{id}', 'App\Http\Controllers\AjaxController@eliminartmpbien');
 
-Route::get('limpiatmpbien', 'App\Http\Controllers\AjaxController@limpiartmpbien'); // aumento
-
-Route::get('resguardo/funcionario/{id}', 'App\Http\Controllers\PDFController@pdfresguardofuncionario');
+Route::get('limpiatmpbien', 'App\Http\Controllers\AjaxController@limpiartmpbien');
 
 Route::resource('/resguardos', 'App\Http\Controllers\ResguardoController');
+
+Route::get('/resguardo/funcionario/{id}', 'App\Http\Controllers\PDFController@pdfresguardofuncionario');
 
 Route::resource('/pases', 'App\Http\Controllers\PaseController');
 

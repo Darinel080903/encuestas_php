@@ -49,6 +49,7 @@ class AjaxController extends Controller
                 $tmpdependencia->patrimonio = $request->patrimoniomodal;
                 $tmpdependencia->fkestado = $request->estadomodal;
                 $tmpdependencia->observacion = $request->observacionmodal;
+                
                 $tmpdependencia->fkusuario = auth()->user()->id;
                 $tmpdependencia->save();
                 //guardar
@@ -173,6 +174,15 @@ class AjaxController extends Controller
             }            
             $funcionario = Vfuncionario::where([['activo', 1], ['ruta', 'like', "%$area%"]])->orderBy('nombre', 'asc')->orderBy('paterno', 'asc')->orderBy('materno', 'asc')->get();
             return response()->json($funcionario);
+        }
+    }
+
+    public function cargarbien(Request $request, $id)
+    {
+        if($request->ajax())
+        {
+            $bienes = Bien::findOrFail($id);
+            return response()->json($bienes);
         }
     }
 }

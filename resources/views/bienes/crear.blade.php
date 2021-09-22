@@ -9,6 +9,30 @@
                     <form class="needs-validation" id="formmodal" action="javascript:tmpguardarbien();" novalidate>
                         <div class="form-row">
                             <div class="form-group col-md-4">
+                                <label for="origenmodal">Origen:</label>
+                                <select class="form-control form-control-chosen" id="origenmodal" name="origenmodal">
+                                    <option value="0">Nuevo</option>
+                                    <option value="1">Inventario</option>
+                                </select> 
+                            </div>
+
+                            <div class="form-group col-md-8">
+                                <label for="bienmodal">Bienes:</label>
+                                <select class="form-control form-control-chosen" id="bienmodal" name="bienmodal" disabled>
+                                    <option value="">Bien</option>
+                                    @foreach ($bienesmodal as $item)
+                                        @if (old('bienmodal') == $item->idbien)
+                                            <option value="{{$item->idbien}}" selected>{{$item->articulo.' - '.$item->patrimonio}}</option>
+                                        @else
+                                            <option value="{{$item->idbien}}">{{$item->articulo.' - '.$item->patrimonio}}</option>
+                                        @endif
+                                    @endforeach
+                                </select> 
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-4">
                                 <label for="articulomodal">Artículos:</label>
                                 <select class="form-control @error('articulomodal') is-invalid @enderror form-control-chosen" id="articulomodal" name="articulomodal" required>
                                     <option value="">Artículo</option>
@@ -89,6 +113,8 @@
                                 <textarea class="form-control" id="observacionmodal" name="observacionmodal" cols="30" rows="2">{{old('observacionmodal')}}</textarea>
                             </div> 
                         </div>
+
+                        <input type="text" id="vorigen" name="vorigen">
                         
                         <button type="submit" class="btn btn-outline-danger"><i class="fas fa-save"></i> Guardar</button>
                         <button type="button" class="btn btn-outline-danger" data-dismiss="modal"><i class="fas fa-sign-out-alt fa-rotate-180"></i> Cerrar</button>
@@ -96,6 +122,12 @@
                         {{-- <div id="message-delete" class="alert alert-info" role="alert" style="display:none">
                             <strong> El registro se elimino correctamente.</strong>
                         </div> --}}
+                        <div class="d-none justify-content-center" id="divmodalloading">
+                            <div class="spinner-grow divloading" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                            <p class="font-weight-bolder text-muted font-italic mt-1 mb-2">&nbsp;Cargando...</p>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -249,14 +281,9 @@
                             </div>
                         
                             <div class="form-row d-none" id="divbienes">
-                                <div class="form-group col-md-6">
+                                <div class="form-group col-md-12">
                                     <button type="button" class="btn btn-outline-danger btn-block" id="botonaddarticulos" data-toggle="modal" data-target="#exampleModal">
-                                        <i class="fas fa-plus"></i> <i class="fas fa-keyboard"></i> <i class="fas fa-mouse"></i> Asociar artículos nuevos
-                                    </button>                                    
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <button type="button" class="btn btn-outline-danger btn-block" id="botonaddarticulos" data-toggle="modal" data-target="#exampleModal">
-                                        <i class="fas fa-plus"></i> <i class="fas fa-keyboard"></i> <i class="fas fa-mouse"></i> Agregar artículos dependientes...
+                                        <i class="fas fa-plus"></i> <i class="fas fa-keyboard"></i> <i class="fas fa-mouse"></i> Asociar artículos
                                     </button>                                    
                                 </div>
                                 <div class="table-responsive">                        
@@ -331,9 +358,10 @@
             </div>
         </div>
     </div>
+
     <script>
         $(document).ready(function(){
-            $(".form-control-chosen").chosen();
+            $(".form-control-chosen").chosen({disable_search_threshold:5});
             if($("#articulo").chosen().val())
             {
                 campos($("#articulo").chosen().val());
@@ -344,14 +372,32 @@
             }
         });
 
-        $("#botonaddarticulos").on("click", function(){
-            limpiar(); 
-        });
+        function eliminartmpbien(id)
+        {
+            var url = "{{url('eliminatmpbien/id')}}";
+            url = url.replace("id", id); 
+            var token = $("#token").val();
+            $.ajax
+            ({
+                url: url,
+                type: 'get',
+                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                dataType: "json",
+                success: function(response, textStatus, xhr) 
+                {
+                    $("#listaarticulos").empty();
+                    $('#listaarticulos').append("<tr><th>Articulo</th><th>Marca</th><th>Modelo</th><th>Serie</th><th>Patrimonio</th><th>Estado</th><th>Observacion</th><th>Eliminar</th></tr>");
 
-        $(function(){
-            $("#articulo").chosen().change(function(){
-                campos($("#articulo").chosen().val());
+                    for(let i = 0; i< response.length; i++) 
+                    {                               
+                        $('#listaarticulos').append("<tr><td>"+response[i].articulo+"</td><td>"+response[i].marca+"</td><td>"+response[i].modelo+"</td><td>"+response[i].serie+"</td><td>"+response[i].patrimonio+"</td><td>"+response[i].estado+"</td><td>"+response[i].observacion+"</td><td><a class='btn btn-primary id='message-delete' href='javascript:eliminartmpbien("+response[i].idtmpbien+");'>Eliminar</a></td></tr>");                       
+                    }   
+                }
             });
+        }
+
+        $("#articulo").chosen().change(function(){
+            campos($("#articulo").chosen().val());
         });
 
         function campos(identificador)
@@ -387,6 +433,64 @@
             });
         }
 
+        $("#botonaddarticulos").on("click", function(){
+            limpiar(); 
+        });
+        
+        $("#origenmodal").chosen().change(function(){
+            var origen = $("#origenmodal").chosen().val();
+            if(origen == 0)
+            {
+                $("#bienmodal").prop("disabled", true).trigger("chosen:updated");
+                limpiar();
+            }
+            else if(origen == 1)
+            {
+                $("#bienmodal").prop("disabled", false).trigger("chosen:updated");
+            }
+        });
+        
+        $("#bienmodal").chosen().change(function(){
+            $("#divmodalloading").addClass("d-flex").removeClass("d-none");
+            var identificador = $("#bienmodal").chosen().val();
+            if(identificador)
+            {
+                // Ini Ajax
+                var url = "{{url('/bienes/inventario/idbien')}}";
+                url = url.replace("idbien", identificador);
+                $.ajax({type:"get",
+                    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                    url:url,
+                    dataType: "json",
+                    success: function(response, textStatus, xhr)
+                    {
+                        $("#articulomodal").val(response.fkarticulo);
+                        $("#articulomodal").trigger("chosen:updated");
+                        $("#marcamodal").val(response.fkmarca);
+                        $("#marcamodal").trigger("chosen:updated");
+                        $("#modelomodal").val(response.modelo);
+                        $("#seriemodal").val(response.serie);
+                        $("#patrimoniomodal").val(response.patrimonio);
+                        $("#estadomodal").val(response.fkestado);
+                        $("#estadomodal").trigger("chosen:updated");
+                        $("#observacionmodal").val(response.observacion);
+                        $("#vorigen").val("i");
+                        $("#divmodalloading").addClass("d-none").removeClass("d-flex");
+                    },
+                    error: function(xhr, textStatus, errorThrown)
+                    {
+                        alert("¡Error al cargar el bien!");
+                    }
+                });
+                // Fin Ajax
+            }
+            else
+            {
+                limpiar();
+                $("#divmodalloading").addClass("d-none").removeClass("d-flex");
+            } 
+        });
+        
         function tmpguardarbien()
         {       
             var articulo = $("#articulomodal").val();
@@ -396,6 +500,7 @@
             var patrimonio = $("#patrimoniomodal").val();
             var estado = $("#estadomodal").val();
             var observacion = $("#observacionmodal").val();
+            var vorigen = $("#vorigen").val();
 
             var url = "{{url('savetmp')}}";    
          
@@ -404,7 +509,7 @@
                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}, 
                 url: url,
                 dataType: "json",
-                data: {articulomodal:articulo, marcamodal:marca, modelomodal:modelo, seriemodal:serie, patrimoniomodal:patrimonio, estadomodal:estado, observacionmodal:observacion},
+                data: {articulomodal:articulo, marcamodal:marca, modelomodal:modelo, seriemodal:serie, patrimoniomodal:patrimonio, estadomodal:estado, observacionmodal:observacion, vorigen:vorigen},
                 success: function(response, textStatus, xhr)
                 {
                     if(response == "R")
@@ -443,6 +548,17 @@
         {
             $("#formmodal").removeClass("was-validated");
 
+            $("#origenmodal option:selected").prop("selected", false);
+            $("#origenmodal").trigger("chosen:updated");
+            $("#origenmodal_chosen").removeClass("is-valid");
+            $("#origenmodal_chosen").removeClass("is-invalid");
+
+            $("#bienmodal option:selected").prop("selected", false);
+            $("#bienmodal").trigger("chosen:updated");
+            $("#bienmodal_chosen").removeClass("is-valid");
+            $("#bienmodal_chosen").removeClass("is-invalid");
+            $("#bienmodal").prop("disabled", true).trigger("chosen:updated");
+
             $("#articulomodal option:selected").prop("selected", false);
             $("#articulomodal").trigger("chosen:updated");
             $("#articulomodal_chosen").removeClass("is-valid");
@@ -463,65 +579,9 @@
             $("#estadomodal_chosen").removeClass("is-invalid");
             
             $("#observacionmodal").val("");
+            $("#vorigen").val("n");
         }
         
-        function eliminartmpbien(id)
-        {
-            var url = "{{url('eliminatmpbien/id')}}";
-            url = url.replace("id", id); 
-            var token = $("#token").val();
-            $.ajax
-            ({
-                url: url,
-                type: 'get',
-                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-                dataType: "json",
-                success: function(response, textStatus, xhr) 
-                {
-                    $("#listaarticulos").empty();
-                    $('#listaarticulos').append("<tr><th>Articulo</th><th>Marca</th><th>Modelo</th><th>Serie</th><th>Patrimonio</th><th>Estado</th><th>Observacion</th><th>Eliminar</th></tr>");
-
-                    for(let i = 0; i< response.length; i++) 
-                    {                               
-                        $('#listaarticulos').append("<tr><td>"+response[i].articulo+"</td><td>"+response[i].marca+"</td><td>"+response[i].modelo+"</td><td>"+response[i].serie+"</td><td>"+response[i].patrimonio+"</td><td>"+response[i].estado+"</td><td>"+response[i].observacion+"</td><td><a class='btn btn-primary id='message-delete' href='javascript:eliminartmpbien("+response[i].idtmpbien+");'>Eliminar</a></td></tr>");                       
-                    }   
-                }
-            });
-        }
-
-        function limpiartmpbien()
-        {
-            var url = "{{url('limpiatmpbien')}}"; 
-            var token = $("#token").val();
-            $.ajax
-            ({
-                url: url,
-                type: 'get',
-                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-                dataType: "text",
-                success: function(response, textStatus, xhr)
-                {
-                    if(response != "Y")
-                    {
-                        alert("¡hola Error al limpiar la tabla temporal!");
-                    }
-                },
-                error: function(xhr, textStatus, errorThrown)
-                {
-                    alert("¡Error al limpiar la tabla temporal!");
-                }               
-                
-            });
-        }
-
-        // $(document).ready(function(){
-        //     $('#fecha').datepicker({
-        //         uiLibrary: 'bootstrap4',
-        //         locale: 'es-es',
-        //         format: 'dd/mm/yyyy'
-        //     });
-        // });
-
         $("#articulomodal").change(function(){
             if($("#articulomodal").val() != "")
             {

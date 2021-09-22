@@ -57,6 +57,7 @@ class BienController extends Controller
         $vfecha = $request->vfecha;
         $vbusqueda = $request->vbusqueda;
 
+        $bienesmodal = Vbien::where([['raiz', null], ['fkraiz', null], ['fkfuncionario', null], ['activo', 1]])->get();
         $articulos = Articulo::orderBy('articulo', 'asc')->get();
         $articulosmodal = Articulo::where('raiz', '<>', 1)->orwhereNull('raiz')->orderBy('articulo', 'asc')->get();
         $marcas = Marca::orderBy('marca', 'asc')->get();
@@ -66,7 +67,7 @@ class BienController extends Controller
         $estados = Estado::orderBy('idestado', 'asc')->get();
         $cedulas = Cedula::orderBy('fecha', 'asc')->get();
 
-        return view('bienes.crear', compact('page', 'vfecha', 'vbusqueda', 'articulos', 'articulosmodal', 'marcas', 'operativos', 'areas', 'funcionarios', 'estados', 'cedulas'));
+        return view('bienes.crear', compact('page', 'vfecha', 'vbusqueda', 'bienesmodal', 'articulos', 'articulosmodal', 'marcas', 'operativos', 'areas', 'funcionarios', 'estados', 'cedulas'));
     }
 
     /**
