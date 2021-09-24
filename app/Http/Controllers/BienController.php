@@ -143,33 +143,48 @@ class BienController extends Controller
                 $tmpbienes = Tmpbien::where('fkusuario', $usuario)->get();
                 
                 foreach ($tmpbienes as $item)
-                {                
-                 
-                    $nuevotmpbien = new Bien();
-                    $nuevotmpbien->fkarticulo = $item->fkarticulo;
-                    $nuevotmpbien->fkmarca = $item->fkmarca;
-                    $nuevotmpbien->modelo = $item->modelo;
-                    $nuevotmpbien->serie = $item->serie;
-                    $nuevotmpbien->patrimonio = $item->patrimonio;
-                    if($request->funcionario != null)
+                {   
+                    if($item->origen == 'n')
                     {
-                        $nuevotmpbien->fkfuncionario = $request->funcionario;
-                        $fechaformat = date('Y-m-d', strtotime(str_replace('/', '-', $request->fecha)));
-                        $nuevotmpbien->fecha = $fechaformat;
-                    }                    
-                    $nuevotmpbien->fkestado = $item->fkestado;
-                    $nuevotmpbien->observacion = $item->observacion;
-                    $nuevotmpbien->fkraiz = $nuevobien->idbien;
-                    $nuevotmpbien->fkusuario = auth()->user()->id;
-                    if(isset($request->activo))
-                    {
-                        $nuevotmpbien->activo = 1;
+                        $nuevotmpbien = new Bien();
+                        $nuevotmpbien->fkarticulo = $item->fkarticulo;
+                        $nuevotmpbien->fkmarca = $item->fkmarca;
+                        $nuevotmpbien->modelo = $item->modelo;
+                        $nuevotmpbien->serie = $item->serie;
+                        $nuevotmpbien->patrimonio = $item->patrimonio;
+                        if($request->funcionario != null)
+                        {
+                            $nuevotmpbien->fkfuncionario = $request->funcionario;
+                            $fechaformat = date('Y-m-d', strtotime(str_replace('/', '-', $request->fecha)));
+                            $nuevotmpbien->fecha = $fechaformat;
+                        }                    
+                        $nuevotmpbien->fkestado = $item->fkestado;
+                        $nuevotmpbien->observacion = $item->observacion;
+                        $nuevotmpbien->fkraiz = $nuevobien->idbien;
+                        $nuevotmpbien->fkusuario = auth()->user()->id;
+                        if(isset($request->activo))
+                        {
+                            $nuevotmpbien->activo = 1;
+                        }
+                            else
+                        {
+                            $nuevotmpbien->activo = 0;
+                        }
+                        $nuevotmpbien->save();
                     }
-                        else
+                    elseif($item->origen == 'i')
                     {
-                        $nuevotmpbien->activo = 0;
-                    }
-                    $nuevotmpbien->save();             
+                        $idbien = Bien::Where([['serie', $item->serie], ['patrimonio', $item->patrimonio]])->value('idbien');
+                        $actualizabien = Bien::findOrFail($idbien);
+                        if($request->funcionario != null)
+                        {
+                            $actualizabien->fkfuncionario = $request->funcionario;
+                            $fechaformat = date('Y-m-d', strtotime(str_replace('/', '-', $request->fecha)));
+                            $actualizabien->fecha = $fechaformat;
+                        }
+                        $actualizabien->fkraiz = $nuevobien->idbien;
+                        $actualizabien->save();
+                    }                      
                 }
                     
                 $limpiatmpbienes = Tmpbien::where('fkusuario', $usuario); //eliminamos los registros de la tabla temporal.

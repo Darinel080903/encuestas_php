@@ -372,27 +372,27 @@
             }
         });
 
-        function eliminartmpbien(id)
+        function limpiartmpbien()
         {
-            var url = "{{url('eliminatmpbien/id')}}";
-            url = url.replace("id", id); 
+            var url = "{{url('limpiatmpbien')}}"; 
             var token = $("#token").val();
             $.ajax
             ({
                 url: url,
                 type: 'get',
                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-                dataType: "json",
-                success: function(response, textStatus, xhr) 
+                dataType: "text",
+                success: function(response, textStatus, xhr)
                 {
-                    $("#listaarticulos").empty();
-                    $('#listaarticulos').append("<tr><th>Articulo</th><th>Marca</th><th>Modelo</th><th>Serie</th><th>Patrimonio</th><th>Estado</th><th>Observacion</th><th>Eliminar</th></tr>");
-
-                    for(let i = 0; i< response.length; i++) 
-                    {                               
-                        $('#listaarticulos').append("<tr><td>"+response[i].articulo+"</td><td>"+response[i].marca+"</td><td>"+response[i].modelo+"</td><td>"+response[i].serie+"</td><td>"+response[i].patrimonio+"</td><td>"+response[i].estado+"</td><td>"+response[i].observacion+"</td><td><a class='btn btn-primary id='message-delete' href='javascript:eliminartmpbien("+response[i].idtmpbien+");'>Eliminar</a></td></tr>");                       
-                    }   
-                }
+                    if(response != "Y")
+                    {
+                        alert("¡hola Error al limpiar la tabla temporal!");
+                    }
+                },
+                error: function(xhr, textStatus, errorThrown)
+                {
+                    alert("¡Error al limpiar la tabla temporal!");
+                }               
             });
         }
 
@@ -436,6 +436,44 @@
         $("#botonaddarticulos").on("click", function(){
             limpiar(); 
         });
+
+        function limpiar()
+        {
+            $("#formmodal").removeClass("was-validated");
+
+            $("#origenmodal option:selected").prop("selected", false);
+            $("#origenmodal").trigger("chosen:updated");
+            $("#origenmodal_chosen").removeClass("is-valid");
+            $("#origenmodal_chosen").removeClass("is-invalid");
+
+            $("#bienmodal option:selected").prop("selected", false);
+            $("#bienmodal").trigger("chosen:updated");
+            $("#bienmodal_chosen").removeClass("is-valid");
+            $("#bienmodal_chosen").removeClass("is-invalid");
+            $("#bienmodal").prop("disabled", true).trigger("chosen:updated");
+
+            $("#articulomodal option:selected").prop("selected", false);
+            $("#articulomodal").trigger("chosen:updated");
+            $("#articulomodal_chosen").removeClass("is-valid");
+            $("#articulomodal_chosen").removeClass("is-invalid");
+
+            $("#marcamodal option:selected").prop("selected", false);
+            $("#marcamodal").trigger("chosen:updated");
+            $("#marcamodal_chosen").removeClass("is-valid");
+            $("#marcamodal_chosen").removeClass("is-invalid");
+            
+            $("#modelomodal").val("");
+            $("#seriemodal").val("");
+            $("#patrimoniomodal").val("");
+            
+            $("#estadomodal option:selected").prop("selected", false);
+            $("#estadomodal").trigger("chosen:updated");
+            $("#estadomodal_chosen").removeClass("is-valid");
+            $("#estadomodal_chosen").removeClass("is-invalid");
+            
+            $("#observacionmodal").val("");
+            $("#vorigen").val("n");
+        }
         
         $("#origenmodal").chosen().change(function(){
             var origen = $("#origenmodal").chosen().val();
@@ -509,7 +547,7 @@
                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}, 
                 url: url,
                 dataType: "json",
-                data: {articulomodal:articulo, marcamodal:marca, modelomodal:modelo, seriemodal:serie, patrimoniomodal:patrimonio, estadomodal:estado, observacionmodal:observacion, vorigen:vorigen},
+                data: {articulomodal:articulo, marcamodal:marca, modelomodal:modelo, seriemodal:serie, patrimoniomodal:patrimonio, estadomodal:estado, observacionmodal:observacion, origen:vorigen},
                 success: function(response, textStatus, xhr)
                 {
                     if(response == "R")
@@ -539,49 +577,35 @@
                 },
                 error: function(xhr, textStatus, errorThrown)
                 {
-                    alert("¡Error al guardar la dependencia!");                 
+                    alert("¡Error al guardar el bien!");                 
                 }                
             });              
         }
 
-        function limpiar()
+        function eliminartmpbien(id)
         {
-            $("#formmodal").removeClass("was-validated");
+            var url = "{{url('eliminatmpbien/id')}}";
+            url = url.replace("id", id); 
+            var token = $("#token").val();
+            $.ajax
+            ({
+                url: url,
+                type: 'get',
+                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                dataType: "json",
+                success: function(response, textStatus, xhr) 
+                {
+                    $("#listaarticulos").empty();
+                    $('#listaarticulos').append("<tr><th>Articulo</th><th>Marca</th><th>Modelo</th><th>Serie</th><th>Patrimonio</th><th>Estado</th><th>Observacion</th><th>Eliminar</th></tr>");
 
-            $("#origenmodal option:selected").prop("selected", false);
-            $("#origenmodal").trigger("chosen:updated");
-            $("#origenmodal_chosen").removeClass("is-valid");
-            $("#origenmodal_chosen").removeClass("is-invalid");
-
-            $("#bienmodal option:selected").prop("selected", false);
-            $("#bienmodal").trigger("chosen:updated");
-            $("#bienmodal_chosen").removeClass("is-valid");
-            $("#bienmodal_chosen").removeClass("is-invalid");
-            $("#bienmodal").prop("disabled", true).trigger("chosen:updated");
-
-            $("#articulomodal option:selected").prop("selected", false);
-            $("#articulomodal").trigger("chosen:updated");
-            $("#articulomodal_chosen").removeClass("is-valid");
-            $("#articulomodal_chosen").removeClass("is-invalid");
-
-            $("#marcamodal option:selected").prop("selected", false);
-            $("#marcamodal").trigger("chosen:updated");
-            $("#marcamodal_chosen").removeClass("is-valid");
-            $("#marcamodal_chosen").removeClass("is-invalid");
-            
-            $("#modelomodal").val("");
-            $("#seriemodal").val("");
-            $("#patrimoniomodal").val("");
-            
-            $("#estadomodal option:selected").prop("selected", false);
-            $("#estadomodal").trigger("chosen:updated");
-            $("#estadomodal_chosen").removeClass("is-valid");
-            $("#estadomodal_chosen").removeClass("is-invalid");
-            
-            $("#observacionmodal").val("");
-            $("#vorigen").val("n");
+                    for(let i = 0; i< response.length; i++) 
+                    {                               
+                        $('#listaarticulos').append("<tr><td>"+response[i].articulo+"</td><td>"+response[i].marca+"</td><td>"+response[i].modelo+"</td><td>"+response[i].serie+"</td><td>"+response[i].patrimonio+"</td><td>"+response[i].estado+"</td><td>"+response[i].observacion+"</td><td><a class='btn btn-primary id='message-delete' href='javascript:eliminartmpbien("+response[i].idtmpbien+");'>Eliminar</a></td></tr>");                       
+                    }   
+                }
+            });
         }
-        
+
         $("#articulomodal").change(function(){
             if($("#articulomodal").val() != "")
             {
@@ -696,46 +720,44 @@
             }
         });
 
-        $(function(){
-            $("#area").chosen().change(function(){
-                $("#divloading").addClass("d-flex").removeClass("d-none");
-                var identificador = $("#area").chosen().val();
-                if(identificador)
-                {
-                    // Ini Ajax
-                    var url = "{{url('/bienes/funcionarios/idarea')}}";
-                    url = url.replace("idarea", identificador);
-                    $.ajax({type:"get",
-                        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-                        url:url,
-                        dataType: "json",
-                        success: function(response, textStatus, xhr)
+        $("#area").chosen().change(function(){
+            $("#divloading").addClass("d-flex").removeClass("d-none");
+            var identificador = $("#area").chosen().val();
+            if(identificador)
+            {
+                // Ini Ajax
+                var url = "{{url('/bienes/funcionarios/idarea')}}";
+                url = url.replace("idarea", identificador);
+                $.ajax({type:"get",
+                    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                    url:url,
+                    dataType: "json",
+                    success: function(response, textStatus, xhr)
+                    {
+                        $("#funcionario").empty();
+                        $("#funcionario").append("<option value=''>Funcionario</option>");
+                        for(let i = 0; i< response.length; i++)
                         {
-                            $("#funcionario").empty();
-                            $("#funcionario").append("<option value=''>Funcionario</option>");
-                            for(let i = 0; i< response.length; i++)
-                            {
-                                $("#funcionario").append("<option value='"+response[i].idfuncionario+"'>"+response[i].nombre+' '+response[i].paterno+' '+response[i].materno+"</option>"); 
-                            }
-                            $("#divloading").addClass("d-none").removeClass("d-flex");
-                            $("#funcionario").trigger("chosen:updated");
-                        },
-                        error: function(xhr, textStatus, errorThrown)
-                        {
-                            alert("¡Error al cargar el funcionario!");
+                            $("#funcionario").append("<option value='"+response[i].idfuncionario+"'>"+response[i].nombre+' '+response[i].paterno+' '+response[i].materno+"</option>"); 
                         }
-                    });
-                    // Fin Ajax
-                }
-                else
-                {
-                    $("#funcionario").empty();
-                    $("#funcionario").append("<option value=''>Funcionario</option>");
-                    $("#divloading").addClass("d-none").removeClass("d-flex");
-                    $("#funcionario").trigger("chosen:updated");
-                } 
-            });
-        });
+                        $("#divloading").addClass("d-none").removeClass("d-flex");
+                        $("#funcionario").trigger("chosen:updated");
+                    },
+                    error: function(xhr, textStatus, errorThrown)
+                    {
+                        alert("¡Error al cargar el funcionario!");
+                    }
+                });
+                // Fin Ajax
+            }
+            else
+            {
+                $("#funcionario").empty();
+                $("#funcionario").append("<option value=''>Funcionario</option>");
+                $("#divloading").addClass("d-none").removeClass("d-flex");
+                $("#funcionario").trigger("chosen:updated");
+            } 
+        });        
 
         // Example starter JavaScript for disabling form submissions if there are invalid fields
         (function() 

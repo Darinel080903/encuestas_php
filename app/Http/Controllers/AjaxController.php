@@ -31,17 +31,24 @@ class AjaxController extends Controller
     public function tmpguardarbien(Request $request)
     {
 
-         if($request->ajax())
+        if($request->ajax())
         {          
-            //creacion de validaciones
             $usuario = auth()->user()->id;
-            $cuentatmpbienes = Tmpbien::where([['serie', $request->seriemodal], ['patrimonio', $request->patrimoniomodal], ['fkusuario', $usuario]])->count();
-            $cuentabienes = Bien::where([['serie', $request->seriemodal], ['patrimonio', $request->patrimoniomodal]])->count();
-
-            if($cuentatmpbienes == 0 && $cuentabienes == 0 ) //condicion de busqueda en tablas
+            
+            $cuentatmpbienes = Tmpbien::where('serie', $request->seriemodal)->orWhere('patrimonio', $request->patrimoniomodal)->count();
+            if($request->origen == 'n')
             {
-                 //guardar
-                $tmpdependencia = new Vtmpbien();
+                $cuentabienes = Bien::where('serie', $request->seriemodal)->orWhere('patrimonio', $request->patrimoniomodal)->count();
+            }
+            elseif($request->origen == 'i')
+            {
+                $cuentabienes = 0;
+            }
+
+            if($cuentatmpbienes == 0 && $cuentabienes == 0)
+            {
+                //guardar
+                $tmpdependencia = new Tmpbien();
                 $tmpdependencia->fkarticulo = $request->articulomodal;
                 $tmpdependencia->fkmarca = $request->marcamodal;
                 $tmpdependencia->modelo = $request->modelomodal;
@@ -49,7 +56,7 @@ class AjaxController extends Controller
                 $tmpdependencia->patrimonio = $request->patrimoniomodal;
                 $tmpdependencia->fkestado = $request->estadomodal;
                 $tmpdependencia->observacion = $request->observacionmodal;
-                
+                $tmpdependencia->origen = $request->origen;
                 $tmpdependencia->fkusuario = auth()->user()->id;
                 $tmpdependencia->save();
                 //guardar
@@ -83,14 +90,12 @@ class AjaxController extends Controller
 
     public function limpiartmpbien() 
     {
-        
          $usuario = auth()->user()->id;
                 
          $limpiatmpbien = Tmpbien::where('fkusuario', $usuario);
          $limpiatmpbien->delete();
        
-         return response('Y');
-                   
+         return response('Y');               
     }
 
     public function cargartipos(Request $request, $id)
