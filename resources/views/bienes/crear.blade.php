@@ -114,7 +114,7 @@
                             </div> 
                         </div>
 
-                        <input type="text" id="vorigen" name="vorigen">
+                        <input type="hidden" id="vorigen" name="vorigen">
                         
                         <button type="submit" class="btn btn-outline-danger"><i class="fas fa-save"></i> Guardar</button>
                         <button type="button" class="btn btn-outline-danger" data-dismiss="modal"><i class="fas fa-sign-out-alt fa-rotate-180"></i> Cerrar</button>
@@ -283,7 +283,7 @@
                             <div class="form-row d-none" id="divbienes">
                                 <div class="form-group col-md-12">
                                     <button type="button" class="btn btn-outline-danger btn-block" id="botonaddarticulos" data-toggle="modal" data-target="#exampleModal">
-                                        <i class="fas fa-plus"></i> <i class="fas fa-keyboard"></i> <i class="fas fa-mouse"></i> Asociar artículos
+                                        <i class="fas fa-link"></i> <i class="fas fa-keyboard"></i> <i class="fas fa-mouse"></i> Asociar artículos
                                     </button>                                    
                                 </div>
                                 <div class="table-responsive">                        
@@ -322,14 +322,6 @@
                                         @endforeach  
                                     </select> 
                                 </div>                         
-                        
-                                {{-- <div class="form-group col-md-2">
-                                    <label for="fecha">Fecha:</label>
-                                    <input type="text" class="form-control @error('fecha') is-invalid @enderror" id="fecha" name="fecha" aria-label="Fecha" placeholder="Fecha" value="{{date('d/m/Y')}}" readonly/>
-                                </div>
-                                <div class="invalid-feedback">
-                                    ¡La <strong>fecha</strong> es un campo requerido!
-                                </div> --}}
                             </div>
                         
                             <div class="form-row">
@@ -557,7 +549,7 @@
                     else
                     {
                         $("#listaarticulos").empty();
-                        $('#listaarticulos').append("<tr><th>Articulo</th><th>Marca</th><th>Modelo</th><th>Serie</th><th>Patrimonio</th><th>Estado</th><th>Observacion</th><th>Eliminar</th></tr>");
+                        $('#listaarticulos').append("<tr><th class='text-center'>Articulo</th><th class='text-center'>Marca</th><th class='text-center'>Modelo</th><th class='text-center'>Serie</th><th class='text-center'>Patrimonio</th><th class='text-center'>Estado</th><th class='text-center'>Observación</th><th class='text-center' width='13%'>Desasociar</th></tr>");
                         for(let i = 0; i< response.length; i++) 
                         {   
                             var showmodelo = "";
@@ -570,7 +562,7 @@
                             {
                                 var showobservacion = response[i].observacion;
                             }
-                            $('#listaarticulos').append("<tr><td>"+response[i].articulo+"</td><td>"+response[i].marca+"</td><td>"+showmodelo+"</td><td>"+response[i].serie+"</td><td>"+response[i].patrimonio+"</td><td>"+response[i].estado+"</td><td>"+showobservacion+"</td><td><a class='btn btn-primary id='message-delete' href='javascript:eliminartmpbien("+response[i].idtmpbien+");'>Eliminar</a></td></tr>");                    
+                            $('#listaarticulos').append("<tr><td>"+response[i].articulo+"</td><td>"+response[i].marca+"</td><td>"+showmodelo+"</td><td>"+response[i].serie+"</td><td>"+response[i].patrimonio+"</td><td>"+response[i].estado+"</td><td>"+showobservacion+"</td><td class='text-center' width='13%'><a class='btn btn-outline-danger' id='message-delete' href='javascript:eliminartmpbien("+response[i].idtmpbien+");'><i class='fas fa-unlink'></i> Desasociar</a></td></tr>");                    
                         }
                         limpiar();   
                     }

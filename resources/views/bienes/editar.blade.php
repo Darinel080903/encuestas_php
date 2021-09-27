@@ -7,7 +7,30 @@
             <div class="modal-content">
                 <div class="modal-body">
                     <form class="needs-validation" id="formmodal" action="javascript:tmpguardarbien();" novalidate>
-                        
+                        <div class="form-row">
+                            <div class="form-group col-md-4">
+                                <label for="origenmodal">Origen:</label>
+                                <select class="form-control form-control-chosen" id="origenmodal" name="origenmodal">
+                                    <option value="0">Nuevo</option>
+                                    <option value="1">Inventario</option>
+                                </select> 
+                            </div>
+
+                            <div class="form-group col-md-8">
+                                <label for="bienmodal">Bienes:</label>
+                                <select class="form-control form-control-chosen" id="bienmodal" name="bienmodal" disabled>
+                                    <option value="">Bien</option>
+                                    @foreach ($bienesmodal as $item)
+                                        @if (old('bienmodal') == $item->idbien)
+                                            <option value="{{$item->idbien}}" selected>{{$item->articulo.' - '.$item->patrimonio}}</option>
+                                        @else
+                                            <option value="{{$item->idbien}}">{{$item->articulo.' - '.$item->patrimonio}}</option>
+                                        @endif
+                                    @endforeach
+                                </select> 
+                            </div>
+                        </div>
+
                         <div class="form-row">
                             <div class="form-group col-md-4">
                                 <label for="articulomodal">Artículos:</label>
@@ -237,6 +260,44 @@
                                 </div>                                
                             </div>
 
+                            <div class="form-row @if($raiz != 1) {{'d-none'}} @endif" id="divbienes">
+                                <div class="form-group col-md-12">
+                                    <button type="button" class="btn btn-outline-danger btn-block" id="botonaddarticulos" data-toggle="modal" data-target="#exampleModal">
+                                        <i class="fas fa-link"></i> <i class="fas fa-keyboard"></i> <i class="fas fa-mouse"></i> Asociar artículos
+                                    </button>
+                                </div>
+
+                                <div class="table-responsive">
+                                    <table class="table table-bordered" id="listaarticulos">    
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center" scope="col" width="10%">Artículo</th>    
+                                                <th class="text-center" scope="col">Marca</th>
+                                                <th class="text-center" scope="col">Modelo</th>
+                                                <th class="text-center" scope="col">Serie</th>
+                                                <th class="text-center" scope="col">Patrimonio</th>
+                                                <th class="text-center" scope="col">Estado</th>
+                                                <th class="text-center" scope="col">Observacion</th>
+                                                <th class="text-center" scope="col" width='13%'>Desasociar</th>
+                                            </tr>
+                                        </thead>
+                                
+                                        @foreach ($tmpbienes as $item)                                        
+                                            <tr>                                            
+                                                <td class="text-center" width="10%" scope="col">{{$item->articulo}}</td>
+                                                <td class="text-center" scope="col">{{$item->marca}}</td>
+                                                <td class="text-center" scope="col">{{$item->modelo}}</td>
+                                                <td class="text-center" scope="col">{{$item->serie}}</td>
+                                                <td class="text-center" scope="col">{{$item->patrimonio}}</td>
+                                                <td class="text-center" scope="col">{{$item->estado}}</td>
+                                                <td class="text-center" scope="col">{{$item->observacion}}</td>
+                                                <td class="text-center" scope="col" width='13%'><a class="btn btn-outline-danger" href="javascript:eliminartmpbien({{$item->idtmpbien}});"><i class='fas fa-unlink'></i> Desasociar</a></td>                                           
+                                            </tr>
+                                        @endforeach
+                                    </table>
+                                </div>   
+                            </div>
+
                             <div class="form-row">
                                 <div class="form-group col-md-6">
                                     <label for="area">Áreas:</label>
@@ -255,7 +316,7 @@
                                     </select> 
                                 </div>
 
-                                <div class="form-group col-md-4">
+                                <div class="form-group col-md-6">
                                     <label for="funcionario">Funcionarios:</label>
                                     <select class="form-control form-control-chosen" id="funcionario" name="funcionario">
                                         <option value="">Funcionario</option>
@@ -268,50 +329,6 @@
                                         @endforeach  
                                     </select> 
                                 </div>
-
-                                <div class="form-group col-md-2">
-                                    <label for="fecha">Fecha:</label>
-                                    <input type="text" class="form-control @error('fecha') is-invalid @enderror" id="fecha" name="fecha" aria-label="Fecha" placeholder="Fecha" value="{{ date('d/m/Y') }}" readonly/>
-                                </div>
-                            </div>
-
-                            <div class="form-row @if($raiz != 1) {{'d-none'}} @endif" id="divbienes">
-                                <div class="form-group col-md-12">
-                                    {{-- <label for="area">Áreas:</label> --}}
-                                    <button type="button" class="btn btn-outline-danger btn-block" id="botonaddarticulos" data-toggle="modal" data-target="#exampleModal">
-                                        <i class="fas fa-plus"></i> <i class="fas fa-keyboard"></i> <i class="fas fa-mouse"></i> Agregar artículos dependientes...
-                                    </button>
-                                </div>
-
-                                <div class="table-responsive">
-                                    <table class="table table-bordered" id="listaarticulos">    
-                                        <thead>
-                                            <tr>
-                                                <th class="text-center" width="10%" scope="col">Artículo</th>    
-                                                <th class="text-center" scope="col">Marca</th>
-                                                <th class="text-center" scope="col">Modelo</th>
-                                                <th class="text-center" scope="col">Serie</th>
-                                                <th class="text-center" scope="col">Patrimonio</th>
-                                                <th class="text-center" scope="col">Estado</th>
-                                                <th class="text-center" scope="col">Observacion</th>
-                                                <th class="text-center" scope="col"></th>
-                                            </tr>
-                                        </thead>
-                                
-                                        @foreach ($tmpbienes as $item)                                        
-                                            <tr>                                            
-                                                <td class="text-center" width="10%" scope="col">{{$item->articulo}}</td>
-                                                <td class="text-center" scope="col">{{$item->marca}}</td>
-                                                <td class="text-center" scope="col">{{$item->modelo}}</td>
-                                                <td class="text-center" scope="col">{{$item->serie}}</td>
-                                                <td class="text-center" scope="col">{{$item->patrimonio}}</td>
-                                                <td class="text-center" scope="col">{{$item->estado}}</td>
-                                                <td class="text-center" scope="col">{{$item->observacion}}</td>
-                                                <td><a class="btn btn-primary" href="javascript:eliminartmpbien({{$item->idtmpbien}});">Eliminar</a></td>                                           
-                                            </tr>
-                                        @endforeach
-                                    </table>
-                                </div>   
                             </div>
 
                             <div class="form-row">
@@ -340,49 +357,148 @@
             </div>
         </div>
     </div>
+
     <script>
         $(document).ready(function(){
-            $(".form-control-chosen").chosen();
+            $(".form-control-chosen").chosen({disable_search_threshold:5});
         });
 
         $("#botonaddarticulos").on("click", function(){
             limpiar(); 
         });
 
-        $(function(){
-            $("#articulo").chosen().change(function(){
-                var url = "{{url('bienes/campos/idarticulo')}}";    //sirve para colocar el nombre de la pagina completa 
-                var identificador = $("#articulo").chosen().val();
-                url = url.replace("idarticulo", identificador);                   
-                $.get(url, function(response, state){
-                    if(response.dato == 1)
-                    {
-                        $("#procesador").val("");
-                        $("#memoria").val("");
-                        $("#disco").val("");
-                        $("#ip").val("");
-                        $("#divcampos").removeClass("d-none");
-                    }
-                    else
-                    {
-                        $("#procesador").val("");
-                        $("#memoria").val("");
-                        $("#disco").val("");
-                        $("#ip").val("");
-                        $("#divcampos").addClass("d-none");
-                    }
-                    if(response.raiz == 1)
-                    {
-                        $("#divbienes").removeClass("d-none");
-                    }
-                    else
-                    {
-                        $("#divbienes").addClass("d-none");
-                    }
-                }); 
-            });
+        $("#articulo").chosen().change(function(){
+            campos($("#articulo").chosen().val());            
         });
-       
+
+        function campos(identificador)
+        {
+            var url = "{{url('bienes/campos/idarticulo')}}";    //sirve para colocar el nombre de la pagina completa 
+            var identificador = $("#articulo").chosen().val();
+            url = url.replace("idarticulo", identificador);                   
+            $.get(url, function(response, state){
+                if(response.dato == 1)
+                {
+                    $("#procesador").val("");
+                    $("#memoria").val("");
+                    $("#disco").val("");
+                    $("#ip").val("");
+                    $("#divcampos").removeClass("d-none");
+                }
+                else
+                {
+                    $("#procesador").val("");
+                    $("#memoria").val("");
+                    $("#disco").val("");
+                    $("#ip").val("");
+                    $("#divcampos").addClass("d-none");
+                }
+                if(response.raiz == 1)
+                {
+                    $("#divbienes").removeClass("d-none");
+                }
+                else
+                {
+                    $("#divbienes").addClass("d-none");
+                }
+            }); 
+        }
+
+        $("#botonaddarticulos").on("click", function(){
+            limpiar(); 
+        });
+
+        function limpiar()
+        {
+            $("#formmodal").removeClass("was-validated");
+
+            $("#origenmodal option:selected").prop("selected", false);
+            $("#origenmodal").trigger("chosen:updated");
+            $("#origenmodal_chosen").removeClass("is-valid");
+            $("#origenmodal_chosen").removeClass("is-invalid");
+
+            $("#bienmodal option:selected").prop("selected", false);
+            $("#bienmodal").trigger("chosen:updated");
+            $("#bienmodal_chosen").removeClass("is-valid");
+            $("#bienmodal_chosen").removeClass("is-invalid");
+            $("#bienmodal").prop("disabled", true).trigger("chosen:updated");
+
+            $("#articulomodal option:selected").prop("selected", false);
+            $("#articulomodal").trigger("chosen:updated");
+            $("#articulomodal_chosen").removeClass("is-valid");
+            $("#articulomodal_chosen").removeClass("is-invalid");
+
+            $("#marcamodal option:selected").prop("selected", false);
+            $("#marcamodal").trigger("chosen:updated");
+            $("#marcamodal_chosen").removeClass("is-valid");
+            $("#marcamodal_chosen").removeClass("is-invalid");
+            
+            $("#modelomodal").val("");
+            $("#seriemodal").val("");
+            $("#patrimoniomodal").val("");
+            
+            $("#estadomodal option:selected").prop("selected", false);
+            $("#estadomodal").trigger("chosen:updated");
+            $("#estadomodal_chosen").removeClass("is-valid");
+            $("#estadomodal_chosen").removeClass("is-invalid");
+            
+            $("#observacionmodal").val("");
+        }
+
+        $("#origenmodal").chosen().change(function(){
+            var origen = $("#origenmodal").chosen().val();
+            if(origen == 0)
+            {
+                $("#bienmodal").prop("disabled", true).trigger("chosen:updated");
+                limpiar();
+            }
+            else if(origen == 1)
+            {
+                $("#bienmodal").prop("disabled", false).trigger("chosen:updated");
+            }
+        });
+        
+        $("#bienmodal").chosen().change(function(){
+            $("#divmodalloading").addClass("d-flex").removeClass("d-none");
+            var identificador = $("#bienmodal").chosen().val();
+            if(identificador)
+            {
+                // Ini Ajax
+                var url = "{{url('/bienes/inventario/idbien')}}";
+                url = url.replace("idbien", identificador);
+                $.ajax({type:"get",
+                    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                    url:url,
+                    dataType: "json",
+                    success: function(response, textStatus, xhr)
+                    {
+                        $("#articulomodal").val(response.fkarticulo);
+                        $("#articulomodal").trigger("chosen:updated");
+                        $("#marcamodal").val(response.fkmarca);
+                        $("#marcamodal").trigger("chosen:updated");
+                        $("#modelomodal").val(response.modelo);
+                        $("#seriemodal").val(response.serie);
+                        $("#patrimoniomodal").val(response.patrimonio);
+                        $("#estadomodal").val(response.fkestado);
+                        $("#estadomodal").trigger("chosen:updated");
+                        $("#observacionmodal").val(response.observacion);
+                        $("#vorigen").val("i");
+                        $("#divmodalloading").addClass("d-none").removeClass("d-flex");
+                    },
+                    error: function(xhr, textStatus, errorThrown)
+                    {
+                        alert("¡Error al cargar el bien!");
+                    }
+                });
+                // Fin Ajax
+            }
+            else
+            {
+                limpiar();
+                $("#divmodalloading").addClass("d-none").removeClass("d-flex");
+            } 
+        });
+        
         function tmpguardarbien()
         {       
             var articulo = $("#articulomodal").val();
@@ -435,32 +551,6 @@
             });              
         }
 
-        function limpiar()
-        {
-            $("#formmodal").removeClass("was-validated");
-
-            $("#articulomodal option:selected").prop("selected", false);
-            $("#articulomodal").trigger("chosen:updated");
-            $("#articulomodal_chosen").removeClass("is-valid");
-            $("#articulomodal_chosen").removeClass("is-invalid");
-
-            $("#marcamodal option:selected").prop("selected", false);
-            $("#marcamodal").trigger("chosen:updated");
-            $("#marcamodal_chosen").removeClass("is-valid");
-            $("#marcamodal_chosen").removeClass("is-invalid");
-            
-            $("#modelomodal").val("");
-            $("#seriemodal").val("");
-            $("#patrimoniomodal").val("");
-            
-            $("#estadomodal option:selected").prop("selected", false);
-            $("#estadomodal").trigger("chosen:updated");
-            $("#estadomodal_chosen").removeClass("is-valid");
-            $("#estadomodal_chosen").removeClass("is-invalid");
-            
-            $("#observacionmodal").val("");
-        }
-
         function eliminartmpbien(id)
         {
             var url = "{{url('eliminatmpbien/id')}}";
@@ -486,15 +576,6 @@
                 }
             });
         }
-
-        $(document).ready(function()
-        {
-            $("#fecha").datepicker({
-                uiLibrary: "bootstrap4",
-                locale: "es-es",
-                format: "dd/mm/yyyy"
-            });
-        });
 
         $("#articulomodal").change(function(){
             if($("#articulomodal").val() != "")
@@ -609,48 +690,46 @@
                 }
             }
         });
-
-        $(function(){
-            $("#area").chosen().change(function(){
-                $("#divloading").addClass("d-flex").removeClass("d-none");
-                var identificador = $("#area").chosen().val();
-                if(identificador)
-                {
-                    // Ini Ajax
-                    var url = "{{url('/bienes/funcionarios/idarea')}}";
-                    url = url.replace("idarea", identificador);
-                    $.ajax({type:"get",
-                        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-                        url:url,
-                        dataType: "json",
-                        success: function(response, textStatus, xhr)
+        
+        $("#area").chosen().change(function(){
+            $("#divloading").addClass("d-flex").removeClass("d-none");
+            var identificador = $("#area").chosen().val();
+            if(identificador)
+            {
+                // Ini Ajax
+                var url = "{{url('/bienes/funcionarios/idarea')}}";
+                url = url.replace("idarea", identificador);
+                $.ajax({type:"get",
+                    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                    url:url,
+                    dataType: "json",
+                    success: function(response, textStatus, xhr)
+                    {
+                        $("#funcionario").empty();
+                        $("#funcionario").append("<option value=''>Funcionario</option>");
+                        for(let i = 0; i< response.length; i++)
                         {
-                            $("#funcionario").empty();
-                            $("#funcionario").append("<option value=''>Funcionario</option>");
-                            for(let i = 0; i< response.length; i++)
-                            {
-                                $("#funcionario").append("<option value='"+response[i].idfuncionario+"'>"+response[i].nombre+' '+response[i].paterno+' '+response[i].materno+"</option>"); 
-                            }
-                            $("#divloading").addClass("d-none").removeClass("d-flex");
-                            $("#funcionario").trigger("chosen:updated");
-                        },
-                        error: function(xhr, textStatus, errorThrown)
-                        {
-                            alert("¡Error al cargar el funcionario!");
+                            $("#funcionario").append("<option value='"+response[i].idfuncionario+"'>"+response[i].nombre+' '+response[i].paterno+' '+response[i].materno+"</option>"); 
                         }
-                    });
-                    // Fin Ajax
-                }
-                else
-                {
-                    $("#funcionario").empty();
-                    $("#funcionario").append("<option value=''>Funcionario</option>");
-                    $("#divloading").addClass("d-none").removeClass("d-flex");
-                    $("#funcionario").trigger("chosen:updated");
-                } 
-            });
+                        $("#divloading").addClass("d-none").removeClass("d-flex");
+                        $("#funcionario").trigger("chosen:updated");
+                    },
+                    error: function(xhr, textStatus, errorThrown)
+                    {
+                        alert("¡Error al cargar el funcionario!");
+                    }
+                });
+                // Fin Ajax
+            }
+            else
+            {
+                $("#funcionario").empty();
+                $("#funcionario").append("<option value=''>Funcionario</option>");
+                $("#divloading").addClass("d-none").removeClass("d-flex");
+                $("#funcionario").trigger("chosen:updated");
+            } 
         });
-
+        
         //Example starter JavaScript for disabling form submissions if there are invalid fields
         (function() 
         {

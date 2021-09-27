@@ -229,6 +229,7 @@ class BienController extends Controller
         $vfecha = $request->vfecha;
         $vbusqueda = $request->vbusqueda;
 
+        $bienesmodal = Vbien::where([['raiz', null], ['fkraiz', null], ['fkfuncionario', null], ['activo', 1]])->get();
         $bienes = Bien::findOrFail($id);
         $articulos = Articulo::orderBy('articulo', 'asc')->get();
         $articulosmodal = Articulo::where('raiz', '<>', 1)->orwhereNull('raiz')->orderBy('articulo', 'asc')->get();
@@ -254,7 +255,6 @@ class BienController extends Controller
         //se agregan los datos a la tabla Tmpbienes                
         foreach ($bienestotmp as $item)
         {                
-                
             $agregabien = new Tmpbien();
             $agregabien->fkarticulo = $item->fkarticulo;
             $agregabien->fkmarca = $item->fkmarca;
@@ -265,13 +265,12 @@ class BienController extends Controller
             $agregabien->observacion = $item->observacion;
             $agregabien->fkusuario = auth()->user()->id;
             $agregabien->save();
-                
         }
 
         // registros que se van a la tabla temporal.                                        
         $tmpbienes = Vtmpbien::Where('fkusuario', $usuario)->get();          
 
-        return view('bienes.editar',compact('page', 'vfecha', 'vbusqueda', 'articulos', 'articulosmodal', 'marcas', 'operativos', 'areas', 'funcionarios', 'estados', 'cedulas', 'bienes', 'raiz', 'tmpbienes'));
+        return view('bienes.editar', compact('page', 'vfecha', 'vbusqueda', 'bienesmodal', 'articulos', 'articulosmodal', 'marcas', 'operativos', 'areas', 'funcionarios', 'estados', 'cedulas', 'bienes', 'raiz', 'tmpbienes'));
     }
 
     /**
