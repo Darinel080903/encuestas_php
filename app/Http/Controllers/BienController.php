@@ -263,6 +263,7 @@ class BienController extends Controller
             $agregabien->patrimonio = $item->patrimonio;                            
             $agregabien->fkestado = $item->fkestado;
             $agregabien->observacion = $item->observacion;
+            $agregabien->origen = 'i';
             $agregabien->fkusuario = auth()->user()->id;
             $agregabien->save();
         }
@@ -328,17 +329,18 @@ class BienController extends Controller
         }
         $actualizabien->save();
 
-        //limpiamos de la tabla bien los registros dependientes fkraiz.
-
         $articulos = Articulo::findOrFail($request->articulo);
 
-        if($articulos->raiz == 1 ) //condicion de busqueda en tablas
+        if($articulos->raiz == 1)
         {
-            $limpiartmpbien = Bien::where('fkraiz', $id); //eliminamos los registros de la tabla temporal.
-            $limpiartmpbien->delete();
+            //Eliminamos los registros de la tabla temporal.
+            $limpiartmpbien = Bien::where('fkraiz', $id);
+            // $limpiartmpbien->delete();
 
-            $usuario = auth()->user()->id;        //obtenemos la instancia del usuario logueado
-            $cuentatmpbienes = Tmpbien::where([['fkusuario', $usuario]])->count();    //estamos contando si hay registros raiz en la tabla Bienes.
+            //obtenemos la instancia del usuario logueado
+            $usuario = auth()->user()->id;
+            //estamos contando si hay registros raiz en la tabla Bienes.
+            $cuentatmpbienes = Tmpbien::where([['fkusuario', $usuario]])->count();
             
             if($cuentatmpbienes != 0 )
             {
@@ -346,7 +348,6 @@ class BienController extends Controller
                 
                 foreach ($tmpbienes as $item)
                 {                
-                 
                     $agregatmpbien = new Bien();
                     $agregatmpbien->fkarticulo = $item->fkarticulo;
                     $agregatmpbien->fkmarca = $item->fkmarca;
@@ -372,9 +373,7 @@ class BienController extends Controller
                         $agregatmpbien->activo = 0;
                     }
                     $agregatmpbien->save();
-                 
                 }
-                  
             }
         }
 

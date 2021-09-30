@@ -114,6 +114,8 @@
                             </div> 
                         </div>
 
+                        <input type="hidden" id="vorigen" name="vorigen">
+
                         <button type="submit" class="btn btn-outline-danger"><i class="fas fa-save"></i> Guardar</button>
                         <button type="button" class="btn btn-outline-danger" data-dismiss="modal"><i class="fas fa-sign-out-alt fa-rotate-180"></i> Cerrar</button>
                     </form>
@@ -284,14 +286,14 @@
                                 
                                         @foreach ($tmpbienes as $item)                                        
                                             <tr>                                            
-                                                <td class="text-center" width="10%" scope="col">{{$item->articulo}}</td>
-                                                <td class="text-center" scope="col">{{$item->marca}}</td>
-                                                <td class="text-center" scope="col">{{$item->modelo}}</td>
-                                                <td class="text-center" scope="col">{{$item->serie}}</td>
-                                                <td class="text-center" scope="col">{{$item->patrimonio}}</td>
-                                                <td class="text-center" scope="col">{{$item->estado}}</td>
-                                                <td class="text-center" scope="col">{{$item->observacion}}</td>
-                                                <td class="text-center" scope="col" width='13%'><a class="btn btn-outline-danger" href="javascript:eliminartmpbien({{$item->idtmpbien}});"><i class='fas fa-unlink'></i> Desasociar</a></td>                                           
+                                                <td scope="col" width="10%">{{$item->articulo}}</td>
+                                                <td scope="col">{{$item->marca}}</td>
+                                                <td scope="col">{{$item->modelo}}</td>
+                                                <td scope="col">{{$item->serie}}</td>
+                                                <td scope="col">{{$item->patrimonio}}</td>
+                                                <td scope="col">{{$item->estado}}</td>
+                                                <td scope="col">{{$item->observacion}}</td>
+                                                <td scope="col" width='13%'><a class="btn btn-outline-danger" href="javascript:eliminartmpbien({{$item->idtmpbien}});"><i class='fas fa-unlink'></i> Desasociar</a></td>                                           
                                             </tr>
                                         @endforeach
                                     </table>
@@ -443,6 +445,7 @@
             $("#estadomodal_chosen").removeClass("is-invalid");
             
             $("#observacionmodal").val("");
+            $("#vorigen").val("n");
         }
 
         $("#origenmodal").chosen().change(function(){
@@ -508,6 +511,7 @@
             var patrimonio = $("#patrimoniomodal").val();
             var estado = $("#estadomodal").val();
             var observacion = $("#observacionmodal").val();
+            var vorigen = $("#vorigen").val();
 
             var url = "{{url('savetmp')}}";    //sirve para colocar el nombre de la pagina completa 
                  
@@ -516,7 +520,7 @@
                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}, 
                 url: url,
                 dataType: "json",
-                data: {articulomodal:articulo, marcamodal:marca, modelomodal:modelo, seriemodal:serie, patrimoniomodal:patrimonio, estadomodal:estado, observacionmodal:observacion},
+                data: {articulomodal:articulo, marcamodal:marca, modelomodal:modelo, seriemodal:serie, patrimoniomodal:patrimonio, estadomodal:estado, observacionmodal:observacion, origen:vorigen},
                 success: function(response, textStatus, xhr)
                 {
                     if(response == "R")
@@ -526,7 +530,7 @@
                     else
                     {
                         $("#listaarticulos").empty();
-                        $('#listaarticulos').append("<tr><th>Articulo</th><th>Marca</th><th>Modelo</th><th>Serie</th><th>Patrimonio</th><th>Estado</th><th>Observacion</th><th>Eliminar</th></tr>");
+                        $('#listaarticulos').append("<tr><th class='text-center'>Articulo</th><th class='text-center'>Marca</th><th class='text-center'>Modelo</th><th class='text-center'>Serie</th><th class='text-center'>Patrimonio</th><th class='text-center'>Estado</th><th class='text-center'>Observación</th><th class='text-center' width='13%'>Desasociar</th></tr>");
                         for(let i = 0; i< response.length; i++) 
                         {
                             var showmodelo = "";
@@ -539,7 +543,7 @@
                             {
                                 var showobservacion = response[i].observacion;
                             }
-                            $('#listaarticulos').append("<tr><td>"+response[i].articulo+"</td><td>"+response[i].marca+"</td><td>"+showmodelo+"</td><td>"+response[i].serie+"</td><td>"+response[i].patrimonio+"</td><td>"+response[i].estado+"</td><td>"+showobservacion+"</td><td><a class='btn btn-primary id='message-delete' href='javascript:eliminartmpbien("+response[i].idtmpbien+");'>Eliminar</a></td></tr>");
+                            $('#listaarticulos').append("<tr><td>"+response[i].articulo+"</td><td>"+response[i].marca+"</td><td>"+showmodelo+"</td><td>"+response[i].serie+"</td><td>"+response[i].patrimonio+"</td><td>"+response[i].estado+"</td><td>"+showobservacion+"</td><td class='text-center' width='13%'><a class='btn btn-outline-danger' id='message-delete' href='javascript:eliminartmpbien("+response[i].idtmpbien+");'><i class='fas fa-unlink'></i> Desasociar</a></td></tr>");
                         }
                         limpiar();   
                     }
@@ -566,12 +570,20 @@
                 success: function(response, textStatus, xhr) 
                 {
                     $("#listaarticulos").empty();
-                    $('#listaarticulos').append("<tr><th>Articulo</th><th>Marca</th><th>Modelo</th><th>Serie</th><th>Patrimonio</th><th>Estado</th><th>Observacion</th><th>Eliminar</th></tr>");
-
+                    $('#listaarticulos').append("<tr><th class='text-center'>Articulo</th><th class='text-center'>Marca</th><th class='text-center'>Modelo</th><th class='text-center'>Serie</th><th class='text-center'>Patrimonio</th><th class='text-center'>Estado</th><th class='text-center'>Observación</th><th class='text-center' width='13%'>Desasociar</th></tr>");
                     for(let i = 0; i< response.length; i++) 
-                    {                               
-                        $('#listaarticulos').append("<tr><td>"+response[i].articulo+"</td><td>"+response[i].marca+"</td><td>"+response[i].modelo+"</td><td>"+response[i].serie+"</td><td>"+response[i].patrimonio+"</td><td>"+response[i].estado+"</td><td>"+response[i].observacion+"</td><td><a class='btn btn-primary id='message-delete' href='javascript:eliminartmpbien("+response[i].idtmpbien+");'>Eliminar</a></td></tr>");
-                                                
+                    {
+                        var showmodelo = "";
+                        if(response[i].modelo)
+                        {
+                            var showmodelo = response[i].modelo;
+                        }
+                        var showobservacion = "";
+                        if(response[i].observacion)
+                        {
+                            var showobservacion = response[i].observacion;
+                        }
+                        $('#listaarticulos').append("<tr><td>"+response[i].articulo+"</td><td>"+response[i].marca+"</td><td>"+showmodelo+"</td><td>"+response[i].serie+"</td><td>"+response[i].patrimonio+"</td><td>"+response[i].estado+"</td><td>"+showobservacion+"</td><td class='text-center' width='13%'><a class='btn btn-outline-danger' id='message-delete' href='javascript:eliminartmpbien("+response[i].idtmpbien+");'><i class='fas fa-unlink'></i> Desasociar</a></td></tr>");
                     }   
                 }
             });
