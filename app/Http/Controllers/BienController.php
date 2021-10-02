@@ -333,48 +333,58 @@ class BienController extends Controller
 
         if($articulos->raiz == 1)
         {
-            //Eliminamos los registros de la tabla temporal.
-            $limpiartmpbien = Bien::where('fkraiz', $id);
-            // $limpiartmpbien->delete();
-
-            //obtenemos la instancia del usuario logueado
+            $cuentabienes = Bien::where('fkraiz', $id)->count();
             $usuario = auth()->user()->id;
-            //estamos contando si hay registros raiz en la tabla Bienes.
-            $cuentatmpbienes = Tmpbien::where([['fkusuario', $usuario]])->count();
+            $cuentatmpbienes = Tmpbien::where('fkusuario', $usuario)->count();
             
-            if($cuentatmpbienes != 0 )
+            if($cuentabienes > 0)
             {
-                $tmpbienes = Tmpbien::where('fkusuario', $usuario)->get();
-                
-                foreach ($tmpbienes as $item)
-                {                
-                    $agregatmpbien = new Bien();
-                    $agregatmpbien->fkarticulo = $item->fkarticulo;
-                    $agregatmpbien->fkmarca = $item->fkmarca;
-                    $agregatmpbien->modelo = $item->modelo;
-                    $agregatmpbien->serie = $item->serie;
-                    $agregatmpbien->patrimonio = $item->patrimonio;
-                    if($request->funcionario != null)
+                $bienes = Bien::where('fkraiz', $id)->get();
+                foreach ($bienes as $item)
+                {
+                    $tmpbienes = Tmpbien::where('fkusuario', $usuario)->get();              
+                    if($tmpbienes->contains($item->patrimonio) == false)
                     {
-                        $agregatmpbien->fkfuncionario = $request->funcionario;
-                        $fechaformat = date('Y-m-d', strtotime(str_replace('/', '-', $request->fecha)));
-                        $agregatmpbien->fecha = $fechaformat;
-                    }                                                
-                    $agregatmpbien->fkestado = $item->fkestado;
-                    $agregatmpbien->observacion = $item->observacion;                    
-                    $agregatmpbien->fkraiz = $id;
-                    $agregatmpbien->fkusuario = auth()->user()->id;
-                    if(isset($request->activo))
-                    {
-                        $agregatmpbien->activo = 1;
+                        $desasociabien = Bien::findOrFail($item->idbien);
+                        $desasociabien->fkraiz = null;
+                        $desasociabien->save();
                     }
-                        else
-                    {
-                        $agregatmpbien->activo = 0;
-                    }
-                    $agregatmpbien->save();
                 }
             }
+                
+            // if($cuentatmpbienes != 0 )
+            // {
+            //     $tmpbienes = Tmpbien::where('fkusuario', $usuario)->get();
+                
+            //     foreach ($tmpbienes as $item)
+            //     {                
+            //         $agregatmpbien = new Bien();
+            //         $agregatmpbien->fkarticulo = $item->fkarticulo;
+            //         $agregatmpbien->fkmarca = $item->fkmarca;
+            //         $agregatmpbien->modelo = $item->modelo;
+            //         $agregatmpbien->serie = $item->serie;
+            //         $agregatmpbien->patrimonio = $item->patrimonio;
+            //         if($request->funcionario != null)
+            //         {
+            //             $agregatmpbien->fkfuncionario = $request->funcionario;
+            //             $fechaformat = date('Y-m-d', strtotime(str_replace('/', '-', $request->fecha)));
+            //             $agregatmpbien->fecha = $fechaformat;
+            //         }                                                
+            //         $agregatmpbien->fkestado = $item->fkestado;
+            //         $agregatmpbien->observacion = $item->observacion;                    
+            //         $agregatmpbien->fkraiz = $id;
+            //         $agregatmpbien->fkusuario = auth()->user()->id;
+            //         if(isset($request->activo))
+            //         {
+            //             $agregatmpbien->activo = 1;
+            //         }
+            //             else
+            //         {
+            //             $agregatmpbien->activo = 0;
+            //         }
+            //         $agregatmpbien->save();
+            //     }
+            // }
         }
 
         $bitacora = new Bitacora();
