@@ -39,7 +39,7 @@ class BienController extends Controller
         $vfecha = $request->vfecha;
         $vbusqueda = $request->vbusqueda;
 
-        $bienes = Vbien::fecha($vfecha)->busqueda($vbusqueda)->orderBy('patrimonio', 'asc')->paginate(10);
+        $bienes = Vbien::fecha($vfecha)->busqueda($vbusqueda)->orderBy('idbien', 'asc')->orderBy('fkraiz', 'asc')->paginate(20);
     
         return view('bienes.lista',compact('page', 'vfecha', 'vbusqueda', 'bienes'));  
     }
@@ -58,16 +58,16 @@ class BienController extends Controller
         $vbusqueda = $request->vbusqueda;
 
         $bienesmodal = Vbien::where([['raiz', null], ['fkraiz', null], ['fkfuncionario', null], ['activo', 1]])->get();
-        $articulos = Articulo::orderBy('articulo', 'asc')->get();
         $articulosmodal = Articulo::where('raiz', '<>', 1)->orwhereNull('raiz')->orderBy('articulo', 'asc')->get();
+        $articulos = Articulo::orderBy('articulo', 'asc')->get();        
         $marcas = Marca::orderBy('marca', 'asc')->get();
         $operativos = Operativo::orderBy('operativo', 'asc')->get();
+        $cedulas = Cedula::orderBy('fecha', 'asc')->get();
+        $estados = Estado::orderBy('idestado', 'asc')->get();
         $areas = Area::whereNull('fkarea')->get();
         $funcionarios = Funcionario::where('activo', 1)->orderBy('nombre', 'asc')->orderBy('paterno', 'asc')->orderBy('materno', 'asc')->get();
-        $estados = Estado::orderBy('idestado', 'asc')->get();
-        $cedulas = Cedula::orderBy('fecha', 'asc')->get();
 
-        return view('bienes.crear', compact('page', 'vfecha', 'vbusqueda', 'bienesmodal', 'articulos', 'articulosmodal', 'marcas', 'operativos', 'areas', 'funcionarios', 'estados', 'cedulas'));
+        return view('bienes.crear', compact('page', 'vfecha', 'vbusqueda', 'bienesmodal', 'articulosmodal', 'articulos', 'marcas', 'operativos', 'cedulas', 'estados', 'areas', 'funcionarios'));
     }
 
     /**
@@ -85,7 +85,7 @@ class BienController extends Controller
             'marca' => 'required',
             'serie' => 'required',
             'patrimonio' => 'required',
-            'estado' => 'required',
+            'estado' => 'required'
         ]);
 
         $page = $request->page;
@@ -110,15 +110,14 @@ class BienController extends Controller
         $nuevobien->fkoperativo = $request->operativo;
         $nuevobien->serie = $request->serie;
         $nuevobien->patrimonio = $request->patrimonio;
+        $nuevobien->fkcedula = $request->cedula;
+        $nuevobien->fkestado = $request->estado;
+        $nuevobien->observacion = $request->observacion;
         if($request->funcionario != null)
         {
             $nuevobien->fkfuncionario = $request->funcionario;
+            $nuevobien->fecha = date('Y-m-d');
         }
-        $fechaformat = date('Y-m-d');
-        $nuevobien->fecha = $fechaformat;
-        $nuevobien->fkestado = $request->estado;
-        $nuevobien->fkcedula = $request->cedula;
-        $nuevobien->observacion = $request->observacion;
         $nuevobien->fkusuario = auth()->user()->id;
         if(isset($request->activo))
         {
@@ -152,15 +151,14 @@ class BienController extends Controller
                         $nuevotmpbien->modelo = $item->modelo;
                         $nuevotmpbien->serie = $item->serie;
                         $nuevotmpbien->patrimonio = $item->patrimonio;
-                        if($request->funcionario != null)
-                        {
-                            $nuevotmpbien->fkfuncionario = $request->funcionario;
-                            $fechaformat = date('Y-m-d', strtotime(str_replace('/', '-', $request->fecha)));
-                            $nuevotmpbien->fecha = $fechaformat;
-                        }                    
                         $nuevotmpbien->fkestado = $item->fkestado;
                         $nuevotmpbien->observacion = $item->observacion;
                         $nuevotmpbien->fkraiz = $nuevobien->idbien;
+                        if($request->funcionario != null)
+                        {
+                            $nuevotmpbien->fkfuncionario = $request->funcionario;
+                            $nuevotmpbien->fecha = date('Y-m-d');
+                        }
                         $nuevotmpbien->fkusuario = auth()->user()->id;
                         if(isset($request->activo))
                         {
@@ -176,13 +174,26 @@ class BienController extends Controller
                     {
                         $idbien = Bien::Where([['serie', $item->serie], ['patrimonio', $item->patrimonio]])->value('idbien');
                         $actualizabien = Bien::findOrFail($idbien);
+                        $actualizabien->observacion = $item->observacion;
+                        $actualizabien->fkraiz = $nuevobien->idbien;
                         if($request->funcionario != null)
                         {
                             $actualizabien->fkfuncionario = $request->funcionario;
-                            $fechaformat = date('Y-m-d', strtotime(str_replace('/', '-', $request->fecha)));
-                            $actualizabien->fecha = $fechaformat;
+                            $actualizabien->fecha = date('Y-m-d');
                         }
-                        $actualizabien->fkraiz = $nuevobien->idbien;
+                        else
+                        {
+                            $actualizabien->fkfuncionario = null;
+                            $actualizabien->fecha = date('Y-m-d');
+                        }
+                        if(isset($request->activo))
+                        {
+                            $actualizabien->activo = 1;
+                        }
+                        else
+                        {
+                            $actualizabien->activo = 0;
+                        }
                         $actualizabien->save();
                     }                      
                 }
@@ -229,17 +240,17 @@ class BienController extends Controller
         $vfecha = $request->vfecha;
         $vbusqueda = $request->vbusqueda;
 
-        $bienesmodal = Vbien::where([['raiz', null], ['fkraiz', null], ['fkfuncionario', null], ['activo', 1]])->get();
         $bienes = Bien::findOrFail($id);
-        $articulos = Articulo::orderBy('articulo', 'asc')->get();
+        $bienesmodal = Vbien::where([['raiz', null], ['fkraiz', null], ['fkfuncionario', null], ['activo', 1]])->get();
         $articulosmodal = Articulo::where('raiz', '<>', 1)->orwhereNull('raiz')->orderBy('articulo', 'asc')->get();
+        $articulos = Articulo::orderBy('articulo', 'asc')->get();        
         $marcas = Marca::orderBy('marca', 'asc')->get();
         $operativos = Operativo::orderBy('operativo', 'asc')->get();
+        $cedulas = Cedula::orderBy('fecha', 'asc')->get();
+        $estados = Estado::orderBy('idestado', 'asc')->get();
         $areas = Area::whereNull('fkarea')->get();
         $funcionarios = Funcionario::where('activo', 1)->orderBy('nombre', 'asc')->orderBy('paterno', 'asc')->orderBy('materno', 'asc')->get();
-        $estados = Estado::orderBy('idestado', 'asc')->get();
-        $cedulas = Cedula::orderBy('fecha', 'asc')->get();
-
+        
         $raiz = Articulo::Where('idarticulo', $bienes->fkarticulo)->value('raiz');
 
         // registros que se van a la tabla temporal.
@@ -291,12 +302,19 @@ class BienController extends Controller
             'marca' => 'required',
             'serie' => 'required',
             'patrimonio' => 'required',
-            'estado' => 'required',
+            'estado' => 'required'
         ]);
 
         $page = $request->page;
         $vfecha = $request->vfecha;
         $vbusqueda = $request->vbusqueda;
+
+        $validar = Bien::where('serie', $request->serie)->orWhere('patrimonio', $request->patrimonio)->count();
+        
+        if($validar > 0)
+        {
+            return back()->withInput()->with('mensaje', '¡Error, numero de serie o número de patrimonio existente en el inventario!');
+        }
         
         $actualizabien = Bien::findOrFail($id);
         $actualizabien->fkarticulo = $request->articulo;
@@ -309,16 +327,21 @@ class BienController extends Controller
         $actualizabien->fkoperativo = $request->operativo;
         $actualizabien->serie = $request->serie;
         $actualizabien->patrimonio = $request->patrimonio;
+        $actualizabien->fkcedula = $request->cedula;
+        $actualizabien->fkestado = $request->estado;
+        $actualizabien->observacion = $request->observacion;
         if($request->funcionario != null)
         {
             $actualizabien->fkfuncionario = $request->funcionario;
-            $fechaformat = date('Y-m-d', strtotime(str_replace('/', '-', $request->fecha)));
+            $fechaformat = date('Y-m-d');
             $actualizabien->fecha = $fechaformat;
         }
-        $actualizabien->fkestado = $request->estado;
-        $actualizabien->fkcedula = $request->cedula;
-        $actualizabien->observacion = $request->observacion;
-        $actualizabien->fkusuario = auth()->user()->id;
+        else
+        {
+            $actualizabien->fkfuncionario = null;
+            $fechaformat = date('Y-m-d');
+            $actualizabien->fecha = $fechaformat;
+        }
         if(isset($request->activo))
         {
             $actualizabien->activo = 1;
@@ -333,17 +356,16 @@ class BienController extends Controller
 
         if($articulos->raiz == 1)
         {
-            $cuentabienes = Bien::where('fkraiz', $id)->count();
             $usuario = auth()->user()->id;
-            $cuentatmpbienes = Tmpbien::where('fkusuario', $usuario)->count();
-            
+
+            $cuentabienes = Bien::where('fkraiz', $id)->count();
             if($cuentabienes > 0)
             {
                 $bienes = Bien::where('fkraiz', $id)->get();
                 foreach ($bienes as $item)
                 {
-                    $tmpbienes = Tmpbien::where('fkusuario', $usuario)->get();              
-                    if($tmpbienes->contains($item->patrimonio) == false)
+                    $cuentatmpbien = Tmpbien::where([['fkusuario', $usuario], ['patrimonio', $item->patrimonio]])->count();
+                    if($cuentatmpbien == 0)
                     {
                         $desasociabien = Bien::findOrFail($item->idbien);
                         $desasociabien->fkraiz = null;
@@ -351,40 +373,58 @@ class BienController extends Controller
                     }
                 }
             }
-                
-            // if($cuentatmpbienes != 0 )
-            // {
-            //     $tmpbienes = Tmpbien::where('fkusuario', $usuario)->get();
-                
-            //     foreach ($tmpbienes as $item)
-            //     {                
-            //         $agregatmpbien = new Bien();
-            //         $agregatmpbien->fkarticulo = $item->fkarticulo;
-            //         $agregatmpbien->fkmarca = $item->fkmarca;
-            //         $agregatmpbien->modelo = $item->modelo;
-            //         $agregatmpbien->serie = $item->serie;
-            //         $agregatmpbien->patrimonio = $item->patrimonio;
-            //         if($request->funcionario != null)
-            //         {
-            //             $agregatmpbien->fkfuncionario = $request->funcionario;
-            //             $fechaformat = date('Y-m-d', strtotime(str_replace('/', '-', $request->fecha)));
-            //             $agregatmpbien->fecha = $fechaformat;
-            //         }                                                
-            //         $agregatmpbien->fkestado = $item->fkestado;
-            //         $agregatmpbien->observacion = $item->observacion;                    
-            //         $agregatmpbien->fkraiz = $id;
-            //         $agregatmpbien->fkusuario = auth()->user()->id;
-            //         if(isset($request->activo))
-            //         {
-            //             $agregatmpbien->activo = 1;
-            //         }
-            //             else
-            //         {
-            //             $agregatmpbien->activo = 0;
-            //         }
-            //         $agregatmpbien->save();
-            //     }
-            // }
+
+            $cuentatmpbienes = Tmpbien::where('fkusuario', $usuario)->count();
+            if($cuentatmpbienes != 0 )
+            {
+                $tmpbienes = Tmpbien::where('fkusuario', $usuario)->get();    
+                foreach ($tmpbienes as $item)
+                {                
+                    if($item->origen == 'n')
+                    {
+                        $nuevotmpbien = new Bien();
+                        $nuevotmpbien->fkarticulo = $item->fkarticulo;
+                        $nuevotmpbien->fkmarca = $item->fkmarca;
+                        $nuevotmpbien->modelo = $item->modelo;
+                        $nuevotmpbien->serie = $item->serie;
+                        $nuevotmpbien->patrimonio = $item->patrimonio;                    
+                        $nuevotmpbien->fkestado = $item->fkestado;
+                        $nuevotmpbien->observacion = $item->observacion;
+                        $nuevotmpbien->fkraiz = $id;
+                        if($request->funcionario != null)
+                        {
+                            $nuevotmpbien->fkfuncionario = $request->funcionario;
+                            $nuevotmpbien->fecha = date('Y-m-d');
+                        }
+                        $nuevotmpbien->fkusuario = auth()->user()->id;
+                        if(isset($request->activo))
+                        {
+                            $nuevotmpbien->activo = 1;
+                        }
+                        else
+                        {
+                            $nuevotmpbien->activo = 0;
+                        }
+                        $nuevotmpbien->save();
+                    }
+                    elseif($item->origen == 'i')
+                    {
+                        $idbien = Bien::Where([['serie', $item->serie], ['patrimonio', $item->patrimonio]])->value('idbien');
+                        $actualizabien = Bien::findOrFail($idbien);
+                        $actualizabien->observacion = $item->observacion;
+                        $actualizabien->fkraiz = $id;
+                        if($request->funcionario != null)
+                        {
+                            $actualizabien->fkfuncionario = $request->funcionario;
+                            $actualizabien->fecha = date('Y-m-d');
+                        }
+                        $actualizabien->save();
+                    }
+                }
+            }
+
+            $limpiatmpbienes = Tmpbien::where('fkusuario', $usuario);
+            $limpiatmpbienes->delete();
         }
 
         $bitacora = new Bitacora();

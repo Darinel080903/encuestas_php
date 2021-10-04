@@ -118,10 +118,7 @@
                         
                         <button type="submit" class="btn btn-outline-danger"><i class="fas fa-save"></i> Guardar</button>
                         <button type="button" class="btn btn-outline-danger" data-dismiss="modal"><i class="fas fa-sign-out-alt fa-rotate-180"></i> Cerrar</button>
-                        <!-- mensaje de error de bootstrap -->
-                        {{-- <div id="message-delete" class="alert alert-info" role="alert" style="display:none">
-                            <strong> El registro se elimino correctamente.</strong>
-                        </div> --}}
+                        
                         <div class="d-none justify-content-center" id="divmodalloading">
                             <div class="spinner-grow divloading" role="status">
                                 <span class="sr-only">Loading...</span>

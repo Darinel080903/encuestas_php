@@ -131,6 +131,9 @@
                     <div class="card-header justify-content-between align-items-centr text-center encabezadoform">
                         <h3 class="headerlistatitulo"><i class="fas fa-pen"></i> Editar bien</h3>
                     </div>
+                    @if (session('mensaje'))
+                        <div class="alert alert-danger">{{session('mensaje')}}</div>
+                    @endif 
                     <div class="card-body">     
                         <form class="needs-validation" id="formmain" action="{{url('/bienes/'.$bienes->idbien)}}" method="POST" novalidate>
                         @method('PUT')
