@@ -138,6 +138,15 @@
                         <form class="needs-validation" id="formmain" action="{{url('/bienes/'.$bienes->idbien)}}" method="POST" novalidate>
                         @method('PUT')
                         @csrf
+                            
+                            @if($bienraiz)
+                                <div class="form-row">
+                                    <div class="form-group col-md-12">
+                                        <h5>Bien asosiado al número de patrimonio: {{$bienraiz->patrimonio}}</h5>
+                                    </div>
+                                </div>
+                            @endif
+                            
                             <div class="form-row">
                                 <div class="form-group col-md-4">
                                     <label for="articulo">Artículos:</label>

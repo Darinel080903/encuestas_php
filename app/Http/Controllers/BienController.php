@@ -129,6 +129,24 @@ class BienController extends Controller
         }
         $nuevobien->save();
 
+        $historico = new Historico();
+        $historico->fecha = date('Y-m-d H:i');
+        $historico->accion = 'Alta';
+        $historico->fkbien = $nuevobien->idbien;
+        $historico->fkusuario = auth()->user()->id;
+        $historico->save();
+
+        if($request->funcionario != null)
+        {
+            $historico = new Historico();
+            $historico->fecha = date('Y-m-d H:i');
+            $historico->accion = 'Resguardo';
+            $historico->fkbien = $nuevobien->idbien;
+            $historico->fkfuncionario = $request->funcionario;
+            $historico->fkusuario = auth()->user()->id;
+            $historico->save();
+        }
+
         //tenemos que validar si la tabla Tmpbien tiene datos del cpu raiz de ser asi mandarlos a guardar los datos dependientes.
         $articulos = Articulo::findOrFail($request->articulo);
 
@@ -169,6 +187,24 @@ class BienController extends Controller
                             $nuevotmpbien->activo = 0;
                         }
                         $nuevotmpbien->save();
+
+                        $historico = new Historico();
+                        $historico->fecha = date('Y-m-d H:i');
+                        $historico->accion = 'Alta';
+                        $historico->fkbien = $nuevotmpbien->idbien;
+                        $historico->fkusuario = auth()->user()->id;
+                        $historico->save();
+
+                        if($request->funcionario != null)
+                        {
+                            $historico = new Historico();
+                            $historico->fecha = date('Y-m-d H:i');
+                            $historico->accion = 'Resguardo';
+                            $historico->fkbien = $nuevotmpbien->idbien;
+                            $historico->fkfuncionario = $request->funcionario;
+                            $historico->fkusuario = auth()->user()->id;
+                            $historico->save();
+                        }
                     }
                     elseif($item->origen == 'i')
                     {
@@ -178,6 +214,14 @@ class BienController extends Controller
                         $actualizabien->fkraiz = $nuevobien->idbien;
                         if($request->funcionario != null)
                         {
+                            $historico = new Historico();
+                            $historico->fecha = date('Y-m-d H:i');
+                            $historico->accion = 'Resguardo';
+                            $historico->fkbien = $idbien;
+                            $historico->fkfuncionario = $request->funcionario;
+                            $historico->fkusuario = auth()->user()->id;
+                            $historico->save();
+
                             $actualizabien->fkfuncionario = $request->funcionario;
                             $actualizabien->fecha = date('Y-m-d');
                         }
@@ -280,9 +324,18 @@ class BienController extends Controller
         }
 
         // registros que se van a la tabla temporal.                                        
-        $tmpbienes = Vtmpbien::Where('fkusuario', $usuario)->get();          
-
-        return view('bienes.editar', compact('page', 'vfecha', 'vbusqueda', 'bienesmodal', 'articulos', 'articulosmodal', 'marcas', 'operativos', 'areas', 'funcionarios', 'estados', 'cedulas', 'bienes', 'raiz', 'tmpbienes'));
+        $tmpbienes = Vtmpbien::Where('fkusuario', $usuario)->get();
+        
+        if($bienes->fkraiz)
+        {
+            $bienraiz = Bien::findOrFail($bienes->fkraiz);
+        }
+        else
+        {
+            $bienraiz = null;
+        }
+    
+        return view('bienes.editar', compact('page', 'vfecha', 'vbusqueda', 'bienesmodal', 'articulos', 'articulosmodal', 'marcas', 'operativos', 'areas', 'funcionarios', 'estados', 'cedulas', 'bienes', 'raiz', 'tmpbienes', 'bienraiz'));
     }
 
     /**
@@ -309,7 +362,7 @@ class BienController extends Controller
         $vfecha = $request->vfecha;
         $vbusqueda = $request->vbusqueda;
 
-        $validar = Bien::where('serie', $request->serie)->orWhere('patrimonio', $request->patrimonio)->count();
+        $validar = Bien::where([['idbien', '<>', $id], ['serie', $request->serie]])->orWhere([['idbien', '<>', $id], ['patrimonio', $request->patrimonio]])->count();
         
         if($validar > 0)
         {
@@ -332,15 +385,46 @@ class BienController extends Controller
         $actualizabien->observacion = $request->observacion;
         if($request->funcionario != null)
         {
-            $actualizabien->fkfuncionario = $request->funcionario;
-            $fechaformat = date('Y-m-d');
-            $actualizabien->fecha = $fechaformat;
+            if($actualizabien->fkfuncionario != $request->funcionario)
+            {
+                if($actualizabien->fkfuncionario != null)
+                {
+                    $historico = new Historico();
+                    $historico->fecha = date('Y-m-d H:i');
+                    $historico->accion = 'Baja';
+                    $historico->fkbien = $id;
+                    $historico->fkfuncionario = $actualizabien->fkfuncionario;
+                    $historico->fkusuario = auth()->user()->id;
+                    $historico->save();
+                }
+
+                $historico = new Historico();
+                $historico->fecha = date('Y-m-d H:i');
+                $historico->accion = 'Resguardo';
+                $historico->fkbien = $id;
+                $historico->fkfuncionario = $request->funcionario;
+                $historico->fkusuario = auth()->user()->id;
+                $historico->save();
+
+                $actualizabien->fkfuncionario = $request->funcionario;
+                $actualizabien->fecha = date('Y-m-d');
+            }
         }
         else
         {
+            if($actualizabien->fkfuncionario != null)
+            {
+                $historico = new Historico();
+                $historico->fecha = date('Y-m-d H:i');
+                $historico->accion = 'Baja';
+                $historico->fkbien = $id;
+                $historico->fkfuncionario = $actualizabien->fkfuncionario;
+                $historico->fkusuario = auth()->user()->id;
+                $historico->save();
+            }
+
             $actualizabien->fkfuncionario = null;
-            $fechaformat = date('Y-m-d');
-            $actualizabien->fecha = $fechaformat;
+            $actualizabien->fecha = date('Y-m-d');
         }
         if(isset($request->activo))
         {
@@ -406,6 +490,24 @@ class BienController extends Controller
                             $nuevotmpbien->activo = 0;
                         }
                         $nuevotmpbien->save();
+
+                        $historico = new Historico();
+                        $historico->fecha = date('Y-m-d H:i');
+                        $historico->accion = 'Alta';
+                        $historico->fkbien = $nuevotmpbien->idbien;
+                        $historico->fkusuario = auth()->user()->id;
+                        $historico->save();
+
+                        if($request->funcionario != null)
+                        {
+                            $historico = new Historico();
+                            $historico->fecha = date('Y-m-d H:i');
+                            $historico->accion = 'Resguardo';
+                            $historico->fkbien = $nuevotmpbien->idbien;
+                            $historico->fkfuncionario = $request->funcionario;
+                            $historico->fkusuario = auth()->user()->id;
+                            $historico->save();
+                        }
                     }
                     elseif($item->origen == 'i')
                     {
@@ -415,6 +517,25 @@ class BienController extends Controller
                         $actualizabien->fkraiz = $id;
                         if($request->funcionario != null)
                         {
+                            if($actualizabien->fkfuncionario != null)
+                            {
+                                $historico = new Historico();
+                                $historico->fecha = date('Y-m-d H:i');
+                                $historico->accion = 'Baja';
+                                $historico->fkbien = $idbien;
+                                $historico->fkfuncionario = $actualizabien->fkfuncionario;
+                                $historico->fkusuario = auth()->user()->id;
+                                $historico->save();
+                            }
+
+                            $historico = new Historico();
+                            $historico->fecha = date('Y-m-d H:i');
+                            $historico->accion = 'Resguardo';
+                            $historico->fkbien = $idbien;
+                            $historico->fkfuncionario = $request->funcionario;
+                            $historico->fkusuario = auth()->user()->id;
+                            $historico->save();
+                    
                             $actualizabien->fkfuncionario = $request->funcionario;
                             $actualizabien->fecha = date('Y-m-d');
                         }
