@@ -517,6 +517,33 @@ class BienController extends Controller
                         $actualizabien->fkraiz = $id;
                         if($request->funcionario != null)
                         {
+                            if($actualizabien->fkfuncionario != $request->funcionario)
+                            {
+                                if($actualizabien->fkfuncionario != null)
+                                {
+                                    $historico = new Historico();
+                                    $historico->fecha = date('Y-m-d H:i');
+                                    $historico->accion = 'Baja';
+                                    $historico->fkbien = $idbien;
+                                    $historico->fkfuncionario = $actualizabien->fkfuncionario;
+                                    $historico->fkusuario = auth()->user()->id;
+                                    $historico->save();
+                                }
+
+                                $historico = new Historico();
+                                $historico->fecha = date('Y-m-d H:i');
+                                $historico->accion = 'Resguardo';
+                                $historico->fkbien = $idbien;
+                                $historico->fkfuncionario = $request->funcionario;
+                                $historico->fkusuario = auth()->user()->id;
+                                $historico->save();
+                            }
+
+                            $actualizabien->fkfuncionario = $request->funcionario;
+                            $actualizabien->fecha = date('Y-m-d');
+                        }
+                        else
+                        {
                             if($actualizabien->fkfuncionario != null)
                             {
                                 $historico = new Historico();
@@ -527,16 +554,8 @@ class BienController extends Controller
                                 $historico->fkusuario = auth()->user()->id;
                                 $historico->save();
                             }
-
-                            $historico = new Historico();
-                            $historico->fecha = date('Y-m-d H:i');
-                            $historico->accion = 'Resguardo';
-                            $historico->fkbien = $idbien;
-                            $historico->fkfuncionario = $request->funcionario;
-                            $historico->fkusuario = auth()->user()->id;
-                            $historico->save();
-                    
-                            $actualizabien->fkfuncionario = $request->funcionario;
+                            
+                            $actualizabien->fkfuncionario = null;
                             $actualizabien->fecha = date('Y-m-d');
                         }
                         $actualizabien->save();
@@ -559,6 +578,49 @@ class BienController extends Controller
         return redirect('/bienes?page='.$page.'&vfecha='.$vfecha.'&vbusqueda='.$vbusqueda)->with('mensaje','¡Bien, editado correctamente!');
     }
     
+    public function desasociar(Request $request, $id)
+    {
+        $modelo = Vbien::findOrFail($id);
+        $this->authorize('update', $modelo);
+
+        $request->validate([
+            'articulo' => 'required',
+            'marca' => 'required',
+            'serie' => 'required',
+            'patrimonio' => 'required',
+            'estado' => 'required'
+        ]);
+
+        $page = $request->page;
+        $vfecha = $request->vfecha;
+        $vbusqueda = $request->vbusqueda;
+        
+        $actualizabien = Bien::findOrFail($id);
+        $actualizabien->fkarticulo = $request->articulo;
+        $actualizabien->fkmarca = $request->marca;
+        $actualizabien->modelo = $request->modelo;
+        $actualizabien->procesador = $request->procesador;
+        $actualizabien->memoria = $request->memoria;
+        $actualizabien->disco = $request->disco;
+        $actualizabien->ip = $request->ip;
+        $actualizabien->fkoperativo = $request->operativo;
+        $actualizabien->serie = $request->serie;
+        $actualizabien->patrimonio = $request->patrimonio;
+        $actualizabien->fkcedula = $request->cedula;
+        $actualizabien->fkestado = $request->estado;
+        $actualizabien->observacion = $request->observacion;
+        $actualizabien->save();
+
+        $bitacora = new Bitacora();
+        $bitacora->fkusuario = auth()->user()->id;
+        $bitacora->operacion = 'Edición del bien con id:'.$actualizabien->idbien;
+        $bitacora->fecha = date('Y-m-d H:i:s');
+        $bitacora->ip = $request->ip();
+        $bitacora->pc = gethostname();
+        $bitacora->save();
+        
+        return redirect('/bienes?page='.$page.'&vfecha='.$vfecha.'&vbusqueda='.$vbusqueda)->with('mensaje','¡Bien, editado correctamente!');
+    }
 
     /**
      * Remove the specified resource from storage.

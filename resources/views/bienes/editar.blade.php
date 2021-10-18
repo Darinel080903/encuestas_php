@@ -142,7 +142,13 @@
                             @if($bienraiz)
                                 <div class="form-row">
                                     <div class="form-group col-md-12">
-                                        <h5>Bien asosiado al número de patrimonio: {{$bienraiz->patrimonio}}</h5>
+                                        {{-- <h5>Bien asosiado al número de patrimonio: {{$bienraiz->patrimonio}} <a href="">Ver</a> <a href="">Desasociar</a></h5> --}}
+                                        <a class="btn btn-outline-danger" href="{{url('/bienes/'.$bienraiz->idbien.'/edit?page='.$page.'&vfecha='.$vfecha.'&vbusqueda='.$vbusqueda)}}"><i class="fas fa-desktop"></i> {{$bienraiz->patrimonio}}</a>
+                                        <form id="frmdesasociar" name="frmdesasociar" method="POST" action="{{url('/bienes/'.$bienraiz->idbien.'/desasociar')}}">
+                                            @method('PUT')
+                                            @csrf
+                                            <button type="submit" class="btn btn-outline-danger" href=""><i class='fas fa-unlink'></i> Desasociar</button> 
+                                        </form>
                                     </div>
                                 </div>
                             @endif

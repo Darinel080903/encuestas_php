@@ -68,6 +68,8 @@ Route::resource('/bienes', 'App\Http\Controllers\BienController');
 
 Route::put('/bienes/{funcionario}/update2', 'App\Http\Controllers\BienController@update2');
 
+Route::put('/bienes/{idbien}/desasociar', 'App\Http\Controllers\BienController@desasociar');
+
 Route::get('/bienes/campos/{id}', 'App\Http\Controllers\AjaxController@cargarcampos');
 
 Route::get('/bienes/funcionarios/{id}', 'App\Http\Controllers\AjaxController@cargarfuncionarios');
