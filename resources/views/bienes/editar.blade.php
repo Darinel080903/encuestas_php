@@ -134,25 +134,28 @@
                     @if (session('mensaje'))
                         <div class="alert alert-danger">{{session('mensaje')}}</div>
                     @endif 
-                    <div class="card-body">     
+                    @if (session('mensajedesa'))
+                    <div class="alert alert-success">{{session('mensajedesa')}}</div>
+                @endif 
+                    <div class="card-body">
+                        
+                        @if($bienraiz)
+                            <form id="frmdesasociar" name="frmdesasociar" method="POST" action="{{url('/bienes/'.$bienes->idbien.'/desasociar')}}">
+                            @method('PUT')
+                            @csrf
+                                <div class="form-row">
+                                    <div class="form-group col-md-12">
+                                        <a class="btn btn-outline-danger" href="{{url('/bienes/'.$bienraiz->idbien.'/edit?page='.$page.'&vfecha='.$vfecha.'&vbusqueda='.$vbusqueda)}}"><i class="fas fa-desktop"></i> {{$bienraiz->patrimonio}}</a>
+                                        <button type="submit" class="btn btn-outline-danger" id="btndesasociar"><i class='fas fa-unlink'></i> Desasociar</button> 
+                                    </div>
+                                </div>
+                            </form>    
+                        @endif
+
                         <form class="needs-validation" id="formmain" action="{{url('/bienes/'.$bienes->idbien)}}" method="POST" novalidate>
                         @method('PUT')
                         @csrf
-                            
-                            @if($bienraiz)
-                                <div class="form-row">
-                                    <div class="form-group col-md-12">
-                                        {{-- <h5>Bien asosiado al número de patrimonio: {{$bienraiz->patrimonio}} <a href="">Ver</a> <a href="">Desasociar</a></h5> --}}
-                                        <a class="btn btn-outline-danger" href="{{url('/bienes/'.$bienraiz->idbien.'/edit?page='.$page.'&vfecha='.$vfecha.'&vbusqueda='.$vbusqueda)}}"><i class="fas fa-desktop"></i> {{$bienraiz->patrimonio}}</a>
-                                        <form id="frmdesasociar" name="frmdesasociar" method="POST" action="{{url('/bienes/'.$bienraiz->idbien.'/desasociar')}}">
-                                            @method('PUT')
-                                            @csrf
-                                            <button type="submit" class="btn btn-outline-danger" href=""><i class='fas fa-unlink'></i> Desasociar</button> 
-                                        </form>
-                                    </div>
-                                </div>
-                            @endif
-                            
+
                             <div class="form-row">
                                 <div class="form-group col-md-4">
                                     <label for="articulo">Artículos:</label>
@@ -892,5 +895,25 @@
                 });
             }, false);
         })(); 
+
+        $('#btndesasociar').confirm({
+            title: 'Desasociar',
+            content: '¡Confirmación!',
+            type: 'dark',
+            typeAnimated: true,
+            buttons:{
+                yes:{
+                    text: 'Si',
+                    btnClass: 'btn-success',
+                    keys: ['enter'],
+                    action: function(){
+                        $("#frmdesasociar").submit();
+                    }
+                },
+                no: function(){
+                },
+            }
+        });
+
     </script>
 @endsection

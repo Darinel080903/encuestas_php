@@ -58,6 +58,10 @@
     <!-- Custom Chosen By CIRG -->
     <link rel="stylesheet" href="{{asset('chosen/component-chosen.min.css')}}">
     <script src="{{asset('chosen/chosen.js')}}"></script>
+
+    <!-- Custom Confirm By CIRG -->
+    <link rel="stylesheet" href="{{asset('confirm/dist/jquery-confirm.min.css')}}">
+    <script src="{{asset('confirm/dist/jquery-confirm.min.js')}}"></script>
     
     <!-- Maps By CIRG -->
     <script src="{{asset('maps/maps.add.js')}}"></script>
