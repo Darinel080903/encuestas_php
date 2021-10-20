@@ -78,6 +78,8 @@ Route::get('/bienes/agregar', 'App\Http\Controllers\AjaxController@cargarcampos'
 
 Route::get('/bienes/inventario/{id}', 'App\Http\Controllers\AjaxController@cargarbien');
 
+Route::get('/bienes/historico/{id}', 'App\Http\Controllers\HistoricoController@historico');
+
 Route::get('savetmp', 'App\Http\Controllers\AjaxController@tmpguardarbien');
 
 Route::get('eliminatmpbien/{id}', 'App\Http\Controllers\AjaxController@eliminartmpbien');

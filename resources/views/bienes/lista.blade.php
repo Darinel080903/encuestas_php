@@ -38,7 +38,7 @@
                                         <th class="text-center" scope="col">Cédula</th>
                                         <th class="text-center" scope="col">Funcionario</th>
                                         <th class="text-center" scope="col">Fecha</th>
-                                        <th class="text-center" scope="col" width="33%" colspan="3">
+                                        <th class="text-center" scope="col" width="33%" colspan="4">
                                             @can('create', \App\Models\Vbien::class)
                                                 <a class="btn btn-outline-danger" href="{{url('/bienes/create?page='.$page.'&vfecha='.$vfecha.'&vbusqueda='.$vbusqueda)}}"><i class="fas fa-save"></i> Nuevo</a>
                                             @endcan
@@ -71,12 +71,15 @@
                                             </td>
                                             <td class="text-center" width="11%">
                                                 @can('delete', $item)
-                                                    <form method="POST" action="{{url('/bienes/'.$item->idbien)}}">
+                                                    <form id="frmeliminar{{$item->idbien}}" name="frmeliminar{{$item->idbien}}" method="POST" action="{{url('/bienes/'.$item->idbien)}}">
                                                         @method('DELETE')
                                                         @csrf
-                                                        <button class="btn btn-outline-danger" type="submit"><i class="fas fa-trash"></i> Borrar</button>
+                                                        <button type="button" class="btn btn-outline-danger btneliminar" onclick="funeliminar('frmeliminar{{$item->idbien}}')"><i class="fas fa-trash"></i> Borrar</button>
                                                     </form>
                                                 @endcan
+                                            </td>
+                                            <td class="text-center" width="11%">
+                                                <a class="btn btn-outline-danger" href="{{url('/bienes/historico/'.$item->idbien.'?page='.$page.'&vfecha='.$vfecha.'&vbusqueda='.$vbusqueda)}}"><i class="fas fa-history"></i> Historial</a>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -115,6 +118,28 @@
         function funpublicar(frm)
         {
             $("#"+frm).submit();
+        }
+
+        function funeliminar(frm)
+        {
+            $.confirm({
+                title: 'Borrar',
+                content: '¡Confirmación!',
+                type: 'dark',
+                typeAnimated: true,
+                buttons:{
+                    yes:{
+                        text: 'Si',
+                        btnClass: 'btn-success',
+                        keys: ['enter'],
+                        action: function(){
+                            $("#"+frm).submit();
+                        }
+                    },
+                    no: function(){
+                    },
+                }
+            });
         }
     </script>
 @endsection
