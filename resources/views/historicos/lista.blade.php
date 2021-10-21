@@ -26,7 +26,14 @@
                             <table class="table table-bordered">
                                 <thead>
                                     <tr>
-                                        <th class="text-center" scope="col" colspan="4">{{$bien->articulo.' '.$bien->marca.' '.$bien->patrimonio}}</th>    
+                                        <th class="text-center" scope="col" colspan="2">Articulo</th>
+                                        <th class="text-center" scope="col">Marca</th>
+                                        <th class="text-center" scope="col">Patrimonio</th>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-center" scope="col" colspan="2">{{$bien->articulo}}</td>
+                                        <td class="text-center" scope="col">{{$bien->marca}}</td>
+                                        <td class="text-center" scope="col">{{$bien->patrimonio}}</td>
                                     </tr>
                                     <tr>
                                         <th class="text-center" scope="col" width="10%">Fecha</th>    
