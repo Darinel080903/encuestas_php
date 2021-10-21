@@ -391,7 +391,7 @@ class BienController extends Controller
                 {
                     $historico = new Historico();
                     $historico->fecha = date('Y-m-d H:i');
-                    $historico->accion = 'Baja';
+                    $historico->accion = 'Devolución';
                     $historico->fkbien = $id;
                     $historico->fkfuncionario = $actualizabien->fkfuncionario;
                     $historico->fkusuario = auth()->user()->id;
@@ -416,7 +416,7 @@ class BienController extends Controller
             {
                 $historico = new Historico();
                 $historico->fecha = date('Y-m-d H:i');
-                $historico->accion = 'Baja';
+                $historico->accion = 'Devolución';
                 $historico->fkbien = $id;
                 $historico->fkfuncionario = $actualizabien->fkfuncionario;
                 $historico->fkusuario = auth()->user()->id;
@@ -523,7 +523,7 @@ class BienController extends Controller
                                 {
                                     $historico = new Historico();
                                     $historico->fecha = date('Y-m-d H:i');
-                                    $historico->accion = 'Baja';
+                                    $historico->accion = 'Devolución';
                                     $historico->fkbien = $idbien;
                                     $historico->fkfuncionario = $actualizabien->fkfuncionario;
                                     $historico->fkusuario = auth()->user()->id;
@@ -548,7 +548,7 @@ class BienController extends Controller
                             {
                                 $historico = new Historico();
                                 $historico->fecha = date('Y-m-d H:i');
-                                $historico->accion = 'Baja';
+                                $historico->accion = 'Devolución';
                                 $historico->fkbien = $idbien;
                                 $historico->fkfuncionario = $actualizabien->fkfuncionario;
                                 $historico->fkusuario = auth()->user()->id;

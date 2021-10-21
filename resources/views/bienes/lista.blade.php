@@ -38,7 +38,7 @@
                                         <th class="text-center" scope="col">Cédula</th>
                                         <th class="text-center" scope="col">Funcionario</th>
                                         <th class="text-center" scope="col">Fecha</th>
-                                        <th class="text-center" scope="col" width="33%" colspan="4">
+                                        <th class="text-center" scope="col" width="45%" colspan="4">
                                             @can('create', \App\Models\Vbien::class)
                                                 <a class="btn btn-outline-danger" href="{{url('/bienes/create?page='.$page.'&vfecha='.$vfecha.'&vbusqueda='.$vbusqueda)}}"><i class="fas fa-save"></i> Nuevo</a>
                                             @endcan
@@ -78,7 +78,7 @@
                                                     </form>
                                                 @endcan
                                             </td>
-                                            <td class="text-center" width="11%">
+                                            <td class="text-center" width="12%">
                                                 <a class="btn btn-outline-danger" href="{{url('/bienes/historico/'.$item->idbien.'?page='.$page.'&vfecha='.$vfecha.'&vbusqueda='.$vbusqueda)}}"><i class="fas fa-history"></i> Historial</a>
                                             </td>
                                         </tr>
