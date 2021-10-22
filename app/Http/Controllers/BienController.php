@@ -591,8 +591,6 @@ class BienController extends Controller
         $actualizabien->fkraiz = null;
         $actualizabien->save();
         
-        // return ('hola');
-        // return redirect('/bienes?page='.$page.'&vfecha='.$vfecha.'&vbusqueda='.$vbusqueda)->with('mensaje','¡Bien, editado correctamente!');
         return back()->withInput()->with('mensajedesa', '¡Bien, desasociado correctamente!');   
     }
 

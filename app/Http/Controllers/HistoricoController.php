@@ -24,6 +24,5 @@ class HistoricoController extends Controller
         $data = Vhistorico::where('fkbien', $id)->orderBy('idhistorico', 'desc')->get();
     
         return view('historicos.lista',compact('page', 'vfecha', 'vbusqueda', 'bien', 'data'));  
-        // return('cirg');
     }
 }

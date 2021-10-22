@@ -21,7 +21,8 @@
                         
                         @if (session('mensaje'))
                             <div class="alert alert-success">{{session('mensaje')}}</div>
-                        @endif 
+                        @endif
+
                         <div class="table-responsive">
                             <table class="table table-bordered">
                                 <thead>
@@ -47,9 +48,6 @@
                                         <tr>
                                             <td class="text-center align-middle" scope="row">{{date('d/m/Y', strtotime("$item->fecha"))}}</td>
                                             <td class="text-justify align-middle" scope="row">{{$item->accion}}</td>
-                                            {{-- <td class="text-justify align-middle" scope="row">{{$item->articulo}}</td>
-                                            <td class="text-justify align-middle" scope="row">{{$item->marca}}</td>
-                                            <td class="text-justify align-middle" scope="row">{{$item->patrimonio}}</td> --}}
                                             <td class="text-justify align-middle" scope="row">{{$item->nombre.' '.$item->paterno.' '.$item->materno}}</td>
                                             <td class="text-justify align-middle" scope="row">{{$item->usuario}}</td>
                                         </tr>
