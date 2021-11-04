@@ -94,7 +94,7 @@
                             </table>
                         </div>
                         <div class="row justify-content-md-center">
-                            {{$autos->withQueryString()->links()}}
+                            {{$autos->withQueryString()->links('pagination::bootstrap-4')}}
                         </div>
                     </div>
                 </div>

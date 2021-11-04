@@ -129,6 +129,14 @@
                     </table>
                 </div>
             </div>
+
+            @if($vales->observacion)
+            <div class="row">
+                <div class="col">
+                    <p>Observaciones: {!! nl2br(e($vales->observacion)) !!}</p>
+                </div>
+            </div>
+            @endif
             
         </div>
     </body> 
