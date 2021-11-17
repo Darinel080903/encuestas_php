@@ -166,8 +166,8 @@ class AjaxController extends Controller
 
     public function cargarfuncionarios(Request $request, $id)
     {
-        if($request->ajax())
-        {
+        // if($request->ajax())
+        // {
             $valida = Area::where('idarea', $id)->value('fkarea');
             if($valida)
             {
@@ -177,9 +177,9 @@ class AjaxController extends Controller
             {
                 $area = $id;
             }            
-            $funcionario = Vfuncionario::where([['activo', 1], ['ruta', 'like', "%$area%"]])->orderBy('nombre', 'asc')->orderBy('paterno', 'asc')->orderBy('materno', 'asc')->get();
+            $funcionario = Vfuncionario::where('activo', 1)->orWhere('ruta', 'like', '%'.$area)->orWhere('ruta', 'like', '%'.$area.'.%')->orderBy('nombre', 'asc')->orderBy('paterno', 'asc')->orderBy('materno', 'asc')->get();
             return response()->json($funcionario);
-        }
+        // }
     }
 
     public function cargarbien(Request $request, $id)
