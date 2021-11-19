@@ -364,6 +364,7 @@
                             <input type="hidden" name="page" value="{{$page ?? ''}}">
                             <input type="hidden" name="vfecha" value="{{$vfecha ?? ''}}">
                             <input type="hidden" name="vbusqueda" value="{{$vbusqueda ?? ''}}">
+                            <input type="hidden" id="vraiz" name="vraiz" value="{{$bienraiz->patrimonio ?? ''}}">
                             
                             <button type="submit" class="btn btn-outline-danger"><i class="fas fa-save"></i> Guardar</button>
                             <a class="btn btn-outline-danger" href="{{ url('/bienes?page='.$page.'&vfecha='.$vfecha.'&vbusqueda='.$vbusqueda) }}"><i class="fas fa-sign-out-alt fa-rotate-180"></i> Regresar</a>
@@ -384,6 +385,15 @@
     <script>
         $(document).ready(function(){
             $(".form-control-chosen").chosen({disable_search_threshold:5});
+            // $('#funcionario').prop('disabled', true).trigger("chosen:updated");
+            // $('#funcionario').chosen().chosenReadonly(true);
+            // $('#funcionario').trigger('chosen:updated');
+            var vraiz = $("#vraiz").val();
+            if(vraiz)
+            {
+                $("#area_chosen").addClass("noaccion");
+                $("#funcionario_chosen").addClass("noaccion");
+            }
         });
 
         $("#botonaddarticulos").on("click", function(){

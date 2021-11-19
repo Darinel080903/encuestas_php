@@ -166,20 +166,22 @@ class AjaxController extends Controller
 
     public function cargarfuncionarios(Request $request, $id)
     {
-        // if($request->ajax())
-        // {
-            $valida = Area::where('idarea', $id)->value('fkarea');
-            if($valida)
-            {
-                $area = '.'.$id;
-            }
-            else
-            {
-                $area = $id;
-            }            
-            $funcionario = Vfuncionario::where('activo', 1)->orWhere('ruta', 'like', '%'.$area)->orWhere('ruta', 'like', '%'.$area.'.%')->orderBy('nombre', 'asc')->orderBy('paterno', 'asc')->orderBy('materno', 'asc')->get();
+        if($request->ajax())
+        {
+            // $valida = Area::where('idarea', $id)->value('fkarea');
+            // if($valida)
+            // {
+            //     $area = '.'.$id;
+            // }
+            // else
+            // {
+            //     $area = $id;
+            // }            
+            // $funcionario = Vfuncionario::where('activo', 1)->orWhere('ruta', 'like', $id)->orWhere('ruta', 'like', $id.'.%')->orWhere('ruta', 'like', '%'.$id)->orWhere('ruta', 'like', '%.'.$id.'.%')->orderBy('nombre', 'asc')->orderBy('paterno', 'asc')->orderBy('materno', 'asc')->get();
+            $funcionario = Vfuncionario::orWhere('ruta', $id)->orWhere('ruta', 'like', $id.'.%')->orWhere('ruta', 'like', '%.'.$id)->orWhere('ruta', 'like', '%.'.$id.'.%')->where('activo', 1)->orderBy('nombre', 'asc')->orderBy('paterno', 'asc')->orderBy('materno', 'asc')->get();
+            // dd($funcionario);
             return response()->json($funcionario);
-        // }
+        }
     }
 
     public function cargarbien(Request $request, $id)

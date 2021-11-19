@@ -123,3 +123,9 @@
 .divloading{
     background-color:#e3342f !important;
 }
+
+.noaccion{
+    pointer-events: none;
+    background-color: #e9ecef !important;
+    opacity: 1;
+}
