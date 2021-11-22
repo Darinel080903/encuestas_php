@@ -131,7 +131,8 @@ class BienController extends Controller
 
         $historico = new Historico();
         $historico->fecha = date('Y-m-d H:i');
-        $historico->accion = 'Alta';
+        $historico->fkaccion = 1;
+        // $historico->accion = 'Alta';
         $historico->fkbien = $nuevobien->idbien;
         $historico->fkusuario = auth()->user()->id;
         $historico->save();
@@ -140,7 +141,8 @@ class BienController extends Controller
         {
             $historico = new Historico();
             $historico->fecha = date('Y-m-d H:i');
-            $historico->accion = 'Resguardo';
+            $historico->fkaccion = 3;
+            // $historico->accion = 'Resguardo';
             $historico->fkbien = $nuevobien->idbien;
             $historico->fkfuncionario = $request->funcionario;
             $historico->fkusuario = auth()->user()->id;
@@ -190,7 +192,8 @@ class BienController extends Controller
 
                         $historico = new Historico();
                         $historico->fecha = date('Y-m-d H:i');
-                        $historico->accion = 'Alta';
+                        $historico->fkaccion = 1;
+                        // $historico->accion = 'Alta';
                         $historico->fkbien = $nuevotmpbien->idbien;
                         $historico->fkusuario = auth()->user()->id;
                         $historico->save();
@@ -199,7 +202,8 @@ class BienController extends Controller
                         {
                             $historico = new Historico();
                             $historico->fecha = date('Y-m-d H:i');
-                            $historico->accion = 'Resguardo';
+                            $historico->fkaccion = 3;
+                            // $historico->accion = 'Resguardo';
                             $historico->fkbien = $nuevotmpbien->idbien;
                             $historico->fkfuncionario = $request->funcionario;
                             $historico->fkusuario = auth()->user()->id;
@@ -216,7 +220,8 @@ class BienController extends Controller
                         {
                             $historico = new Historico();
                             $historico->fecha = date('Y-m-d H:i');
-                            $historico->accion = 'Resguardo';
+                            $historico->fkaccion = 3;
+                            // $historico->accion = 'Resguardo';
                             $historico->fkbien = $idbien;
                             $historico->fkfuncionario = $request->funcionario;
                             $historico->fkusuario = auth()->user()->id;
@@ -391,7 +396,8 @@ class BienController extends Controller
                 {
                     $historico = new Historico();
                     $historico->fecha = date('Y-m-d H:i');
-                    $historico->accion = 'Devolución';
+                    $historico->fkaccion = 4;
+                    // $historico->accion = 'Devolución';
                     $historico->fkbien = $id;
                     $historico->fkfuncionario = $actualizabien->fkfuncionario;
                     $historico->fkusuario = auth()->user()->id;
@@ -400,7 +406,8 @@ class BienController extends Controller
 
                 $historico = new Historico();
                 $historico->fecha = date('Y-m-d H:i');
-                $historico->accion = 'Resguardo';
+                $historico->fkaccion = 3;
+                // $historico->accion = 'Resguardo';
                 $historico->fkbien = $id;
                 $historico->fkfuncionario = $request->funcionario;
                 $historico->fkusuario = auth()->user()->id;
@@ -416,7 +423,8 @@ class BienController extends Controller
             {
                 $historico = new Historico();
                 $historico->fecha = date('Y-m-d H:i');
-                $historico->accion = 'Devolución';
+                $historico->fkaccion = 4;
+                // $historico->accion = 'Devolución';
                 $historico->fkbien = $id;
                 $historico->fkfuncionario = $actualizabien->fkfuncionario;
                 $historico->fkusuario = auth()->user()->id;
@@ -493,7 +501,8 @@ class BienController extends Controller
 
                         $historico = new Historico();
                         $historico->fecha = date('Y-m-d H:i');
-                        $historico->accion = 'Alta';
+                        $historico->fcaccion = 1;
+                        // $historico->accion = 'Alta';
                         $historico->fkbien = $nuevotmpbien->idbien;
                         $historico->fkusuario = auth()->user()->id;
                         $historico->save();
@@ -502,7 +511,8 @@ class BienController extends Controller
                         {
                             $historico = new Historico();
                             $historico->fecha = date('Y-m-d H:i');
-                            $historico->accion = 'Resguardo';
+                            $historico->fkaccion = 3;
+                            // $historico->accion = 'Resguardo';
                             $historico->fkbien = $nuevotmpbien->idbien;
                             $historico->fkfuncionario = $request->funcionario;
                             $historico->fkusuario = auth()->user()->id;
@@ -523,7 +533,8 @@ class BienController extends Controller
                                 {
                                     $historico = new Historico();
                                     $historico->fecha = date('Y-m-d H:i');
-                                    $historico->accion = 'Devolución';
+                                    $historico->fkaccion = 4;
+                                    // $historico->accion = 'Devolución';
                                     $historico->fkbien = $idbien;
                                     $historico->fkfuncionario = $actualizabien->fkfuncionario;
                                     $historico->fkusuario = auth()->user()->id;
@@ -532,7 +543,8 @@ class BienController extends Controller
 
                                 $historico = new Historico();
                                 $historico->fecha = date('Y-m-d H:i');
-                                $historico->accion = 'Resguardo';
+                                $historico->fkaccion = 3;
+                                // $historico->accion = 'Resguardo';
                                 $historico->fkbien = $idbien;
                                 $historico->fkfuncionario = $request->funcionario;
                                 $historico->fkusuario = auth()->user()->id;
@@ -548,7 +560,8 @@ class BienController extends Controller
                             {
                                 $historico = new Historico();
                                 $historico->fecha = date('Y-m-d H:i');
-                                $historico->accion = 'Devolución';
+                                $historico->fkaccion = 4;
+                                // $historico->accion = 'Devolución';
                                 $historico->fkbien = $idbien;
                                 $historico->fkfuncionario = $actualizabien->fkfuncionario;
                                 $historico->fkusuario = auth()->user()->id;

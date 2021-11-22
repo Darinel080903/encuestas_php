@@ -182,6 +182,9 @@
                                             <a class="dropdown-item" href="{{url('/resguardos')}}">
                                                 <i class="fas fa-retweet icon-color"></i> Resguardos
                                             </a>
+                                            <a class="dropdown-item" href="{{url('/devoluciones')}}">
+                                                <i class="fas fa-file-alt icon-color"></i> Devoluciones
+                                            </a>
                                         @endcan
                                 
                                         @can('viewAny', \App\Models\Vpase::class)

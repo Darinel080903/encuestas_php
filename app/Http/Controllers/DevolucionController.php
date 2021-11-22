@@ -10,7 +10,7 @@ use App\Models\Vresguardo;
 use App\Models\Area;
 use App\Models\Bien;
 
-class ResguardoController extends Controller
+class DevolucionController extends Controller
 {
 
     // By CIRG - Protejer la ruta.
@@ -32,7 +32,7 @@ class ResguardoController extends Controller
         $areas = Area::whereNull('fkarea')->get();
         $funcionarios = Funcionario::where('activo', 1)->orderBy('nombre', 'asc')->orderBy('paterno', 'asc')->orderBy('materno', 'asc')->get();
             
-        return view('resguardos.resguardo',compact('areas', 'funcionarios'));                    
+        return view('devoluciones.devolucion',compact('areas', 'funcionarios'));                    
     }
 
     /**

@@ -113,3 +113,7 @@ Route::get('/vales/unidades/{iddesglose}', 'App\Http\Controllers\AjaxController@
 Route::get('/vales/unitarios/{iddesglose}', 'App\Http\Controllers\AjaxController@cargaunitarios');
 
 Route::get('/imprimir/vale/{id}', 'App\Http\Controllers\PDFController@pdfvale');
+
+Route::resource('/devoluciones', 'App\Http\Controllers\DevolucionController');
+
+// Route::get('/resguardo/funcionario/{id}', 'App\Http\Controllers\PDFController@pdfresguardofuncionario');
