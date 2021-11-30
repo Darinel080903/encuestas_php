@@ -116,4 +116,6 @@ Route::get('/imprimir/vale/{id}', 'App\Http\Controllers\PDFController@pdfvale');
 
 Route::resource('/devoluciones', 'App\Http\Controllers\DevolucionController');
 
+Route::get('/devoluciones/devolucion/{idfuncionario}', 'App\Http\Controllers\AjaxController@cargadevoluciones');
+
 // Route::get('/resguardo/funcionario/{id}', 'App\Http\Controllers\PDFController@pdfresguardofuncionario');

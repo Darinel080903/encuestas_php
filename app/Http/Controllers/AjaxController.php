@@ -15,6 +15,7 @@ use App\Models\Factura;
 use App\Models\Folio;
 use App\Models\Area;
 use App\Models\Vfuncionario;
+use App\Models\Vhistorico;
 
 class AjaxController extends Controller
 {
@@ -190,6 +191,15 @@ class AjaxController extends Controller
         {
             $bienes = Bien::findOrFail($id);
             return response()->json($bienes);
+        }
+    }
+
+    public function cargadevoluciones(Request $request, $id)
+    {
+        if($request->ajax())
+        {
+            $devoluciones = Vhistorico::where([['fkfuncionario', $id], ['fkaccion', 4]])->get();
+            return response()->json($devoluciones);
         }
     }
 }

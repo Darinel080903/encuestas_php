@@ -11,6 +11,7 @@
                     </div>                   
                     <div class="card-body">
                         <form class="needs-validation" id="formmain" action="javascript:Imprimir();" novalidate>
+                            
                             <div class="form-row">                                
                                 <div class="form-group col-md-6"> 
                                     <label for="area">Áreas:</label>                                        
@@ -47,8 +48,30 @@
                                 </div>
                             </div>
 
+                            <div class="form-row">
+                                <div class="form-group col-md-12">    
+                                    <div class="table-responsive">                        
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-center">Fecha</th>
+                                                    <th class="text-center">Acción</th>
+                                                    <th class="text-center">Artículo</th>
+                                                    <th class="text-center">Marca</th>
+                                                    <th class="text-center">No. de patrimonio</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="listado"></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <input type="text" name="detalle" id="detalle">
+
                             <button type="submit" class="btn btn-outline-danger"><i class="fas fa-print"></i> Imprimir</button>
-                            
+        
                             <div class="d-none justify-content-center" id="divloading">
                                 <div class="spinner-grow divloading" role="status">
                                     <span class="sr-only">Loading...</span>
@@ -62,6 +85,8 @@
         </div>
     </div>
     <script>
+        var Detalle = [];
+
         $(document).ready(function(){
             $(".form-control-chosen").chosen();
         });
@@ -111,6 +136,67 @@
             });
         });
 
+        $(function(){
+            $("#funcionario").chosen().change(function(){
+                $("#divloading").addClass("d-flex").removeClass("d-none");
+                var identificador = $("#funcionario").chosen().val();
+                if(identificador)
+                {
+                    // Ini Ajax
+                    var url = "{{url('/devoluciones/devolucion/idfuncionario')}}";
+                    url = url.replace("idfuncionario", identificador);
+                    $.ajax({type:"get",
+                        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                        url:url,
+                        dataType: "json",
+                        success: function(response, textStatus, xhr)
+                        {
+                            $("#listado").empty();
+                            for(let i = 0; i< response.length; i++)
+                            {
+                                var fecha = new Date(response[i].fecha);
+                                var dia = fecha.getDate();
+                                var mes = 1 + fecha.getMonth();
+                                var anio = fecha.getFullYear();
+                                var fechaformat = dia+"/"+mes+"/"+anio;
+                                $('#listado').append("<tr><td class='text-center'>"+fechaformat+"</td><td>"+response[i].accion+"</td><td>"+response[i].articulo+"</td><td>"+response[i].marca+"</td><td>"+response[i].patrimonio+"</td><td class='text-center'><input type='checkbox' id='activo"+i+"' name='activo"+i+"' onchange='Guardar("+i+", "+response[i].idhistorico+");' data-toggle='toggle' data-on='Activo' data-off='Inactivo' data-onstyle='success' data-offstyle='danger'></td></tr>");
+                            }
+                            $("#toggle-demo").bootstrapToggle();
+                            $("#divloading").addClass("d-none").removeClass("d-flex");
+                            $("#detalle").val("");
+                        },
+                        error: function(xhr, textStatus, errorThrown)
+                        {
+                            alert("¡Error al cargar las devoluciones!");
+                            $("#detalle").val("");
+                        }
+                    });
+                    // Fin Ajax
+                }
+                else
+                {
+                    $("#listado").empty();
+                    $("#divloading").addClass("d-none").removeClass("d-flex");
+                } 
+            });
+        });
+
+        function Guardar(numero, identificador)
+        {
+            if($("#activo"+numero).prop("checked") == true)
+            {
+                // console.log(identificador);
+                Detalle.push({idhistorico:identificador});    
+                $("#detalle").val(JSON.stringify(Detalle));
+            }
+            else
+            {
+                // console.log("false");
+                Detalle.splice(numero, 1);
+                $("#detalle").val(JSON.stringify(Detalle));
+            }
+        }
+
         function Imprimir()
         {
             var idfun = $("#funcionario").chosen().val();
@@ -118,24 +204,6 @@
             url = url.replace("idfuncionario", idfun);
             window.open(url);
         }
-
-        // $('input[name="rdbuton"]').on('click', function() 
-        // {
-        //     if ($(this).val() === 'area') 
-        //     {     
-        //         $('#funcionario').prop("disabled", ! $("#area").prop('disabled'));                
-        //         $('#area').prop("disabled", ! $("#funcionario").prop('disabled'));
-        //         $('#area').val("");                            
-        //     }
-        //     else if($(this).val() === 'funcionario');
-        //     {    
-        //         $('#area').prop("disabled",! $("#area").prop('disabled'));
-        //         $('#funcionario').prop("disabled", ! $("#area").prop('disabled'));
-                   
-        //         $('#funcionario').val("");
-        //         $('#area').val("");
-        //     }
-        // });
 
         $("#funcionario").change(function(){
             if($("#funcionario").val() != "")
