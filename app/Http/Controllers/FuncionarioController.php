@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+Use App\Models\User;
 use App\Models\Funcionario;
 use App\Models\Area;
 use App\Models\Categoria;
@@ -30,7 +31,16 @@ class FuncionarioController extends Controller
         $page = $request->page;
         $vbusqueda = $request->vbusqueda;
 
-        $funcionarios = Funcionario::busqueda($vbusqueda)->orderBy('nombre', 'asc')->orderBy('paterno', 'asc')->orderBy('materno', 'asc')->paginate(10);
+        $usuario = User::findOrFail(auth()->user()->id);
+
+        if($usuario->hasRole('administrador'))
+        {
+            $funcionarios = Funcionario::busqueda($vbusqueda)->orderBy('nombre', 'asc')->orderBy('paterno', 'asc')->orderBy('materno', 'asc')->paginate(10);
+        }
+        else
+        {
+            $funcionarios = Funcionario::usuario(auth()->user()->id)->busqueda($vbusqueda)->orderBy('nombre', 'asc')->orderBy('paterno', 'asc')->orderBy('materno', 'asc')->paginate(10);
+        }
     
         return view('funcionarios.lista',compact('page', 'vbusqueda', 'funcionarios'));  
     }
@@ -84,14 +94,14 @@ class FuncionarioController extends Controller
         $nuevofuncionario->materno = $request->materno;
         $nuevofuncionario->fkcategoria = $request->categoria;
         $nuevofuncionario->fkpuesto = $request->puesto;
-        if(isset($request->firma))
-        {
-            $nuevofuncionario->firma = 1;
-        }
-        else
-        {
-            $nuevofuncionario->firma = 0;
-        }
+        // if(isset($request->firma))
+        // {
+        //     $nuevofuncionario->firma = 1;
+        // }
+        // else
+        // {
+        //     $nuevofuncionario->firma = 0;
+        // }
         if(isset($request->activo))
         {
             $nuevofuncionario->activo = 1;
@@ -100,6 +110,7 @@ class FuncionarioController extends Controller
         {
             $nuevofuncionario->activo = 0;
         }
+        $nuevofuncionario->fkusuario = auth()->user()->id;
         $nuevofuncionario->save();
 
         $bitacora = new Bitacora();
@@ -178,14 +189,14 @@ class FuncionarioController extends Controller
         $actualizafuncionario->materno = $request->materno;
         $actualizafuncionario->fkcategoria = $request->categoria;
         $actualizafuncionario->fkpuesto = $request->puesto;
-        if(isset($request->firma))
-        {
-            $actualizafuncionario->firma = 1;
-        }
-        else
-        {
-            $actualizafuncionario->firma = 0;
-        }
+        // if(isset($request->firma))
+        // {
+        //     $actualizafuncionario->firma = 1;
+        // }
+        // else
+        // {
+        //     $actualizafuncionario->firma = 0;
+        // }
         if(isset($request->activo))
         {
             $actualizafuncionario->activo = 1;

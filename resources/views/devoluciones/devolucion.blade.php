@@ -10,7 +10,9 @@
                         <h3 class="headerlistatitulo"><i class="fas fa-list"></i> Devoluciones</h3>
                     </div>                   
                     <div class="card-body">
-                        <form class="needs-validation" id="formmain" action="javascript:Imprimir();" novalidate>
+                        {{-- <form class="needs-validation" id="formmain" action="javascript:Imprimir();" novalidate> --}}
+                        <form class="needs-validation" id="formmain" method="GET" action="{{url('/devoluciones/imprimir/pdf')}}" target="_blank" novalidate>
+                        @csrf 
                             
                             <div class="form-row">                                
                                 <div class="form-group col-md-6"> 
@@ -68,7 +70,7 @@
                                 </div>
                             </div>
 
-                            <input type="text" name="detalle" id="detalle">
+                            <input type="hidden" name="detalle" id="detalle">
 
                             <button type="submit" class="btn btn-outline-danger"><i class="fas fa-print"></i> Imprimir</button>
         
@@ -200,7 +202,7 @@
         function Imprimir()
         {
             var idfun = $("#funcionario").chosen().val();
-            var url = "{{url('/resguardo/funcionario/idfuncionario')}}";
+            var url = "{{url('/devoluciones/imprimir/idfuncionario')}}";
             url = url.replace("idfuncionario", idfun);
             window.open(url);
         }

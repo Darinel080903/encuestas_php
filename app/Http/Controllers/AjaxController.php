@@ -198,7 +198,7 @@ class AjaxController extends Controller
     {
         if($request->ajax())
         {
-            $devoluciones = Vhistorico::where([['fkfuncionario', $id], ['fkaccion', 4]])->get();
+            $devoluciones = Vhistorico::where([['fkfuncionario', $id], ['fkaccion', 4]])->orderBy('fecha', 'desc')->get();
             return response()->json($devoluciones);
         }
     }

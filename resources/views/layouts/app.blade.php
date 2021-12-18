@@ -177,16 +177,22 @@
                                                 <i class="fas fa-desktop icon-color"></i> Bienes
                                             </a>
                                         @endcan
+
+                                        <a class="dropdown-item" href="{{url('/retornos')}}">
+                                            <i class="fas fa-desktop icon-color"></i> Devolución
+                                        </a>
                                         
                                         @can('viewAny', \App\Models\Vresguardo::class)
                                             <a class="dropdown-item" href="{{url('/resguardos')}}">
-                                                <i class="fas fa-retweet icon-color"></i> Resguardos
+                                                <i class="fas fa-print icon-color"></i> Impresión resguardos
                                             </a>
                                             <a class="dropdown-item" href="{{url('/devoluciones')}}">
-                                                <i class="fas fa-file-alt icon-color"></i> Devoluciones
+                                                <i class="fas fa-print icon-color"></i> Impresión devoluciones
                                             </a>
                                         @endcan
                                 
+                                        <div class="dropdown-divider"></div>
+
                                         @can('viewAny', \App\Models\Vpase::class)
                                             <a class="dropdown-item" href="{{url('/pases')}}">
                                                 <i class="fas fa-file-alt icon-color"></i> Pase de salida

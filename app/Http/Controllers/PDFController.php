@@ -22,6 +22,7 @@ use App\Models\Vfolio;
 use App\Models\Vfuncionario;
 use App\Models\Vpase;
 use App\Models\Detalle;
+use App\Models\Vhistorico;
 
 class PDFController extends Controller
 {
@@ -41,7 +42,8 @@ class PDFController extends Controller
         $areas = Area::where('idarea',3)->value('area');
         $operativos = Operativo::orderBy('operativo', 'asc')->get();
         
-        return \PDF::setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true])->loadView('pdf.myPDF', compact( 'vfecha', 'funcionarios','bienes', 'areas', 'articulos', 'marcas','operativos'))->stream('archivo.pdf');       
+        // return \PDF::setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true])->loadView('pdf.myPDF', compact( 'vfecha', 'funcionarios','bienes', 'areas', 'articulos', 'marcas','operativos'))->stream('archivo.pdf');       
+        return \PDF::loadView('pdf.imprimirresguardo', compact( 'vfecha', 'funcionarios','bienes', 'areas', 'articulos', 'marcas','operativos'))->stream('archivo.pdf');
     }
 
     public function pdfvale(Request $request, $id)
@@ -74,6 +76,32 @@ class PDFController extends Controller
 
         $detalles = Detalle::where('fkpase', $id)->get();
             
-        return \PDF::loadView('pdf.pase', compact('fecha', 'pases', 'detalles'))->stream('archivo.pdf');
+        return \PDF::loadView('pdf.imprimirpase', compact('fecha', 'pases', 'detalles'))->stream('archivo.pdf');
+    }
+
+    public function pdfdevolucion(Request $request)
+    {  
+        $dias = ['0' => 'Domingo', '1' => 'Lunes', '2' => 'Martes', '3' => 'Miércoles', '4' => 'Jueves', '5' => 'Viernes', '6' => 'Sábado'];
+        $diaespañol = Arr::get($dias, date('w'));
+        $meses = ['1' => 'Enero', '2' => 'Febrero', '3' => 'Marzo', '4' => 'Abril', '5' => 'Mayo', '6' => 'Junio', '7' => 'Julio', '8' => 'Agosto', '9' => 'Septiembre', '10' => 'Octubre', '11' => 'Noviembre', '12' => 'Diciembre'];
+        $mesespañol = Arr::get($meses, date('n'));
+        $fecha = $diaespañol.' '.date('d').' de '.$mesespañol.' de '.date('Y');
+
+        $ids = [''];
+        $detalles = json_decode($request->detalle);
+
+        if($detalles)
+        {
+            foreach ($detalles as $key => $item) 
+            {   
+                $ids[$key] = [$item->idhistorico];
+            }
+        }
+
+        $funcionario = Vfuncionario::findOrFail($request->funcionario);
+        $devoluciones = Vhistorico::where('fkaccion', 4)->whereIn('idhistorico', $ids)->get();
+        $responsable = Vfuncionario::where([['responsable', 1], ['fkarea', 2], ['activo', 1]])->orderBY('idfuncionario', 'desc')->limit(1)->get();
+        
+        return \PDF::loadView('pdf.imprimirdevolucion', compact('fecha', 'funcionario', 'devoluciones', 'responsable'))->stream('archivo.pdf');
     }
 }

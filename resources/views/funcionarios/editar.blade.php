@@ -103,12 +103,12 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="form-row">
+                            {{-- <div class="form-row">
                                 <div class="form-group col-md-12">
                                     <label for="firma">Firma:</label><br>
                                     <input type="checkbox" class="form-control" id="firma" name="firma" data-toggle="toggle" data-on="Si" data-off="No" data-onstyle="success" data-offstyle="danger" @if($funcionarios->firma == 1) {{'checked'}} @endif>
                                 </div>
-                            </div> 
+                            </div>  --}}
                             <div class="form-row">
                                 <div class="form-group col-md-12">
                                     <label for="activo">Activo:</label><br>

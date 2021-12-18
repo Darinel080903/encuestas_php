@@ -118,4 +118,10 @@ Route::resource('/devoluciones', 'App\Http\Controllers\DevolucionController');
 
 Route::get('/devoluciones/devolucion/{idfuncionario}', 'App\Http\Controllers\AjaxController@cargadevoluciones');
 
+Route::get('/devoluciones/imprimir/pdf', 'App\Http\Controllers\PDFController@pdfdevolucion');
+
+// Route::get('/devoluciones/imprimir/{idfuncionario}', 'App\Http\Controllers\PDFController@pdfdevolucion');
+
 // Route::get('/resguardo/funcionario/{id}', 'App\Http\Controllers\PDFController@pdfresguardofuncionario');
+
+Route::resource('/retornos', 'App\Http\Controllers\RetornoController');

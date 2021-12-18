@@ -14,6 +14,14 @@ class Funcionario extends Model
     //By CIRG para deshabilitar los campos created_at y updated_at
     public $timestamps = false;
 
+    public function scopeUsuario($query, $usuario)
+    {
+        if($usuario)
+        {
+            return $query->where('fkusuario', $usuario);
+        }
+    }
+
     public function scopeBusqueda($query, $busqueda)
     {
         if($busqueda)

@@ -5,7 +5,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         
-        <title>Vale</title>
+        <title>Pase de salida</title>
         <link rel="icon" href="{{asset('storage/ico/favicon.ico')}}">
         
         <!-- Bootstrap CSS -->
@@ -63,8 +63,12 @@
             <table class="table table-borderless">
                 <tbody>
                     <tr>
-                        <td class="text-center col-6"><small><strong>Solicita</strong><br/>{{$pases->solicita}}</small></td>
-                        <td class="text-center col-6"><small><strong>Entrega</strong><br/>{{$pases->funcionario}}<br/>{{$pases->puesto}}<br/>{{$pases->area}}</small></td>
+                        <td class="text-center col-6 mb-4"><strong>Solícita</strong></td>
+                        <td class="text-center col-6 mb-4"><strong>Autoriza</strong></td>
+                    </tr>
+                    <tr>
+                        <td class="text-center col-6"><hr><small><strong>{{$pases->solicita}}</strong></small></td>
+                        <td class="text-center col-6"><hr><small><strong>{{$pases->funcionario}}<br>{{$pases->puesto}}<br>{{$pases->area}}</strong></small></td>
                     </tr>
                 </tbody>
             </table>
@@ -79,8 +83,8 @@
             <div class="row">
                 <div class="col">
                     <p class="text-right mt-0 mb-0"><strong>Unidad de Informática</strong></p>
-                    <p class="text-right mt-0 mb-0"><strong>Area de Soporte Técnico</strong></p>
-                    <h3 class="text-right mt-0 mb-0">Asunto: Pase de salida</h3>
+                    <p class="text-right mt-0 mb-0"><strong>Área de Soporte Técnico</strong></p>
+                    <h3 class="text-right mt-0 mb-3">Asunto: Pase de salida</h3>
                     <p class="text-lefth mt-0 mb-0">Fecha: <strong>{{$fecha}}</strong></p>
                     <p class="text-lefth mt-0 mb-0">Número económico: <strong>{{$pases->idpase}}</strong></p>
                 </div>
@@ -92,7 +96,7 @@
             
             <div class="row">
                 <div class="col">
-                    <table border="1" style="width: 100%;">             
+                    <table class="table border border-dark">             
                         <tr>
                             <th class="text-center" BGCOLOR="gray">Equipo</th>
                             <th class="text-center" BGCOLOR="gray">Marca</th>
@@ -111,7 +115,7 @@
                         @endforeach
                         @if ($pases->observacion)
                             <tr>
-                                <td class="text-justify" colspan="5"><strong>Observaciones: </strong>{!! nl2br(e($pases->observacion)) !!}</td>
+                                <td class="text-justify" colspan="5"><small><strong>Observaciones: </strong>{!! nl2br(e($pases->observacion)) !!}</small></td>
                             </tr>
                         @endif
                     </table>
