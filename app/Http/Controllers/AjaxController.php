@@ -16,6 +16,7 @@ use App\Models\Folio;
 use App\Models\Area;
 use App\Models\Vfuncionario;
 use App\Models\Vhistorico;
+use App\Models\Vbien;
 
 class AjaxController extends Controller
 {
@@ -200,6 +201,15 @@ class AjaxController extends Controller
         {
             $devoluciones = Vhistorico::where([['fkfuncionario', $id], ['fkaccion', 4]])->orderBy('fecha', 'desc')->get();
             return response()->json($devoluciones);
+        }
+    }
+
+    public function cargabienes(Request $request, $id)
+    {
+        if($request->ajax())
+        {
+            $bienes = Vbien::where([['fkfuncionario', $id]])->get();
+            return response()->json($bienes);
         }
     }
 }

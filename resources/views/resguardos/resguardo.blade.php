@@ -7,10 +7,12 @@
             <div class="col-md-12">
                 <div class="card cardborde">
                     <div class="card-header justify-content-between align-items-centr text-center encabezadoform">
-                        <h3 class="headerlistatitulo"><i class="fas fa-list"></i> Resguardos</h3>
+                        <h3 class="headerlistatitulo"><i class="fas fa-list"></i> Impresión de resguardos</h3>
                     </div>                   
                     <div class="card-body">
-                        <form class="needs-validation" id="formmain" action="javascript:Imprimir();" novalidate>
+                        <form class="needs-validation" id="formmain" method="GET" action="{{url('/resguardos/imprimir/pdf')}}" target="_blank" novalidate>
+                        @csrf
+                            
                             <div class="form-row">                                
                                 <div class="form-group col-md-6"> 
                                     <label for="area">Áreas:</label>                                        
@@ -55,6 +57,7 @@
                                 </div>
                                 <p class="font-weight-bolder text-muted font-italic mt-1 mb-2">&nbsp;Cargando...</p>
                             </div>
+
                         </form>
                     </div>
                 </div>
@@ -110,32 +113,6 @@
                 } 
             });
         });
-
-        function Imprimir()
-        {
-            var idfun = $("#funcionario").chosen().val();
-            var url = "{{url('/resguardo/funcionario/idfuncionario')}}";
-            url = url.replace("idfuncionario", idfun);
-            window.open(url);
-        }
-
-        // $('input[name="rdbuton"]').on('click', function() 
-        // {
-        //     if ($(this).val() === 'area') 
-        //     {     
-        //         $('#funcionario').prop("disabled", ! $("#area").prop('disabled'));                
-        //         $('#area').prop("disabled", ! $("#funcionario").prop('disabled'));
-        //         $('#area').val("");                            
-        //     }
-        //     else if($(this).val() === 'funcionario');
-        //     {    
-        //         $('#area').prop("disabled",! $("#area").prop('disabled'));
-        //         $('#funcionario').prop("disabled", ! $("#area").prop('disabled'));
-                   
-        //         $('#funcionario').val("");
-        //         $('#area').val("");
-        //     }
-        // });
 
         $("#funcionario").change(function(){
             if($("#funcionario").val() != "")

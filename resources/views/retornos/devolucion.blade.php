@@ -7,10 +7,11 @@
             <div class="col-md-12">
                 <div class="card cardborde">
                     <div class="card-header justify-content-between align-items-centr text-center encabezadoform">
-                        <h3 class="headerlistatitulo"><i class="fas fa-list"></i> Impresión de devoluciones</h3>
+                        <h3 class="headerlistatitulo"><i class="fas fa-list"></i> Devoluciones</h3>
                     </div>                   
                     <div class="card-body">
-                        <form class="needs-validation" id="formmain" method="GET" action="{{url('/devoluciones/imprimir/pdf')}}" target="_blank" novalidate>
+                        {{-- <form class="needs-validation" id="formmain" action="javascript:Imprimir();" novalidate> --}}
+                        <form class="needs-validation" id="formmain" method="GET" action="{{url('/retornos/imprimir/pdf')}}" target="_blank" novalidate>
                         @csrf 
                             
                             <div class="form-row">                                
@@ -55,10 +56,10 @@
                                         <table class="table table-bordered">
                                             <thead>
                                                 <tr>
-                                                    <th class="text-center">Fecha</th>
-                                                    <th class="text-center">Acción</th>
                                                     <th class="text-center">Artículo</th>
                                                     <th class="text-center">Marca</th>
+                                                    <th class="text-center">Modelo</th>
+                                                    <th class="text-center">Serie</th>
                                                     <th class="text-center">No. de patrimonio</th>
                                                     <th></th>
                                                 </tr>
@@ -69,9 +70,9 @@
                                 </div>
                             </div>
 
-                            <input type="hidden" name="detalle" id="detalle">
+                            <input type="text" name="detalle" id="detalle">
 
-                            <button type="submit" class="btn btn-outline-danger"><i class="fas fa-print"></i> Imprimir</button>
+                            <button type="submit" class="btn btn-outline-danger"><i class="fas fa-print"></i> Devolución e impresión</button>
         
                             <div class="d-none justify-content-center" id="divloading">
                                 <div class="spinner-grow divloading" role="status">
@@ -144,7 +145,7 @@
                 if(identificador)
                 {
                     // Ini Ajax
-                    var url = "{{url('/devoluciones/devolucion/idfuncionario')}}";
+                    var url = "{{url('/retornos/bienes/idfuncionario')}}";
                     url = url.replace("idfuncionario", identificador);
                     $.ajax({type:"get",
                         headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
@@ -155,12 +156,7 @@
                             $("#listado").empty();
                             for(let i = 0; i< response.length; i++)
                             {
-                                var fecha = new Date(response[i].fecha);
-                                var dia = fecha.getDate();
-                                var mes = 1 + fecha.getMonth();
-                                var anio = fecha.getFullYear();
-                                var fechaformat = dia+"/"+mes+"/"+anio;
-                                $('#listado').append("<tr><td class='text-center'>"+fechaformat+"</td><td>"+response[i].accion+"</td><td>"+response[i].articulo+"</td><td>"+response[i].marca+"</td><td>"+response[i].patrimonio+"</td><td class='text-center'><input type='checkbox' id='activo"+i+"' name='activo"+i+"' onchange='Guardar("+i+", "+response[i].idhistorico+");' data-toggle='toggle' data-on='Activo' data-off='Inactivo' data-onstyle='success' data-offstyle='danger'></td></tr>");
+                                $('#listado').append("<tr><td>"+response[i].articulo+"</td><td>"+response[i].marca+"</td><td>"+response[i].modelo+"</td><td>"+response[i].serie+"</td><td>"+response[i].patrimonio+"</td><td class='text-center'><input type='checkbox' id='activo"+i+"' name='activo"+i+"' onchange='Guardar("+i+", "+response[i].idbien+");' data-toggle='toggle' data-on='Activo' data-off='Inactivo' data-onstyle='success' data-offstyle='danger'></td></tr>");
                             }
                             $("#toggle-demo").bootstrapToggle();
                             $("#divloading").addClass("d-none").removeClass("d-flex");
@@ -188,23 +184,25 @@
         {
             if($("#activo"+numero).prop("checked") == true)
             {
-                Detalle.push({idhistorico:identificador});    
+                // console.log(identificador);
+                Detalle.push({idbien:identificador});    
                 $("#detalle").val(JSON.stringify(Detalle));
             }
             else
             {
+                // console.log("false");
                 Detalle.splice(numero, 1);
                 $("#detalle").val(JSON.stringify(Detalle));
             }
         }
 
-        // function Imprimir()
-        // {
-        //     var idfun = $("#funcionario").chosen().val();
-        //     var url = "{{url('/devoluciones/imprimir/idfuncionario')}}";
-        //     url = url.replace("idfuncionario", idfun);
-        //     window.open(url);
-        // }
+        function Imprimir()
+        {
+            var idfun = $("#funcionario").chosen().val();
+            var url = "{{url('/devoluciones/imprimir/idfuncionario')}}";
+            url = url.replace("idfuncionario", idfun);
+            window.open(url);
+        }
 
         $("#funcionario").change(function(){
             if($("#funcionario").val() != "")

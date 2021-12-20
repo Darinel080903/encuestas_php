@@ -88,7 +88,7 @@ Route::get('limpiatmpbien', 'App\Http\Controllers\AjaxController@limpiartmpbien'
 
 Route::resource('/resguardos', 'App\Http\Controllers\ResguardoController');
 
-Route::get('/resguardo/funcionario/{id}', 'App\Http\Controllers\PDFController@pdfresguardofuncionario');
+Route::get('/resguardos/imprimir/pdf', 'App\Http\Controllers\PDFController@pdfresguardo');
 
 Route::resource('/pases', 'App\Http\Controllers\PaseController');
 
@@ -125,3 +125,7 @@ Route::get('/devoluciones/imprimir/pdf', 'App\Http\Controllers\PDFController@pdf
 // Route::get('/resguardo/funcionario/{id}', 'App\Http\Controllers\PDFController@pdfresguardofuncionario');
 
 Route::resource('/retornos', 'App\Http\Controllers\RetornoController');
+
+Route::get('/retornos/bienes/{idfuncionario}', 'App\Http\Controllers\AjaxController@cargabienes');
+
+Route::get('/retornos/imprimir/pdf', 'App\Http\Controllers\PDFController@pdfretorno');

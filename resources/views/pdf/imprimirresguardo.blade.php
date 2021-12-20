@@ -67,8 +67,8 @@
                         <td class="text-center col-6 mb-4"><strong>Recibe</strong></td>
                     </tr>
                     <tr>
-                        <td class="text-center col-6"><hr><small><strong></strong></small></td>
-                        <td class="text-center col-6"><hr><small><strong>Nombre y firma</strong></small></td>
+                        <td class="text-center col-6"><hr><small><strong>{{$entrega->nombre.' '.$entrega->paterno.' '.$entrega->materno}}<br>{{$entrega->puesto}}<br>{{$entrega->area}}</strong></small></td>
+                        <td class="text-center col-6"><hr><small><strong>{{$funcionario->nombre.' '.$funcionario->paterno.' '.$funcionario->materno}}<br>{{$funcionario->puesto}}<br>{{$funcionario->area}}</strong></small></td>
                     </tr>
                 </tbody>
             </table>
@@ -85,10 +85,9 @@
                     <p class="text-right mt-0 mb-0"><strong>Unidad de Informática</strong></p>
                     <p class="text-right mt-0 mb-0"><strong>Área de Soporte Técnico</strong></p>
                     <h3 class="text-right mt-0 mb-3">Asunto: Resguardo</h3>
-                    <p class="text-lefth mt-0 mb-0">Fecha: <strong></strong></p>
-                    <p class="text-lefth mt-0 mb-0">Departamento: <strong></strong></p>
-                    <h1>{{ $funcionarios->nombre }}</h1>
-                    <h3>Suscrito/a al área de: {{$areas}}</h3>
+                    <p class="text-lefth mt-0 mb-0">Fecha: <strong>{{$fecha}}</strong></p>
+                    <p class="text-lefth mt-0 mb-0">Funcionario: <strong>{{$funcionario->nombre.' '.$funcionario->paterno.' '.$funcionario->materno}}</strong></p>
+                    <p class="text-lefth mt-0 mb-0">Departamento: <strong>{{$funcionario->area}}</strong></p>
                 </div>
             </div>
 

@@ -1,19 +1,33 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Models\Retorno;
+use App\Models\Area;
+use App\Models\Funcionario;
 
 use Illuminate\Http\Request;
 
 class RetornoController extends Controller
 {
+    // By CIRG - Protejer la ruta.
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $this->authorize('viewAny', Retorno::class);
+
+        $areas = Area::whereNull('fkarea')->get();
+        $funcionarios = Funcionario::where('activo', 1)->orderBy('nombre', 'asc')->orderBy('paterno', 'asc')->orderBy('materno', 'asc')->get();
+            
+        return view('retornos.devolucion', compact('areas', 'funcionarios'));                    
     }
 
     /**

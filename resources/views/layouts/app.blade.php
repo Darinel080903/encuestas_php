@@ -137,7 +137,9 @@
                                             <i class="fas fa-file-alt icon-color"></i> Cédulas
                                         </a>
                                     @endcan
+
                                     <div class="dropdown-divider"></div>
+                                    
                                     @can('viewAny', \App\Models\Fabrica::class)
                                         <a class="dropdown-item" href="{{url('/fabricas')}}">
                                             <i class="fas fa-industry icon-color"></i> Fabricas
@@ -177,28 +179,29 @@
                                                 <i class="fas fa-desktop icon-color"></i> Bienes
                                             </a>
                                         @endcan
-
-                                        <a class="dropdown-item" href="{{url('/retornos')}}">
-                                            <i class="fas fa-desktop icon-color"></i> Devolución
-                                        </a>
-                                        
-                                        @can('viewAny', \App\Models\Vresguardo::class)
-                                            <a class="dropdown-item" href="{{url('/resguardos')}}">
-                                                <i class="fas fa-print icon-color"></i> Impresión resguardos
-                                            </a>
-                                            <a class="dropdown-item" href="{{url('/devoluciones')}}">
-                                                <i class="fas fa-print icon-color"></i> Impresión devoluciones
+                                        @can('viewAny', \App\Models\Retorno::class)
+                                            <a class="dropdown-item" href="{{url('/retornos')}}">
+                                                <i class="fas fa-desktop icon-color"></i> Devolución
                                             </a>
                                         @endcan
-                                
-                                        <div class="dropdown-divider"></div>
-
                                         @can('viewAny', \App\Models\Vpase::class)
                                             <a class="dropdown-item" href="{{url('/pases')}}">
                                                 <i class="fas fa-file-alt icon-color"></i> Pase de salida
                                             </a>
                                         @endcan
-                                        
+
+                                        <div class="dropdown-divider"></div>
+
+                                        @can('viewAny', \App\Models\Resguardo::class)
+                                            <a class="dropdown-item" href="{{url('/resguardos')}}">
+                                                <i class="fas fa-print icon-color"></i> Impresión resguardos
+                                            </a>
+                                        @endcan
+                                        @can('viewAny', \App\Models\Devolucion::class)
+                                            <a class="dropdown-item" href="{{url('/devoluciones')}}">
+                                                <i class="fas fa-print icon-color"></i> Impresión devoluciones
+                                            </a>
+                                        @endcan
                                     </div>                                
                                 </li>
                             @endcan

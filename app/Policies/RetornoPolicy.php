@@ -2,12 +2,11 @@
 
 namespace App\Policies;
 
-
-use App\Models\Vresguardo;
+use App\Models\Retorno;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class VresguardoPolicy
+class RetornoPolicy
 {
     use HandlesAuthorization;
 
@@ -26,7 +25,7 @@ class VresguardoPolicy
      */
     public function viewAny(User $user)
     {
-        if($user->permissions->contains('slug','resguardo-lista'))
+        if($user->permissions->contains('slug','retorno-lista'))
         {
             return true;
         }
@@ -36,10 +35,10 @@ class VresguardoPolicy
      * Determine whether the user can view the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Vresguardo  $vresguardo
+     * @param  \App\Models\Retorno  $retorno
      * @return mixed
      */
-    public function view(User $user, Vresguardo $vresguardo)
+    public function view(User $user, Retorno $retorno)
     {
         //
     }
@@ -59,10 +58,10 @@ class VresguardoPolicy
      * Determine whether the user can update the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Vresguardo  $vresguardo
+     * @param  \App\Models\Retorno  $retorno
      * @return mixed
      */
-    public function update(User $user, Vresguardo $vresguardo)
+    public function update(User $user, Retorno $retorno)
     {
         //
     }
@@ -71,10 +70,10 @@ class VresguardoPolicy
      * Determine whether the user can delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Vresguardo  $vresguardo
+     * @param  \App\Models\Retorno  $retorno
      * @return mixed
      */
-    public function delete(User $user, Vresguardo $vresguardo)
+    public function delete(User $user, Retorno $retorno)
     {
         //
     }
@@ -83,10 +82,10 @@ class VresguardoPolicy
      * Determine whether the user can restore the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Vresguardo  $vresguardo
+     * @param  \App\Models\Retorno  $retorno
      * @return mixed
      */
-    public function restore(User $user, Vresguardo $vresguardo)
+    public function restore(User $user, Retorno $retorno)
     {
         //
     }
@@ -95,10 +94,10 @@ class VresguardoPolicy
      * Determine whether the user can permanently delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Vresguardo  $vresguardo
+     * @param  \App\Models\Retorno  $retorno
      * @return mixed
      */
-    public function forceDelete(User $user, Vresguardo $vresguardo)
+    public function forceDelete(User $user, Retorno $retorno)
     {
         //
     }

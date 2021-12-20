@@ -3,12 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-use App\Models\Articulo;
-use App\Models\Funcionario;
-use App\Models\Vresguardo;
+use App\Models\Devolucion;
 use App\Models\Area;
-use App\Models\Bien;
+use App\Models\Funcionario;
 
 class DevolucionController extends Controller
 {
@@ -26,13 +23,12 @@ class DevolucionController extends Controller
      */
     public function index(Request $request)
     {
-        $this->authorize('viewAny', Vresguardo::class);
+        $this->authorize('viewAny', Devolucion::class);
 
-        // $areas = Area::orderBy('area', 'asc')->get();
         $areas = Area::whereNull('fkarea')->get();
         $funcionarios = Funcionario::where('activo', 1)->orderBy('nombre', 'asc')->orderBy('paterno', 'asc')->orderBy('materno', 'asc')->get();
             
-        return view('devoluciones.devolucion',compact('areas', 'funcionarios'));                    
+        return view('devoluciones.devolucion', compact('areas', 'funcionarios'));                    
     }
 
     /**
