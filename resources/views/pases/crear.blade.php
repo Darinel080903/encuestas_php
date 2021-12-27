@@ -1,6 +1,35 @@
 @extends('layouts.app')
 
 @section('content')
+
+    <div class="modal fade" id="ModalScanSerie" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Scan</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="readerSerie"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="ModalScanPatrimonio" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Scan</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="readerPatrimonio"></div>
+            </div>
+        </div>
+    </div>
+
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-12">
@@ -70,12 +99,22 @@
 
                                         <div class="form-group col-md-2 mb-0">
                                             <label for="detalleserie">Serie:</label>
-                                            <input type="text" class="form-control" id="detalleserie" name="detalleserie" placeholder="Serie" maxlength="250"/>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" id="detalleserie" name="detalleserie" placeholder="Serie" maxlength="250"/>
+                                                <div class="input-group-append">
+                                                    <a class="btn btn-outline-secondary mb-0" href="javascript:ScanSerie();"><i class="fas fa-barcode"></i></a>
+                                                </div>
+                                            </div>
                                         </div>
 
                                         <div class="form-group col-md-2 mb-0">
                                             <label for="detallepatrimonio">Patrimonio:</label>
-                                            <input type="text" class="form-control" id="detallepatrimonio" name="detallepatrimonio" placeholder="Patrimonio" maxlength="250"/>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" id="detallepatrimonio" name="detallepatrimonio" placeholder="Patrimonio" maxlength="250"/>
+                                                <div class="input-group-append">
+                                                    <a class="btn btn-outline-secondary mb-0" href="javascript:ScanPatrimonio();"><i class="fas fa-barcode"></i></a>
+                                                </div>
+                                            </div>
                                         </div>
 
                                         <div class="form-group col-md-1 mb-0">
@@ -269,6 +308,33 @@
                 $("#detalle").append("<tr><td class='align-middle'>"+Detalle[key].equipo+"</td><td class='align-middle'>"+Detalle[key].marca+"</td><td class='align-middle'>"+Detalle[key].modelo+"</td><td class='align-middle'>"+Detalle[key].serie+"</td><td class='align-middle'>"+Detalle[key].patrimonio+"</td><td><a class='btn btn-outline-danger btn-block' href='javascript:DesgloseEliminar("+key+");'><i class='fas fa-minus'></i></a></td></tr>");
             });
             $("#detalle").append("</tbody>");
+        }
+
+        
+
+        function onScanSuccessSerie(decodedText, decodedResult)
+        {
+            // Handle on success condition with the decoded text or result.
+            // console.log(`Scan result: ${decodedText}`, decodedResult);
+            if(decodedText)
+            {
+                $("#detalleserie").val("");
+                $("#detalleserie").val(decodedText);
+                console.log(decodedText);
+                $("#ModalScanSerie").modal("hide");
+                html5QrcodeScanner.clear();
+            }
+            // $("#detalleserie").val("");
+            // $("#detalleserie").val(decodedText);
+            // console.log(decodedText);
+            // html5QrcodeScanner.clear();
+        }
+        
+        function ScanSerie()
+        {
+            var html5QrcodeScanner = new Html5QrcodeScanner("readerSerie", {fps:10, qrbox:250});
+            html5QrcodeScanner.render(onScanSuccessSerie);
+            $("#ModalScanSerie").modal("show");
         }
 
         // Example starter JavaScript for disabling form submissions if there are invalid fields

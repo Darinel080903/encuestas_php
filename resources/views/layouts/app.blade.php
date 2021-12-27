@@ -62,6 +62,9 @@
     <!-- Custom Confirm By CIRG -->
     <link rel="stylesheet" href="{{asset('confirm/dist/jquery-confirm.min.css')}}">
     <script src="{{asset('confirm/dist/jquery-confirm.min.js')}}"></script>
+
+    <!-- Custom QRCode By CIRG -->
+    <script src="{{asset('QRCode/QRCode.js')}}" type="text/javascript">
     
     <!-- Maps By CIRG -->
     <script src="{{asset('maps/maps.add.js')}}"></script>
