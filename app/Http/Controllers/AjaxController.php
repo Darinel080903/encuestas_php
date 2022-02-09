@@ -17,6 +17,9 @@ use App\Models\Area;
 use App\Models\Vfuncionario;
 use App\Models\Vhistorico;
 use App\Models\Vbien;
+use App\Models\Pemexdesglose;
+use App\Models\Pemexfactura;
+use App\Models\Pemexfolio;
 
 class AjaxController extends Controller
 {
@@ -210,6 +213,53 @@ class AjaxController extends Controller
         {
             $bienes = Vbien::where([['fkfuncionario', $id]])->get();
             return response()->json($bienes);
+        }
+    }
+
+    public function cargaconceptospemex(Request $request, $id)
+    {
+        if($request->ajax())
+        {
+            $desgloses = Pemexdesglose::where('fkfactura', $id)->get();
+            return response()->json($desgloses);
+        }
+    }
+
+    public function cargamontospemex(Request $request, $id)
+    {
+        if($request->ajax())
+        {
+            $montos = Pemexfactura::findOrFail($id);
+            return response()->json($montos);
+        }
+    }
+
+    public function cargasaldospemex(Request $request, $id)
+    {
+        if($request->ajax())
+        {
+            $saldos = Pemexfolio::where('fkfactura', $id)->sum('monto');
+            return response()->json($saldos);
+        }
+    }
+
+    public function cargaunidadespemex(Request $request, $id)
+    {
+        if($request->ajax())
+        {
+            $numero = Pemexdesglose::where('iddesglose', $id)->value('numero');
+            $unidades = Pemexfolio::where('fkdesglose', $id)->sum('numero');
+            $disponible = $numero - $unidades;
+            return response()->json($disponible);
+        }
+    }
+
+    public function cargaunitariospemex(Request $request, $id)
+    {
+        if($request->ajax())
+        {
+            $unitario = Pemexdesglose::where('iddesglose', $id)->value('unitario');
+            return response()->json($unitario);
         }
     }
 }

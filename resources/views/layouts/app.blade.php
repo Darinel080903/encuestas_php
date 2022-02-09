@@ -229,6 +229,26 @@
                                 </li>
                             @endcan
 
+                            @can('viewAny', \App\Models\Pemexfactura::class)
+                                <li class="nav-item dropdown">
+                                    <a id="navbarDropdown" class="nav-link dropdown-toggle text-white" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                        <i class="fas fa-file-invoice-dollar icon-color"></i> Pemex<span class="caret"></span>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                        @can('viewAny', \App\Models\Pemexfactura::class)
+                                            <a class="dropdown-item" href="{{url('/pemexfacturas')}}">
+                                                <i class="fas fa-file-invoice-dollar icon-color"></i> Donaciones
+                                            </a>
+                                        @endcan
+                                        @can('viewAny', \App\Models\Vpemexvale::class)
+                                            <a class="dropdown-item" href="{{url('/pemexvales')}}">
+                                                <i class="fas fa-file-alt icon-color"></i> Dotaciones
+                                            </a>
+                                        @endcan
+                                    </div>                                
+                                </li>
+                            @endcan
+
                             @can('viewAny', \App\Models\User::class)
                                 <li class="nav-item dropdown">
                                     <a id="navbarDropdown" class="nav-link dropdown-toggle text-white" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>

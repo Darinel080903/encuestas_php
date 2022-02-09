@@ -129,3 +129,21 @@ Route::resource('/retornos', 'App\Http\Controllers\RetornoController');
 Route::get('/retornos/bienes/{idfuncionario}', 'App\Http\Controllers\AjaxController@cargabienes');
 
 Route::get('/retornos/imprimir/pdf', 'App\Http\Controllers\PDFController@pdfretorno');
+
+Route::resource('/pemexfacturas', 'App\Http\Controllers\PemexfacturaController');
+
+Route::put('/pemexfacturas/{id}/update2', 'App\Http\Controllers\PemexfacturaController@update2');
+
+Route::resource('/pemexvales', 'App\Http\Controllers\PemexvaleController');
+
+Route::get('/pemexvales/conceptos/{idfactura}', 'App\Http\Controllers\AjaxController@cargaconceptospemex');
+
+Route::get('/pemexvales/montos/{idfactura}', 'App\Http\Controllers\AjaxController@cargamontospemex');
+
+Route::get('/pemexvales/saldos/{idfactura}', 'App\Http\Controllers\AjaxController@cargasaldospemex');
+
+Route::get('/pemexvales/unidades/{iddesglose}', 'App\Http\Controllers\AjaxController@cargaunidadespemex');
+
+Route::get('/pemexvales/unitarios/{iddesglose}', 'App\Http\Controllers\AjaxController@cargaunitariospemex');
+
+Route::get('/imprimir/pemexvale/{id}', 'App\Http\Controllers\PDFController@pdfpemexvale');

@@ -6,10 +6,10 @@
             <div class="col-md-12">
                 <div class="card cardborde">
                     <div class="card-header justify-content-between align-items-centr text-center encabezadoform">
-                        <h3 class="headerlistatitulo"><i class="fas fa-save"></i> Nuevo vale</h3>
+                        <h3 class="headerlistatitulo"><i class="fas fa-save"></i> Nueva dotación</h3>
                     </div>
                     <div class="card-body">
-                        <form class="needs-validation" method="POST" action="{{url('/vales')}}" novalidate>
+                        <form class="needs-validation" method="POST" action="{{url('/pemexvales')}}" novalidate>
                         @csrf
                             <div class="form-row">
                                 <div class="form-group col-md-2">
@@ -25,9 +25,9 @@
                                         <option value="">Auto</option>
                                         @foreach ($autos as $item)
                                             @if (old('auto') == $item->idauto)
-                                                <option value="{{$item->idauto}}" selected>{{$item->numero}}</option>
+                                                <option value="{{$item->idauto}}" selected>{{$item->placa}}</option>
                                             @else
-                                                <option value="{{$item->idauto}}">{{$item->numero}}</option>
+                                                <option value="{{$item->idauto}}">{{$item->placa}}</option>
                                             @endif
                                         @endforeach  
                                     </select>
@@ -59,21 +59,21 @@
                                 </div>
                                 <div class="card-body">
                                     <div class="form-row">
-                                        <div class="form-group col-md-2">
-                                            <label for="factura">Facturas:</label>
+                                        <div class="form-group col-md-4">
+                                            <label for="factura">Donaciones:</label>
                                             <select class="form-control" id="factura" name="factura">
-                                                <option value="">Factura</option>
+                                                <option value="">Donación</option>
                                                 @foreach ($facturas as $item)
                                                     @if (old('factura') == $item->idfactura)
-                                                        <option value="{{$item->idfactura}}" selected>{{$item->numero}}</option>
+                                                        <option value="{{$item->idfactura}}" selected>{{'Fecha: '.date('d/m/Y', strtotime($item->fecha)).' - Número: '.$item->numero}}</option>
                                                     @else
-                                                        <option value="{{$item->idfactura}}">{{$item->numero}}</option>
+                                                        <option value="{{$item->idfactura}}">{{'Fecha: '.date('d/m/Y', strtotime($item->fecha)).' - Número: '.$item->numero}}</option>
                                                     @endif
                                                 @endforeach  
                                             </select>
                                         </div>
                                         <div class="form-group col-md-2 mb-0">
-                                            <label for="montofactura">Monto factura:</label>
+                                            <label for="montofactura">Monto donación:</label>
                                             <div class="input-group">
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text" id="validatedInputGroupPrepend">$</span>
@@ -82,7 +82,7 @@
                                             </div>
                                         </div>
                                         <div class="form-group col-md-2 mb-0">
-                                            <label for="saldofactura">Saldo factura:</label>
+                                            <label for="saldofactura">Saldo donación:</label>
                                             <div class="input-group">
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text" id="validatedInputGroupPrepend">$</span>
@@ -143,9 +143,9 @@
                                         <table class="table table-bordered" id="DesgloseTabla">
                                             <thead>
                                                 <tr>
-                                                    <th class="col-2">Factura</th>
+                                                    <th class="col-3">Donación</th>
                                                     <th class="col-3">Concepto</th>
-                                                    <th class="col-2">Unidades</th>
+                                                    <th class="col-1">Unidades</th>
                                                     <th class="col-2">Precio</th>
                                                     <th class="col-2">Total</th>
                                                     <th class="col-1">Eliminar</th>
@@ -181,7 +181,7 @@
                             <input type="hidden" name="vbusqueda" value="{{$vbusqueda ?? ''}}">
                             <input type="hidden" id="vdetalle" name="vdetalle">
                             <button type="submit" class="btn btn-outline-danger"><i class="fas fa-save"></i> Guardar</button>
-                            <a class="btn btn-outline-danger" href="{{url('/vales?page='.$page.'&vfecha='.$vfecha.'&vbusqueda='.$vbusqueda)}}"><i class="fas fa-sign-out-alt fa-rotate-180"></i> Regresar</a>
+                            <a class="btn btn-outline-danger" href="{{url('/pemexvales?page='.$page.'&vfecha='.$vfecha.'&vbusqueda='.$vbusqueda)}}"><i class="fas fa-sign-out-alt fa-rotate-180"></i> Regresar</a>
                             <div class="d-none justify-content-center" id="divloading">
                                 <div class="spinner-grow divloading" role="status">
                                     <span class="sr-only">Loading...</span>
@@ -249,13 +249,12 @@
 
         $(function(){
             $("#factura").change(function(){
-                
                 var Factura = event.target.value;
                 if(Factura)
                 {
-                    // Ini Ajax
-                    var url = "{{url('/vales/conceptos/idfactura')}}";
+                    var url = "{{url('/pemexvales/conceptos/idfactura')}}";
                     url = url.replace("idfactura", Factura);
+                    // Ini Ajax
                     $("#divloading").addClass("d-flex").removeClass("d-none");
                     $.ajax({type:"get",
                         headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
@@ -295,9 +294,9 @@
 
         function CargarMonto(IdFactura)
         {
-            // Ini Ajax
-            var url = "{{url('/vales/montos/idfactura')}}";
+            var url = "{{url('/pemexvales/montos/idfactura')}}";
             url = url.replace("idfactura", IdFactura);
+            // Ini Ajax
             $("#divloading").addClass("d-flex").removeClass("d-none");
             $.ajax({type:"get",
                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
@@ -321,9 +320,9 @@
 
         function CargarSaldo(IdFactura)
         {
-            // Ini Ajax
-            var url = "{{url('/vales/saldos/idfactura')}}";
+            var url = "{{url('/pemexvales/saldos/idfactura')}}";
             url = url.replace("idfactura", IdFactura);
+            // Ini Ajax
             $("#divloading").addClass("d-flex").removeClass("d-none");
             $.ajax({type:"get",
                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
@@ -364,9 +363,9 @@
                 var Desglose = event.target.value;
                 if(Desglose)
                 {
-                    // Ini Ajax
-                    var url = "{{url('/vales/unidades/iddesglose')}}";
+                    var url = "{{url('/pemexvales/unidades/iddesglose')}}";
                     url = url.replace("iddesglose", Desglose);
+                    // Ini Ajax
                     $("#divloading").addClass("d-flex").removeClass("d-none");
                     $.ajax({type:"get",
                         headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
@@ -412,9 +411,9 @@
 
         function CargarUnitario(Desglose)
         {
-            // Ini Ajax
-            var url = "{{url('/vales/unitarios/iddesglose')}}";
+            var url = "{{url('/pemexvales/unitarios/iddesglose')}}";
             url = url.replace("iddesglose", Desglose);
+            // Ini Ajax
             $("#divloading").addClass("d-flex").removeClass("d-none");
             $.ajax({type:"get",
                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
@@ -642,11 +641,11 @@
         function MostrarDesgloseTabla()
         {         
             $("#DesgloseTabla").empty();
-            $("#DesgloseTabla").append("<thead><tr><th class='col-2'>Factura</th><th class='col-3'>Concepto</th><th class='col-2'>Unidades</th><th class='col-2'>Precio</th><th class='col-2'>Total</th><th class='col-1'>Eliminar</th></tr></thead>"); 
+            $("#DesgloseTabla").append("<thead><tr><th class='col-3'>Donación</th><th class='col-3'>Concepto</th><th class='col-1'>Unidades</th><th class='col-2'>Precio</th><th class='col-2'>Total</th><th class='col-1'>Eliminar</th></tr></thead>"); 
             $("#DesgloseTabla").append("<tbody>");
             $.each(Detalle, function(key, value)
             {
-                $("#DesgloseTabla").append("<tr><td class='align-middle'>"+Detalle[key].facturafolio+"</td><td class='align-middle'>"+Detalle[key].conceptotexto+"</td><td class='align-middle'>"+Detalle[key].numero+"</td><td class='align-middle'>"+formatCurrency(Detalle[key].unitario)+"</td><td class='align-middle'>"+formatCurrency(Detalle[key].monto)+"</td><td><a class='btn btn-outline-danger btn-block' href='javascript:DesgloseEliminar("+key+");'><i class='fas fa-minus'></i></a></td></tr>");
+                $("#DesgloseTabla").append("<tr><td class='align-middle'>"+Detalle[key].facturafolio+"</td><td class='align-middle'>"+Detalle[key].conceptotexto+"</td><td class='align-middle text-center'>"+Detalle[key].numero+"</td><td class='align-middle'>"+formatCurrency(Detalle[key].unitario)+"</td><td class='align-middle'>"+formatCurrency(Detalle[key].monto)+"</td><td><a class='btn btn-outline-danger btn-block' href='javascript:DesgloseEliminar("+key+");'><i class='fas fa-minus'></i></a></td></tr>");
             });
             $("#DesgloseTabla").append("</tbody>");
         }

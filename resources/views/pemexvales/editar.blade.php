@@ -6,15 +6,16 @@
             <div class="col-md-12">
                 <div class="card cardborde">
                     <div class="card-header justify-content-between align-items-centr text-center encabezadoform">
-                        <h3 class="headerlistatitulo"><i class="fas fa-save"></i> Nuevo vale</h3>
+                        <h3 class="headerlistatitulo"><i class="fas fa-pen"></i> Editar dotación</h3>
                     </div>
-                    <div class="card-body">
-                        <form class="needs-validation" method="POST" action="{{url('/vales')}}" novalidate>
+                    <div class="card-body">     
+                        <form class="needs-validation" method="POST" action="{{url('/pemexvales/'.$datos->idvale)}}" novalidate>
+                        @method('PUT')
                         @csrf
                             <div class="form-row">
                                 <div class="form-group col-md-2">
                                     <label for="fecha">Fecha:</label>
-                                    <input type="text" class="form-control @error('fecha') is-invalid @enderror" id="fecha" name="fecha" aria-label="Fecha" placeholder="Fecha" value="{{ date("d/m/Y") }}" readonly/>
+                                    <input type="text" class="form-control @error('fecha') is-invalid @enderror" id="fecha" name="fecha" aria-label="Fecha" placeholder="Fecha" value="{{date('d/m/Y', strtotime($datos->fecha))}}" readonly/>
                                 </div>
                                 <div class="invalid-feedback">
                                     ¡La <strong>fecha</strong> es un campo requerido!
@@ -24,10 +25,10 @@
                                     <select class="form-control" id="auto" name="auto" required>
                                         <option value="">Auto</option>
                                         @foreach ($autos as $item)
-                                            @if (old('auto') == $item->idauto)
-                                                <option value="{{$item->idauto}}" selected>{{$item->numero}}</option>
+                                            @if ($datos->fkauto == $item->idauto)
+                                                <option value="{{$item->idauto}}" selected>{{$item->placa}}</option>
                                             @else
-                                                <option value="{{$item->idauto}}">{{$item->numero}}</option>
+                                                <option value="{{$item->idauto}}">{{$item->placa}}</option>
                                             @endif
                                         @endforeach  
                                     </select>
@@ -39,6 +40,13 @@
                                     <label for="funcionario">Funcionarios:</label>
                                     <select class="form-control" id="funcionario" name="funcionario" required>
                                         <option value="">Funcionario</option>
+                                        @foreach ($funcionarios as $item)
+                                            @if ($datos->fkfuncionario == $item->idfuncionario)
+                                                <option value="{{$item->idfuncionario}}" selected>{{$item->nombre.' '.$item->peterno.' '.$item->materno}}</option>
+                                            @else
+                                                <option value="{{$item->idfuncionario}}">{{$item->nombre.' '.$item->peterno.' '.$item->materno}}</option>
+                                            @endif
+                                        @endforeach 
                                     </select>
                                     <div class="invalid-feedback">
                                         ¡El <strong>funcionario</strong> es un campo requerido!
@@ -46,11 +54,11 @@
                                 </div>
                                 <div class="form-group col-md-2 mb-0">
                                     <label for="kmini">Km inicial:</label>
-                                    <input type="text" class="form-control" id="kmini" name="kmini" placeholder="Km inicial" maxlength="11" value="{{old('kmini')}}"/>
+                                    <input type="text" class="form-control" id="kmini" name="kmini" placeholder="Km inicial" maxlength="11" value="{{$datos->kmini}}"/>
                                 </div>
                                 <div class="form-group col-md-2 mb-0">
                                     <label for="kmfin">Km final:</label>
-                                    <input type="text" class="form-control" id="kmfin" name="kmfin" placeholder="Km final" maxlength="11" value="{{old('kmfin')}}"/>
+                                    <input type="text" class="form-control" id="kmfin" name="kmfin" placeholder="Km final" maxlength="11" value="{{$datos->kmfin}}"/>
                                 </div>
                             </div>
                             <div class="card mb-2">
@@ -59,21 +67,21 @@
                                 </div>
                                 <div class="card-body">
                                     <div class="form-row">
-                                        <div class="form-group col-md-2">
-                                            <label for="factura">Facturas:</label>
+                                        <div class="form-group col-md-4">
+                                            <label for="factura">Donaciones:</label>
                                             <select class="form-control" id="factura" name="factura">
-                                                <option value="">Factura</option>
+                                                <option value="">Donación</option>
                                                 @foreach ($facturas as $item)
                                                     @if (old('factura') == $item->idfactura)
-                                                        <option value="{{$item->idfactura}}" selected>{{$item->numero}}</option>
+                                                        <option value="{{$item->idfactura}}" selected>{{'Fecha: '.date('d/m/Y', strtotime($item->fecha)).' - Número: '.$item->numero}}</option>
                                                     @else
-                                                        <option value="{{$item->idfactura}}">{{$item->numero}}</option>
+                                                        <option value="{{$item->idfactura}}">{{'Fecha: '.date('d/m/Y', strtotime($item->fecha)).' - Número: '.$item->numero}}</option>
                                                     @endif
                                                 @endforeach  
                                             </select>
                                         </div>
                                         <div class="form-group col-md-2 mb-0">
-                                            <label for="montofactura">Monto factura:</label>
+                                            <label for="montofactura">Monto donación:</label>
                                             <div class="input-group">
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text" id="validatedInputGroupPrepend">$</span>
@@ -82,7 +90,7 @@
                                             </div>
                                         </div>
                                         <div class="form-group col-md-2 mb-0">
-                                            <label for="saldofactura">Saldo factura:</label>
+                                            <label for="saldofactura">Saldo donación:</label>
                                             <div class="input-group">
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text" id="validatedInputGroupPrepend">$</span>
@@ -143,9 +151,9 @@
                                         <table class="table table-bordered" id="DesgloseTabla">
                                             <thead>
                                                 <tr>
-                                                    <th class="col-2">Factura</th>
+                                                    <th class="col-3">Donación</th>
                                                     <th class="col-3">Concepto</th>
-                                                    <th class="col-2">Unidades</th>
+                                                    <th class="col-1">Unidades</th>
                                                     <th class="col-2">Precio</th>
                                                     <th class="col-2">Total</th>
                                                     <th class="col-1">Eliminar</th>
@@ -162,32 +170,26 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text" id="validatedInputGroupPrepend">$</span>
                                         </div>
-                                        <input type="text" class="form-control" id="monto" name="monto" placeholder="Monto" maxlength="15" value="{{old('monto')}}" readonly/>
+                                        <input type="text" class="form-control" id="monto" name="monto" placeholder="Monto" maxlength="15" value="{!! number_format((float)($datos->monto), 2) !!}" readonly/>
                                     </div>
                                 </div>
                             </div>
                             <div class="form-row">
                                 <div class="form-group col-md-4">
                                     <label for="recibe">Recibe:</label>    
-                                    <input type="text" class="form-control" id="recibe" name="recibe" placeholder="Recibe" maxlength="250" {{old('recibe')}}/>
+                                    <input type="text" class="form-control" id="recibe" name="recibe" placeholder="Recibe" maxlength="250" value="{{$datos->recibe}}"/>
                                 </div>
                                 <div class="form-group col-md-8">
                                     <label for="observacion">Observaciones:</label>    
-                                    <textarea class="form-control" name="observacion" id="observacion" cols="30" rows="2" placeholder="Observaciones">{{old('observacion')}}</textarea>
+                                    <textarea class="form-control" name="observacion" id="observacion" cols="30" rows="2" placeholder="Observaciones">{{$datos->observacion}}</textarea>
                                 </div>
                             </div>
                             <input type="hidden" name="page" value="{{$page ?? ''}}">
                             <input type="hidden" name="vfecha" value="{{$vfecha ?? ''}}">
                             <input type="hidden" name="vbusqueda" value="{{$vbusqueda ?? ''}}">
-                            <input type="hidden" id="vdetalle" name="vdetalle">
+                            <input type="hidden" id="vdetalle" name="vdetalle" value="{{$folios ?? ''}}">
                             <button type="submit" class="btn btn-outline-danger"><i class="fas fa-save"></i> Guardar</button>
-                            <a class="btn btn-outline-danger" href="{{url('/vales?page='.$page.'&vfecha='.$vfecha.'&vbusqueda='.$vbusqueda)}}"><i class="fas fa-sign-out-alt fa-rotate-180"></i> Regresar</a>
-                            <div class="d-none justify-content-center" id="divloading">
-                                <div class="spinner-grow divloading" role="status">
-                                    <span class="sr-only">Loading...</span>
-                                </div>
-                                <p class="font-weight-bolder text-muted font-italic mt-1 mb-2">&nbsp;Cargando...</p>
-                            </div>
+                            <a class="btn btn-outline-danger" href="{{url('/pemexvales?page='.$page.'&vfecha='.$vfecha.'&vbusqueda='.$vbusqueda)}}"><i class="fas fa-sign-out-alt fa-rotate-180"></i> Regresar</a>
                         </form>
                     </div>
                 </div>
@@ -195,6 +197,21 @@
         </div>
     </div>
     <script>
+        var Detalle = [];
+
+        var data = $("#vdetalle").val();
+        $.each(JSON.parse(data), function(i, item){
+            var fecha = item.fecha;
+            var newfecha = fecha.replace("-", "/");
+            var d = new Date(newfecha);
+            var datestring = ("0" + d.getDate()).slice(-2)  + "/" + ("0"+(d.getMonth()+1)).slice(-2) + "/" + d.getFullYear()
+
+            Detalle.push({factura:item.fkfactura, facturafolio:'Fecha: '+datestring+' - Número: '+item.folio, concepto:item.fkdesglose, conceptotexto:item.concepto, folioini:item.folioini, foliofin:item.foliofin, numero:item.numero, unitario:parseFloat(item.unitario).toFixed(2), monto:parseFloat(item.monto).toFixed(2), tipo:"S"});
+        });
+        $("#vdetalle").val("");
+        $("#vdetalle").val(JSON.stringify(Detalle));
+        MostrarDesgloseTabla();
+
         $('#fecha').datepicker({
             uiLibrary: 'bootstrap4',
             locale: 'es-es',
@@ -230,13 +247,13 @@
                             $("#divloading").addClass("d-none").removeClass("d-flex");
                         }
                     });
-                    // Fin Ajax
+                    // Fin Ajax 
                 }
                 else
                 {
                     $("#funcionario").empty();
                     $("#funcionario").append("<option value=''>Funcionario</option>");
-                } 
+                }
             });
         });
 
@@ -249,13 +266,12 @@
 
         $(function(){
             $("#factura").change(function(){
-                
                 var Factura = event.target.value;
                 if(Factura)
                 {
-                    // Ini Ajax
-                    var url = "{{url('/vales/conceptos/idfactura')}}";
+                    var url = "{{url('/pemexvales/conceptos/idfactura')}}";
                     url = url.replace("idfactura", Factura);
+                    // Ini Ajax
                     $("#divloading").addClass("d-flex").removeClass("d-none");
                     $.ajax({type:"get",
                         headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
@@ -295,9 +311,9 @@
 
         function CargarMonto(IdFactura)
         {
-            // Ini Ajax
-            var url = "{{url('/vales/montos/idfactura')}}";
+            var url = "{{url('/pemexvales/montos/idfactura')}}";
             url = url.replace("idfactura", IdFactura);
+            // Ini Ajax
             $("#divloading").addClass("d-flex").removeClass("d-none");
             $.ajax({type:"get",
                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
@@ -321,9 +337,9 @@
 
         function CargarSaldo(IdFactura)
         {
-            // Ini Ajax
-            var url = "{{url('/vales/saldos/idfactura')}}";
+            var url = "{{url('/pemexvales/saldos/idfactura')}}";
             url = url.replace("idfactura", IdFactura);
+            // Ini Ajax
             $("#divloading").addClass("d-flex").removeClass("d-none");
             $.ajax({type:"get",
                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
@@ -364,9 +380,9 @@
                 var Desglose = event.target.value;
                 if(Desglose)
                 {
-                    // Ini Ajax
-                    var url = "{{url('/vales/unidades/iddesglose')}}";
+                    var url = "{{url('/pemexvales/unidades/iddesglose')}}";
                     url = url.replace("iddesglose", Desglose);
+                    // Ini Ajax
                     $("#divloading").addClass("d-flex").removeClass("d-none");
                     $.ajax({type:"get",
                         headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
@@ -375,6 +391,7 @@
                         success: function(response, textStatus, xhr)
                         {
                             var disponible = 0;
+                            console.log(parseInt(CalcularDisponibleLista(Desglose)));
                             disponible = parseInt(response) - parseInt(CalcularDisponibleLista(Desglose));
                             $("#disponible").val("");
                             $("#disponible").val(disponible);
@@ -402,7 +419,7 @@
             var total = 0;
             $.each(Detalle, function(key, value)
             {
-                if(Concepto == Detalle[key].concepto)
+                if(Concepto == Detalle[key].concepto && Detalle[key].tipo == "N")
                 {
                     total = parseInt(total) + parseInt(Detalle[key].numero);
                 }
@@ -412,9 +429,9 @@
 
         function CargarUnitario(Desglose)
         {
-            // Ini Ajax
-            var url = "{{url('/vales/unitarios/iddesglose')}}";
+            var url = "{{url('/pemexvales/unitarios/iddesglose')}}";
             url = url.replace("iddesglose", Desglose);
+            // Ini Ajax
             $("#divloading").addClass("d-flex").removeClass("d-none");
             $.ajax({type:"get",
                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
@@ -545,8 +562,6 @@
             }
         });
 
-        var Detalle = [];
-        
         function FolioGuardar()
         {
             var valida = true;
@@ -594,7 +609,7 @@
             
             if(valida == true)
             {
-                Detalle.push({factura:vfactura, facturafolio:vfacturafolio, concepto:vconcepto, conceptotexto:vconceptotexto, folioini:vfolioini, foliofin:vfoliofin, numero:vfolionumero, unitario:parseFloat(vfoliounitario).toFixed(2), monto:parseFloat(vfoliomonto).toFixed(2)});    
+                Detalle.push({factura:vfactura, facturafolio:vfacturafolio, concepto:vconcepto, conceptotexto:vconceptotexto, folioini:vfolioini, foliofin:vfoliofin, numero:vfolionumero, unitario:parseFloat(vfoliounitario).toFixed(2), monto:parseFloat(vfoliomonto).toFixed(2), tipo:"N"});    
                 $("#vdetalle").val("");
                 $("#vdetalle").val(JSON.stringify(Detalle));
                 MostrarDesgloseTabla();
@@ -642,11 +657,11 @@
         function MostrarDesgloseTabla()
         {         
             $("#DesgloseTabla").empty();
-            $("#DesgloseTabla").append("<thead><tr><th class='col-2'>Factura</th><th class='col-3'>Concepto</th><th class='col-2'>Unidades</th><th class='col-2'>Precio</th><th class='col-2'>Total</th><th class='col-1'>Eliminar</th></tr></thead>"); 
+            $("#DesgloseTabla").append("<thead><tr><th class='col-3'>Donación</th><th class='col-3'>Concepto</th><th class='col-1'>Unidades</th><th class='col-2'>Precio</th><th class='col-2'>Total</th><th class='col-1'>Eliminar</th></tr></thead>"); 
             $("#DesgloseTabla").append("<tbody>");
             $.each(Detalle, function(key, value)
             {
-                $("#DesgloseTabla").append("<tr><td class='align-middle'>"+Detalle[key].facturafolio+"</td><td class='align-middle'>"+Detalle[key].conceptotexto+"</td><td class='align-middle'>"+Detalle[key].numero+"</td><td class='align-middle'>"+formatCurrency(Detalle[key].unitario)+"</td><td class='align-middle'>"+formatCurrency(Detalle[key].monto)+"</td><td><a class='btn btn-outline-danger btn-block' href='javascript:DesgloseEliminar("+key+");'><i class='fas fa-minus'></i></a></td></tr>");
+                $("#DesgloseTabla").append("<tr><td class='align-middle'>"+Detalle[key].facturafolio+"</td><td class='align-middle'>"+Detalle[key].conceptotexto+"</td><td class='align-middle text-center'>"+Detalle[key].numero+"</td><td class='align-middle'>"+formatCurrency(Detalle[key].unitario)+"</td><td class='align-middle'>"+formatCurrency(Detalle[key].monto)+"</td><td><a class='btn btn-outline-danger btn-block' href='javascript:DesgloseEliminar("+key+");'><i class='fas fa-minus'></i></a></td></tr>");
             });
             $("#DesgloseTabla").append("</tbody>");
         }
@@ -668,9 +683,9 @@
             $("#vdetalle").val(JSON.stringify(Detalle));
             MostrarMontoTotal();
             MostrarDesgloseTabla();
-            Limpiar();
+            Limpiar();   
         }
-
+        
         // Example starter JavaScript for disabling form submissions if there are invalid fields
         (function() {
           'use strict';

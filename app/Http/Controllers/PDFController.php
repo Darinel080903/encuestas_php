@@ -25,6 +25,8 @@ use App\Models\Vpase;
 use App\Models\Detalle;
 use App\Models\Vhistorico;
 use App\Models\Historico;
+use App\Models\Vpemexvale;
+use App\Models\Vpemexfolio;
 
 class PDFController extends Controller
 {
@@ -159,5 +161,23 @@ class PDFController extends Controller
         $responsable = Vfuncionario::where([['responsable', 1], ['fkarea', 2], ['activo', 1]])->orderBY('idfuncionario', 'desc')->limit(1)->get();
         
         return \PDF::loadView('pdf.imprimirdevolucion', compact('fecha', 'funcionario', 'devoluciones', 'responsable'))->stream('archivo.pdf');
+    }
+
+    public function pdfpemexvale(Request $request, $id)
+    {  
+        $vales = Vpemexvale::findOrFail($id);
+
+        $dias = ['0' => 'Domingo', '1' => 'Lunes', '2' => 'Martes', '3' => 'Miércoles', '4' => 'Jueves', '5' => 'Viernes', '6' => 'Sábado'];
+        $diaespañol = Arr::get($dias, date('w', strtotime($vales->fecha)));
+        $meses = ['1' => 'Enero', '2' => 'Febrero', '3' => 'Marzo', '4' => 'Abril', '5' => 'Mayo', '6' => 'Junio', '7' => 'Julio', '8' => 'Agosto', '9' => 'Septiembre', '10' => 'Octubre', '11' => 'Noviembre', '12' => 'Diciembre'];
+        $mesespañol = Arr::get($meses, date('n', strtotime($vales->fecha)));
+        $fecha = $diaespañol.' '.date('d', strtotime($vales->fecha)).' de '.$mesespañol.' de '.date('Y', strtotime($vales->fecha));
+            
+        $folios = Vpemexfolio::where('fkvale', $id)->orderBy('idfolio', 'asc')->get();
+
+        $autoriza = Vfuncionario::where([['autoriza', 1],['activo', 1]])->orderBy('idfuncionario', 'desc')->first();
+        $entrega = Vfuncionario::where([['entrega', 1],['activo', 1]])->orderBy('idfuncionario', 'desc')->first();
+        
+        return \PDF::loadView('pdf.pemexvale', compact('fecha', 'vales', 'folios', 'autoriza', 'entrega'))->stream('archivo.pdf');
     }
 }

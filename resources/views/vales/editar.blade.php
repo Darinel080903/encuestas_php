@@ -215,31 +215,40 @@
 
         $(function(){
             $("#auto").change(function(){
-                // Ini Ajax
-                var url = "{{url('/vales/autos/idauto')}}";
-                url = url.replace("idauto", event.target.value);
-                $("#divloading").addClass("d-flex").removeClass("d-none");
-                $.ajax({type:"get",
-                    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-                    url:url,
-                    dataType: "json",
-                    success: function(response, textStatus, xhr)
-                    {
-                        $("#funcionario").empty();
-                        $("#funcionario").append("<option value=''>Funcionario</option>");
-                        for(let i = 0; i< response.length; i++)
+                var Auto = event.target.value;
+                if(Auto)
+                {
+                    var url = "{{url('/vales/autos/idauto')}}";
+                    url = url.replace("idauto", Auto);
+                    // Ini Ajax
+                    $("#divloading").addClass("d-flex").removeClass("d-none");
+                    $.ajax({type:"get",
+                        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                        url:url,
+                        dataType: "json",
+                        success: function(response, textStatus, xhr)
                         {
-                            $("#funcionario").append("<option value='"+response[i].idfuncionario+"'>"+response[i].nombre+" "+response[i].paterno+" "+response[i].materno+"</option>"); 
+                            $("#funcionario").empty();
+                            $("#funcionario").append("<option value=''>Funcionario</option>");
+                            for(let i = 0; i< response.length; i++)
+                            {
+                                $("#funcionario").append("<option value='"+response[i].idfuncionario+"'>"+response[i].nombre+" "+response[i].paterno+" "+response[i].materno+"</option>"); 
+                            }
+                            $("#divloading").addClass("d-none").removeClass("d-flex");
+                        },
+                        error: function(xhr, textStatus, errorThrown)
+                        {
+                            alert("¡Error al cargar el funcionario!");
+                            $("#divloading").addClass("d-none").removeClass("d-flex");
                         }
-                        $("#divloading").addClass("d-none").removeClass("d-flex");
-                    },
-                    error: function(xhr, textStatus, errorThrown)
-                    {
-                        alert("¡Error al cargar el funcionario!");
-                        $("#divloading").addClass("d-none").removeClass("d-flex");
-                    }
-                });
-                // Fin Ajax 
+                    });
+                    // Fin Ajax
+                }
+                else
+                {
+                    $("#funcionario").empty();
+                    $("#funcionario").append("<option value=''>Funcionario</option>");
+                } 
             });
         });
 
