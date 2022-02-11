@@ -17,20 +17,35 @@
                             <div class="input-group mr-2 mb-2">
                                 <select class="form-control" id="vactivo" name="vactivo">
                                     @if($vactivo == "")
-                                    <option value="" selected>Todos</option>
+                                    <option value="" selected>Estatus</option>
                                     <option value="1">Activo</option>
                                     <option value="0">Inactivo</option>
                                     @elseif($vactivo == 1)
-                                    <option value="">Todos</option>
+                                    <option value="">Estatus</option>
                                     <option value="1" selected>Activo</option>
                                     <option value="0">Inactivo</option>
                                     @elseif($vactivo == 0)
-                                    <option value="">Todos</option>
+                                    <option value="">Estatus</option>
                                     <option value="1">Activo</option>
                                     <option value="0" selected>Inactivo</option>
                                     @endif
                                 </select>
                             </div>
+
+                             {{-- Se agrega selector de busqueda por Oficial o Comodato --}}
+                            <div class="input-group mr-2 mb-2">
+                                <select class="form-control" id="vorigen" name="vorigen">
+                                    <option value="">Origen</option>
+                                    @foreach ($origenes as $item)
+                                        @if ($vorigen == $item->idorigen)
+                                            <option value="{{$item->idorigen}}" selected>{{$item->origen}}</option>
+                                        @else
+                                            <option value="{{$item->idorigen}}">{{$item->origen}}</option>
+                                        @endif
+                                    @endforeach  
+                                </select>
+                            </div>
+
                             <div class="input-group mr-2 mb-2">
                                 <input type="text" class="form-control" id="vbusqueda" name="vbusqueda" placeholder="Búsqueda" aria-label="Búsqueda" aria-describedby="button-addon2" value="{{$vbusqueda}}">
                                 <div class="input-group-append">
@@ -49,9 +64,10 @@
                                         <th class="text-center" scope="col" width="10%">Fecha</th>
                                         <th class="text-center" scope="col">No. económico</th>
                                         <th class="text-center" scope="col">Auto</th>
+                                        <th class="text-center" scope="col">Origen</th>
                                         <th class="text-center" scope="col" width="44%" colspan="4">
                                             @can('create', \App\Models\Vauto::class)
-                                                <a class="btn btn-outline-danger" href="{{url('/autos/create?page='.$page.'&vfecha='.$vfecha.'&vactivo='.$vactivo.'&vbusqueda='.$vbusqueda)}}"><i class="fas fa-save"></i> Nuevo</a>
+                                                <a class="btn btn-outline-danger" href="{{url('/autos/create?page='.$page.'&vfecha='.$vfecha.'&vactivo='.$vactivo.'&vorigen='.$vorigen.'&vbusqueda='.$vbusqueda)}}"><i class="fas fa-save"></i> Nuevo</a>
                                             @endcan
                                         </th>
                                     </tr>
@@ -62,14 +78,15 @@
                                         <td class="text-center align-middle" scope="row">{{date('d/m/Y', strtotime($item->fecha))}}</td>
                                         <td class="text-justify align-middle">{{$item->numero}}</td>
                                         <td class="text-justify align-middle">{{$item->fabrica.' - '.$item->tipo.' - '.$item->modelo}}</td>
+                                        <td class="text-justify align-middle">{{$item->origen}}</td>
                                         <td class="text-center" width="11%">
                                             @can('update', $item)
-                                                <a class="btn btn-outline-danger" href="{{url('/autos/'.$item->idauto.'/edit?page='.$page.'&vfecha='.$vfecha.'&vactivo='.$vactivo.'&vbusqueda='.$vbusqueda)}}"><i class="fas fa-pen"></i> Editar</a>
+                                                <a class="btn btn-outline-danger" href="{{url('/autos/'.$item->idauto.'/edit?page='.$page.'&vfecha='.$vfecha.'&vactivo='.$vactivo.'&vorigen='.$vorigen.'&vbusqueda='.$vbusqueda)}}"><i class="fas fa-pen"></i> Editar</a>
                                             @endcan
                                         </td>
                                         <td class="text-center" width="11%">
                                             @can('update', $item)
-                                                <a class="btn btn-outline-danger" href="{{url('/autosimgs/'.$item->idauto.'?page='.$page.'&vfecha='.$vfecha.'&vactivo='.$vactivo.'&vbusqueda='.$vbusqueda)}}"><i class="fas fa-images"></i> Galeria</a>
+                                                <a class="btn btn-outline-danger" href="{{url('/autosimgs/'.$item->idauto.'?page='.$page.'&vfecha='.$vfecha.'&vactivo='.$vactivo.'&vorigen='.$vorigen.'&vbusqueda='.$vbusqueda)}}"><i class="fas fa-images"></i> Galeria</a>
                                             @endcan
                                         </td>
                                         <td class="text-center" width="11%">
@@ -118,6 +135,12 @@
             {
                 $("#frmbusqueda").submit();
             });
+
+            $("#vorigen").change(function()
+            {
+                $("#frmbusqueda").submit();
+            });
+            
         });
         
         $("#toggle-demo").bootstrapToggle();

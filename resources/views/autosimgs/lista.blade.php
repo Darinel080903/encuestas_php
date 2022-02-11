@@ -41,7 +41,7 @@
                                                 <div class="form-group col-md-12">
                                                     <input type="hidden" id="fkauto" name="fkauto" value="{{ $id }}">
                                                     <button type="submit" class="btn btn-outline-danger" data-toggle="tooltip" data-placement="left" title="Guardar"><i class="fas fa-save"></i> Guardar</button>
-                                                    <a class="btn btn-outline-danger" data-toggle="tooltip" data-placement="left" title="Regresar" href="{{url('/autos?page='.$page.'&vfecha='.$vfecha.'&vactivo='.$vactivo.'&vbusqueda='.$vbusqueda)}}"><i class="fas fa-sign-out-alt fa-rotate-180"></i> Regresar</a>
+                                                    <a class="btn btn-outline-danger" data-toggle="tooltip" data-placement="left" title="Regresar" href="{{url('/autos?page='.$page.'&vfecha='.$vfecha.'&vactivo='.$vactivo.'&vorigen='.$vorigen.'&vbusqueda='.$vbusqueda)}}"><i class="fas fa-sign-out-alt fa-rotate-180"></i> Regresar</a>
                                                 </div>
                                             </div>
                                         </form>

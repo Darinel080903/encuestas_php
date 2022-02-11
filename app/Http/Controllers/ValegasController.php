@@ -68,7 +68,7 @@ class ValegasController extends Controller
         $vbusqueda = $request->vbusqueda;
 
         $usuario = auth()->user()->id;
-        $autos = Auto::whereNotNull('fkfuncionario')->where([['fkusuario', $usuario], ['activo', 1]])->get();
+        $autos = Auto::whereNotNull('fkfuncionario')->where([['fkusuario', $usuario], ['fkorigen', 1], ['activo', 1]])->get();
         $facturas = Factura::where([['fkusuario', $usuario], ['activo', 1]])->get(); 
 
         return view('vales.crear', compact('page', 'vfecha', 'vbusqueda', 'autos', 'facturas'));
@@ -195,7 +195,7 @@ class ValegasController extends Controller
         {
             $datos = Vale::where('fkusuario', $usuario)->findOrFail($id);
         }
-        $autos = Auto::whereNotNull('fkfuncionario')->where([['fkusuario', $usuario], ['activo', 1]])->get();
+        $autos = Auto::whereNotNull('fkfuncionario')->where([['fkusuario', $usuario], ['fkorigen', 1], ['activo', 1]])->get();
         $funcionarios = Funcionario::where('idfuncionario', $datos->fkfuncionario)->get();
         $facturas = Factura::where([['fkusuario', $usuario], ['activo', 1]])->get(); 
         $folios = Vfolio::where('fkvale', $id)->orderby('idfolio', 'asc')->get();

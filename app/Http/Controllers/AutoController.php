@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\File;
 use App\Models\User;
 use App\Models\Auto;
+use App\Models\Origen;
 use App\Models\Vauto;
 use App\Models\Fabrica;
 use App\Models\Tipo;
@@ -35,22 +36,24 @@ class AutoController extends Controller
 
         $page = $request->page;
         $vfecha = $request->vfecha;
-        $vactivo = $request->vactivo;
+        $vactivo = $request->vactivo; 
+        $vorigen = $request->vorigen;       
         $vbusqueda = $request->vbusqueda;
 
+        $origenes = Origen::all();
         $usuario = auth()->user()->id;
         $usuariorole = User::findOrFail($usuario);
 
         if($usuariorole->hasRole('administrador'))
         {
-            $autos = Vauto::fecha($vfecha)->activo($vactivo)->busqueda($vbusqueda)->orderByDesc('fecha')->orderByDesc('idauto')->paginate(20);
+            $autos = Vauto::fecha($vfecha)->activo($vactivo)->origen($vorigen)->busqueda($vbusqueda)->orderByDesc('fecha')->orderByDesc('idauto')->paginate(20);
         }
         else
         {
-            $autos = Vauto::usuario($usuario)->fecha($vfecha)->activo($vactivo)->busqueda($vbusqueda)->orderByDesc('fecha')->orderByDesc('idauto')->paginate(20);
+            $autos = Vauto::usuario($usuario)->fecha($vfecha)->activo($vactivo)->origen($vorigen)->busqueda($vbusqueda)->orderByDesc('fecha')->orderByDesc('idauto')->paginate(20);
         }
 
-        return view('autos.lista', compact('page', 'vfecha', 'vactivo', 'vbusqueda', 'autos'));    
+        return view('autos.lista', compact('page', 'vfecha', 'vactivo', 'vorigen', 'vbusqueda', 'origenes', 'autos'));    
     }
 
     /**
@@ -65,14 +68,16 @@ class AutoController extends Controller
         $page = $request->page;
         $vfecha = $request->vfecha;
         $vactivo = $request->vactivo;
+        $vorigen = $request->vorigen;
         $vbusqueda = $request->vbusqueda;
 
         $fabricas = Fabrica::all();
         $transmisiones = Transmision::all();
+        $origenes = Origen::all();
         $combustibles = Combustible::all();
         $funcionarios = Funcionario::where('activo', 1)->orderby('nombre', 'asc')->orderby('paterno', 'asc')->orderby('materno', 'asc')->get();
 
-        return view('autos.crear', compact('page', 'vfecha', 'vactivo', 'vbusqueda', 'fabricas', 'transmisiones', 'combustibles', 'funcionarios'));
+        return view('autos.crear', compact('page', 'vfecha', 'vactivo', 'vorigen', 'vbusqueda', 'fabricas', 'origenes', 'transmisiones', 'combustibles', 'funcionarios'));
     }
 
     /**
@@ -85,17 +90,34 @@ class AutoController extends Controller
     {
         $this->authorize('create', Vauto::class);
 
-        $request->validate([
-            'fecha' => 'required',
-            'numero' => 'required',
-            'fabrica' => 'required',
-            'tipo' => 'required',
-            'modelo' => 'required'
-        ]);
+        if($request->origen == "1")
+        {
+            $request->validate([
+                'fecha' => 'required',
+                'origen' => 'required',
+                'numero' => 'required',
+                'fabrica' => 'required',
+                'tipo' => 'required',
+                'modelo' => 'required',
+                'placa' => 'required'
+            ]);
+        }
+        else
+        {
+            $request->validate([
+                'fecha' => 'required',
+                'origen' => 'required',                
+                'fabrica' => 'required',
+                'tipo' => 'required',
+                'modelo' => 'required',
+                'placa' => 'required'
+            ]);
+        }       
 
         $nuevoauto = new Auto();
         $fechaformat = date('Y-m-d', strtotime(str_replace('/', '-', $request->fecha)));
         $nuevoauto->fecha = $fechaformat;
+        $nuevoauto->fkorigen = $request->origen;
         $nuevoauto->numero = $request->numero;
         $nuevoauto->fkfabrica = $request->fabrica;
         $nuevoauto->fktipo = $request->tipo;
@@ -120,6 +142,7 @@ class AutoController extends Controller
             $nuevoauto->activo = 0;
         }
         $nuevoauto->save();
+        
 
         $bitacora = new Bitacora();
         $bitacora->fkusuario = auth()->user()->id;
@@ -129,7 +152,7 @@ class AutoController extends Controller
         $bitacora->pc = gethostname();
         $bitacora->save();
 
-        return redirect('/autos?page='.$request->page.'&vfecha='.$request->vfecha.'&vactivo='.$request->vactivo.'&vbusqueda='.$request->vbusqueda)->with('mensaje','¡Auto agregado correctamente!');
+        return redirect('/autos?page='.$request->page.'&vfecha='.$request->vfecha.'&vactivo='.$request->vactivo.'&vorigen='.$request->vorigen.'&vbusqueda='.$request->vbusqueda)->with('mensaje','¡Auto agregado correctamente!');
     }
 
     /**
@@ -157,6 +180,7 @@ class AutoController extends Controller
         $page = $request->page;
         $vfecha = $request->vfecha;
         $vactivo = $request->vactivo;
+        $vorigen = $request->vorigen;
         $vbusqueda = $request->vbusqueda;
 
         $usuario = auth()->user()->id;
@@ -174,10 +198,11 @@ class AutoController extends Controller
         $fabricas = Fabrica::all();
         $tipos = Tipo::where('fkfabrica', $autos->fkfabrica)->get();
         $transmisiones = Transmision::all();
+        $origenes = Origen::all();
         $combustibles = Combustible::all();
         $funcionarios = Funcionario::where('activo', 1)->orderby('nombre', 'asc')->orderby('paterno', 'asc')->orderby('materno', 'asc')->get();
 
-        return view('autos.editar',compact('page', 'vfecha', 'vactivo', 'vbusqueda', 'fabricas', 'tipos', 'transmisiones', 'combustibles', 'funcionarios', 'autos'));
+        return view('autos.editar',compact('page', 'vfecha', 'vactivo', 'vorigen', 'vbusqueda', 'fabricas', 'origenes', 'tipos', 'transmisiones', 'combustibles', 'funcionarios', 'autos'));
     }
 
     /**
@@ -192,17 +217,34 @@ class AutoController extends Controller
         $modelo = Vauto::findOrFail($id);
         $this->authorize('update', $modelo);
         
-        $request->validate([
-            'fecha' => 'required',
-            'numero' => 'required',
-            'fabrica' => 'required',
-            'tipo' => 'required',
-            'modelo' => 'required'
-        ]);
+        if($request->origen == "1")
+        {
+            $request->validate([
+                'fecha' => 'required',
+                'origen' => 'required',
+                'numero' => 'required',
+                'fabrica' => 'required',
+                'tipo' => 'required',
+                'modelo' => 'required',
+                'placa' => 'required'
+            ]);
+        }
+        else
+        {
+            $request->validate([
+                'fecha' => 'required',                
+                'origen' => 'required',
+                'fabrica' => 'required',
+                'tipo' => 'required',
+                'modelo' => 'required',
+                'placa' => 'required'
+            ]);
+        }       
 
         $actualizaauto = Auto::findOrFail($id);
         $fechaformat = date('Y-m-d', strtotime(str_replace('/', '-', $request->fecha)));
         $actualizaauto->fecha = $fechaformat;
+        $actualizaauto->fkorigen = $request->origen;
         $actualizaauto->numero = $request->numero;
         $actualizaauto->fkfabrica = $request->fabrica;
         $actualizaauto->fktipo = $request->tipo;
@@ -235,7 +277,7 @@ class AutoController extends Controller
         $bitacora->pc = gethostname();
         $bitacora->save();
 
-        return redirect('/autos?page='.$request->page.'&vfecha='.$request->vfecha.'&vactivo='.$request->vactivo.'&vbusqueda='.$request->vbusqueda)->with('mensaje','¡Auto editado correctamente!');
+        return redirect('/autos?page='.$request->page.'&vfecha='.$request->vfecha.'&vactivo='.$request->vactivo.'&vorigen='.$request->vorigen.'&vbusqueda='.$request->vbusqueda)->with('mensaje','¡Auto editado correctamente!');
     }
 
     public function update2(Request $request, $id)

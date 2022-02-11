@@ -20,8 +20,24 @@
                                     ¡La <strong>fecha</strong> es un campo requerido!
                                 </div>
                                 <div class="form-group col-md-3">
+                                    <label for="origen">Origen:</label>
+                                    <select class="form-control @error('origen') is-invalid @enderror form-control-chosen" id="origen" name="origen" required>
+                                        <option value="">Origen</option>
+                                        @foreach ($origenes as $item)
+                                            @if (old('origen') == $item->idorigen)
+                                                <option value="{{$item->idorigen}}" selected>{{$item->origen}}</option>
+                                            @else
+                                                <option value="{{$item->idorigen}}">{{$item->origen}}</option>
+                                            @endif
+                                        @endforeach  
+                                    </select>
+                                    <div class="invalid-feedback">
+                                        ¡El <strong>origen</strong> es un campo requerido!
+                                    </div>
+                                </div>                                
+                                <div class="form-group col-md-3">
                                     <label for="numero">Número económico:</label>
-                                    <input type="text" class="form-control @error('numero') is-invalid @enderror" id="numero" name="numero" placeholder="Número económico" maxlength="11" value="{{old('numero')}}" required/>
+                                    <input type="text" class="form-control @error('numero') is-invalid @enderror" id="numero" name="numero" placeholder="Número económico" maxlength="11" value="{{old('numero')}}" required disabled/>
                                     <div class="invalid-feedback">
                                         ¡El <strong>número </strong> es un campo requerido!
                                     </div>  
@@ -62,8 +78,12 @@
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label for="placa">Número de placas:</label>
-                                    <input type="text" class="form-control" id="placa" name="placa" placeholder="Número de placas" maxlength="10" value="{{old('placa')}}"/>
+                                    <input type="text" class="form-control @error('modelo') is-invalid @enderror" id="placa" name="placa" placeholder="Número de placas" maxlength="10" value="{{old('placa')}}" required/>
+                                    <div class="invalid-feedback">
+                                        ¡El <strong>Numero de placa</strong> es un campo requerido!
+                                    </div> 
                                 </div>
+                                 
                             </div>
                             <div class="form-row">
                                 <div class="form-group col-md-3">
@@ -130,9 +150,10 @@
                             <input type="hidden" name="page" value="{{$page ?? ''}}">
                             <input type="hidden" name="vfecha" value="{{$vfecha ?? ''}}">
                             <input type="hidden" name="vactivo" value="{{$vactivo ?? ''}}">
+                            <input type="hidden" name="vorigen" value="{{$vorigen ?? ''}}">
                             <input type="hidden" name="vbusqueda" value="{{$vbusqueda ?? ''}}">
                             <button type="submit" class="btn btn-outline-danger"><i class="fas fa-save"></i> Guardar</button>
-                            <a class="btn btn-outline-danger" href="{{url('/autos?page='.$page.'&vfecha='.$vfecha.'&vactivo='.$vactivo.'&vbusqueda='.$vbusqueda)}}"><i class="fas fa-sign-out-alt fa-rotate-180"></i> Regresar</a>
+                            <a class="btn btn-outline-danger" href="{{url('/autos?page='.$page.'&vfecha='.$vfecha.'&vactivo='.$vactivo.'&vorigen='.$vorigen.'&vbusqueda='.$vbusqueda)}}"><i class="fas fa-sign-out-alt fa-rotate-180"></i> Regresar</a>
                             <div class="d-none justify-content-center" id="divloading">
                                 <div class="spinner-grow divloading" role="status">
                                     <span class="sr-only">Loading...</span>
@@ -201,6 +222,25 @@
             $("#modelo").validCampoFranz("0123456789");	
     	});
 
+        $("#origen").change(function(){
+            if($("#origen").val() != "")
+            {
+                if($("#origen_chosen").hasClass("is-invalid") === true)
+                {
+                    $("#origen_chosen").removeClass("is-invalid");
+                    $("#origen_chosen").addClass("is-valid");
+                }
+            }
+            else
+            {
+                if($("#origen_chosen").hasClass("is-valid") === true)
+                {
+                    $("#origen_chosen").removeClass("is-valid");
+                    $("#origen_chosen").addClass("is-invalid");
+                }
+            }
+        });
+
         $("#fabrica").change(function(){
             if($("#fabrica").val() != "")
             {
@@ -239,6 +279,24 @@
             }
         });
 
+        $(function(){
+            $("#origen").change( function(){
+                if ($(this).val() === "1")
+                {
+                    $("#numero").val("");  
+                    $("#numero").prop("disabled", false); 
+                    $("#numero").prop("required", true);                   
+                } 
+                else
+                {
+                    $("#numero").val("");  
+                    $("#numero").prop("disabled", true);
+                    $("#numero").prop("required", false);
+                    //$("#numero").removeAttr("required");
+                }
+            });
+        });
+
         // Example starter JavaScript for disabling form submissions if there are invalid fields
         (function() {
           'use strict';
@@ -251,6 +309,15 @@
                 if (form.checkValidity() === false) {
                     event.preventDefault();
                     event.stopPropagation();
+
+                    if($("#origen").val() == "")
+                    {
+                        $('#origen_chosen').addClass('is-invalid');
+                    }
+                    else
+                    {
+                        $('#origen_chosen').addClass('is-valid');
+                    }
                     
                     if($("#fabrica").val() == "")
                     {
@@ -275,6 +342,11 @@
                     $('#funcionario_chosen').addClass('is-valid');
                 }
                 form.classList.add('was-validated');
+                
+                if($("#origen").val() != "")
+                {
+                    $('#origen_chosen').addClass('is-valid');
+                }
                 
                 if($("#fabrica").val() != "")
                 {

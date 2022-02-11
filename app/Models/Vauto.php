@@ -38,6 +38,14 @@ class Vauto extends Model
             return $query->where('activo', $activo);
         }
     }
+
+    public function scopeOrigen($query, $origen)
+    {
+        if($origen != "")
+        {
+            return $query->where('fkorigen', $origen);
+        }
+    }
     
     public function scopeBusqueda($query, $busqueda)
     {

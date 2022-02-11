@@ -90,11 +90,12 @@ class AutoimgController extends Controller
         $page = $request->page;
         $vfecha = $request->vfecha;
         $vactivo = $request->vactivo;
+        $vorigen = $request->vorigen;
         $vbusqueda = $request->vbusqueda;
 
         $imgs = Autoimg::where('fkauto', $id)->orderBy('idimg', 'asc')->get();
         
-        return view('autosimgs.lista', compact('imgs', 'id', 'page', 'vfecha', 'vactivo', 'vbusqueda'));   
+        return view('autosimgs.lista', compact('imgs', 'id', 'page', 'vfecha', 'vactivo', 'vorigen', 'vbusqueda'));   
     }
 
     /**
