@@ -111,9 +111,10 @@
 
                 permissions_checkbox_lista.empty();
                 user_permissions_box.empty();
+                var url = "{{url('/usuarios/create')}}";
                 
                 $.ajax({
-                    url: "/usuarios/create",
+                    url: url,
                     method: "get",
                     dataType: "json",
                     data:{"role_id": role_id, "role_slug":role_slug}
