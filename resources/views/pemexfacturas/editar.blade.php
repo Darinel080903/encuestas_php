@@ -54,19 +54,19 @@
                                             <input type="text" class="form-control" id="desgloseconcepto" name="desgloseconcepto" placeholder="Concepto" maxlength="250"/>
                                         </div>
                                         <div class="form-group col-md-2 mb-0">
-                                            <label for="desgloseunitario">Precio:</label>
+                                            <label for="desgloseunitario">Lt vale:</label>
                                             <div class="input-group">
                                                 <div class="input-group-prepend">
-                                                    <span class="input-group-text" id="validatedInputGroupPrepend">$</span>
+                                                    <span class="input-group-text" id="validatedInputGroupPrepend"><i class="fas fa-gas-pump"></i></span>
                                                 </div>
                                                 <input type="text" class="form-control" id="desgloseunitario" name="desgloseunitario" placeholder="Unitario" maxlength="11"/>
                                             </div>
                                         </div>
                                         <div class="form-group col-md-2 mb-0">
-                                            <label for="desglosemonto">Total:</label>
+                                            <label for="desglosemonto">Total Lt:</label>
                                             <div class="input-group">
                                                 <div class="input-group-prepend">
-                                                    <span class="input-group-text" id="validatedInputGroupPrepend">$</span>
+                                                    <span class="input-group-text" id="validatedInputGroupPrepend"><i class="fas fa-gas-pump"></i></span>
                                                 </div>
                                                 <input type="text" class="form-control" id="desglosemonto" name="desglosemonto" placeholder="Total" maxlength="11"/>
                                             </div>
@@ -84,7 +84,7 @@
                                                 <tr>
                                                     <th class="col-2">Unidades</th>
                                                     <th class="col-5">Concepto</th>
-                                                    <th class="col-2">Precio</th>
+                                                    <th class="col-2">Unitario</th>
                                                     <th class="col-2">Total</th>
                                                     <th class="col-1">Eliminar</th>
                                                 </tr>
@@ -99,12 +99,12 @@
                                     <input type="checkbox" class="form-control" id="activo" name="activo" data-toggle="toggle" data-on="Activo" data-off="Inactivo" data-onstyle="success" data-offstyle="danger" @if($datos->activo == 1) {{'checked'}} @endif>
                                 </div>
                                 <div class="form-group offset-md-7 col-md-2 pl-0 mr-2">
-                                    <label for="monto">Monto:</label>
+                                    <label for="monto">Total Lt:</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text" id="validatedInputGroupPrepend">$</span>
+                                            <span class="input-group-text" id="validatedInputGroupPrepend"><i class="fas fa-gas-pump"></i></span>
                                         </div>
-                                        <input type="text" class="form-control" id="monto" name="monto" placeholder="Monto" maxlength="15" value="{!! number_format((float)($datos->monto), 2) !!}" readonly/>
+                                        <input type="text" class="form-control" id="monto" name="monto" placeholder="Gran Total" maxlength="15" value="{!! number_format((float)($datos->monto)) !!}" readonly/>
                                     </div>
                                 </div>
                             </div>
@@ -145,8 +145,8 @@
             var total = 0;
             if(num && uni)
             {
-                total = num * parseFloat(uni).toFixed(2);
-                $("#desglosemonto").val(parseFloat(total).toFixed(2));
+                total = num * parseFloat(uni);
+                $("#desglosemonto").val(parseFloat(total));
             }
             else
             {
@@ -194,7 +194,7 @@
 
         var data = $("#vdetalle").val();
         $.each(JSON.parse(data), function(i, item){
-            Detalle.push({numero:item.numero, concepto:item.concepto, unitario:parseFloat(item.unitario).toFixed(2), monto:parseFloat(item.monto).toFixed(2)});    
+            Detalle.push({numero:item.numero, concepto:item.concepto, unitario:parseFloat(item.unitario), monto:parseFloat(item.monto)});    
         });
         MostrarDesgloseTabla();
         
@@ -229,7 +229,7 @@
             
             if(valida == true)
             {
-                Detalle.push({numero:vnumero, concepto:vconcepto, unitario:parseFloat(vunitario).toFixed(2), monto:parseFloat(vmonto).toFixed(2)});    
+                Detalle.push({numero:vnumero, concepto:vconcepto, unitario:parseFloat(vunitario), monto:parseFloat(vmonto)});    
                 $("#vdetalle").val("");
                 $("#vdetalle").val(JSON.stringify(Detalle));
                 MostrarMontoTotal();
@@ -275,17 +275,17 @@
             {
                 total = parseFloat(total) + parseFloat(Detalle[key].monto);
             });
-            $("#monto").val(formatCurrencyclean(total.toFixed(2)));
+            $("#monto").val(numberWithCommas(total));
         }  
 
         function MostrarDesgloseTabla()
         {         
             $("#DesgloseTabla").empty();
-            $("#DesgloseTabla").append("<thead><tr><th class='col-2'>Unidades</th><th class='col-5'>Concepto</th><th class='col-2'>Precio</th><th class='col-2'>Total</th><th class='col-1'>Eliminar</th></tr></thead>"); 
+            $("#DesgloseTabla").append("<thead><tr><th class='col-2'>Unidades</th><th class='col-5'>Concepto</th><th class='col-2'>Unitario</th><th class='col-2'>Total</th><th class='col-1'>Eliminar</th></tr></thead>"); 
             $("#DesgloseTabla").append("<tbody>");
             $.each(Detalle, function(key, value)
             {
-                $("#DesgloseTabla").append("<tr><td class='align-middle'>"+Detalle[key].numero+"</td><td class='align-middle'>"+Detalle[key].concepto+"</td><td class='align-middle'>"+formatCurrency(Detalle[key].unitario)+"</td><td class='align-middle'>"+formatCurrency(Detalle[key].monto)+"</td><td><a class='btn btn-outline-danger btn-block' href='javascript:DesgloseEliminar("+key+");'><i class='fas fa-minus'></i></a></td></tr>");
+                $("#DesgloseTabla").append("<tr><td class='align-middle'>"+Detalle[key].numero+"</td><td class='align-middle'>"+Detalle[key].concepto+"</td><td class='align-middle'>"+numberWithCommas(Detalle[key].unitario)+"</td><td class='align-middle'>"+numberWithCommas(Detalle[key].monto)+"</td><td><a class='btn btn-outline-danger btn-block' href='javascript:DesgloseEliminar("+key+");'><i class='fas fa-minus'></i></a></td></tr>");
             });
             $("#DesgloseTabla").append("</tbody>");
         }

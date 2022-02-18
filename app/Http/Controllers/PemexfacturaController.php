@@ -287,8 +287,25 @@ class PemexfacturaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        //
+        $modelo = Pemexfactura::findOrFail($id);
+        $this->authorize('delete', $modelo);
+
+        $eliminadesglose = Pemexdesglose::where('fkfactura', $id);
+        $eliminadesglose->delete();
+
+        $elimina = Pemexfactura::findOrFail($id);    
+        $elimina->delete();
+
+        $bitacora = new Bitacora();
+        $bitacora->fkusuario = auth()->user()->id;
+        $bitacora->operacion = 'Factura eliminada con id:'.$id;
+        $bitacora->fecha = date('Y-m-d H:i:s');
+        $bitacora->ip = $request->ip();
+        $bitacora->pc = gethostname();
+        $bitacora->save();
+        
+        return back()->withInput()->with('mensaje', '¡Factura eliminada correctamente!');
     }
 }

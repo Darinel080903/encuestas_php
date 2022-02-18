@@ -68,7 +68,7 @@ class PemexvaleController extends Controller
         $vbusqueda = $request->vbusqueda;
 
         $usuario = auth()->user()->id;
-        $autos = Auto::whereNotNull('fkfuncionario')->where([['fkusuario', $usuario], ['fkorigen', 2], ['activo', 1]])->get();
+        $autos = Auto::whereNotNull('fkfuncionario')->where([['fkusuario', $usuario], ['fkorigen', 2], ['activo', 1]])->orderby('placa', 'asc')->get();
         $facturas = Pemexfactura::where([['fkusuario', $usuario], ['activo', 1]])->get(); 
 
         return view('pemexvales.crear', compact('page', 'vfecha', 'vbusqueda', 'autos', 'facturas'));
@@ -196,7 +196,7 @@ class PemexvaleController extends Controller
         {
             $datos = Pemexvale::where('fkusuario', $usuario)->findOrFail($id);
         }
-        $autos = Auto::whereNotNull('fkfuncionario')->where([['fkusuario', $usuario], ['fkorigen', 2], ['activo', 1]])->get();
+        $autos = Auto::whereNotNull('fkfuncionario')->where([['fkusuario', $usuario], ['fkorigen', 2], ['activo', 1]])->orderby('placa', 'asc')->get();
         $funcionarios = Funcionario::where('idfuncionario', $datos->fkfuncionario)->get();
         $facturas = Pemexfactura::where([['fkusuario', $usuario], ['activo', 1]])->get(); 
         $folios = Vpemexfolio::where('fkvale', $id)->orderby('idfolio', 'asc')->get();

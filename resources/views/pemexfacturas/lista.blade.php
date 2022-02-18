@@ -33,7 +33,7 @@
                                         <th class="text-center" scope="col" width="10%">Fecha</th>
                                         <th class="text-center" scope="col">Número</th>
                                         <th class="text-center" scope="col">Proveedor</th>
-                                        <th class="text-center" scope="col">Monto</th>
+                                        <th class="text-center" scope="col">Litros</th>
                                         <th class="text-center" scope="col" width="33%" colspan="3">
                                             @can('create', \App\Models\Pemexfactura::class)
                                                 <a class="btn btn-outline-danger" href="{{url('/pemexfacturas/create?page='.$page.'&vfecha='.$vfecha.'&vbusqueda='.$vbusqueda)}}"><i class="fas fa-save"></i> Nuevo</a>
@@ -48,7 +48,7 @@
                                         <td class="text-justify align-middle">{{$item->numero}}</td>
                                         <td class="text-justify align-middle">{{$item->proveedor}}</td>
                                         @if ($item->monto)
-                                            <td class=" text-justify align-middle">${!! number_format((float)($item->monto), 2) !!}</td>
+                                            <td class=" text-justify align-middle">{!! number_format((float)($item->monto)) !!}</td>
                                         @else
                                             <td class="text-justify align-middle">{{'$ 0.00'}}</td>
                                         @endif
@@ -62,7 +62,7 @@
                                                 <form id="frmimgpublicar{{$item->idfactura}}" name="frmimgpublicar{{$item->idfactura}}" method="POST" action="{{url('/pemexfacturas/'.$item->idfactura.'/update2')}}">
                                                     @method('PUT')
                                                     @csrf
-                                                    <input type="checkbox" id="activo" name="activo" onchange="funpublicar('frmimgpublicar{{$item->idfactura}}')"  data-toggle="toggle" data-on="Activo" data-off="Inactivo" data-onstyle="success" data-offstyle="danger" @if($item->activo == 1) {{'checked'}} @endif @if(!Auth::user()->hasRole('administrador')) disabled @endif>
+                                                    <input type="checkbox" id="activo" name="activo" onchange="funpublicar('frmimgpublicar{{$item->idfactura}}')"  data-toggle="toggle" data-on="Activo" data-off="Inactivo" data-onstyle="success" data-offstyle="danger" @if($item->activo == 1) {{'checked'}} @endif>
                                                 </form>
                                             @endcan
                                         </td>

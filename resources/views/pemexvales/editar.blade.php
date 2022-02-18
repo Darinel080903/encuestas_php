@@ -84,7 +84,7 @@
                                             <label for="montofactura">Monto donación:</label>
                                             <div class="input-group">
                                                 <div class="input-group-prepend">
-                                                    <span class="input-group-text" id="validatedInputGroupPrepend">$</span>
+                                                    <span class="input-group-text" id="validatedInputGroupPrepend"><i class="fas fa-gas-pump"></i></span>
                                                 </div>
                                                 <input type="text" class="form-control" id="montofactura" name="montofactura" placeholder="Monto" maxlength="11" readonly/>
                                             </div>
@@ -93,7 +93,7 @@
                                             <label for="saldofactura">Saldo donación:</label>
                                             <div class="input-group">
                                                 <div class="input-group-prepend">
-                                                    <span class="input-group-text" id="validatedInputGroupPrepend">$</span>
+                                                    <span class="input-group-text" id="validatedInputGroupPrepend"><i class="fas fa-gas-pump"></i></span>
                                                 </div>
                                                 <input type="text" class="form-control" id="saldofactura" name="saldofactura" placeholder="Saldo" maxlength="11" readonly/>
                                             </div>
@@ -123,19 +123,19 @@
                                             <input type="text" class="form-control" id="folionumero" name="folionumero" placeholder="No." maxlength="11"/>
                                         </div>
                                         <div class="form-group col-md-2 mb-0">
-                                            <label for="desgloseunitario">Precio:</label>
+                                            <label for="desgloseunitario">Lt vale::</label>
                                             <div class="input-group">
                                                 <div class="input-group-prepend">
-                                                    <span class="input-group-text" id="validatedInputGroupPrepend">$</span>
+                                                    <span class="input-group-text" id="validatedInputGroupPrepend"><i class="fas fa-gas-pump"></i></span>
                                                 </div>
                                                 <input type="text" class="form-control" id="foliounitario" name="foliounitario" placeholder="Unitario" maxlength="11" readonly/>
                                             </div>
                                         </div>
                                         <div class="form-group col-md-2 mb-0">
-                                            <label for="desglosemonto">Total:</label>
+                                            <label for="desglosemonto">Total Lt:</label>
                                             <div class="input-group">
                                                 <div class="input-group-prepend">
-                                                    <span class="input-group-text" id="validatedInputGroupPrepend">$</span>
+                                                    <span class="input-group-text" id="validatedInputGroupPrepend"><i class="fas fa-gas-pump"></i></span>
                                                 </div>
                                                 <input type="text" class="form-control" id="foliomonto" name="foliomonto" placeholder="Total" maxlength="11"/>
                                             </div>
@@ -165,12 +165,12 @@
                             </div>
                             <div class="form-row">
                                 <div class="form-group offset-md-9 col-md-2 pl-0 mr-2">
-                                    <label for="monto">Monto:</label>
+                                    <label for="monto">Total Lt:</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text" id="validatedInputGroupPrepend">$</span>
+                                            <span class="input-group-text" id="validatedInputGroupPrepend"><i class="fas fa-gas-pump"></i></span>
                                         </div>
-                                        <input type="text" class="form-control" id="monto" name="monto" placeholder="Monto" maxlength="15" value="{!! number_format((float)($datos->monto), 2) !!}" readonly/>
+                                        <input type="text" class="form-control" id="monto" name="monto" placeholder="Gran Total" maxlength="15" value="{!! number_format((float)($datos->monto)) !!}" readonly/>
                                     </div>
                                 </div>
                             </div>
@@ -206,7 +206,7 @@
             var d = new Date(newfecha);
             var datestring = ("0" + d.getDate()).slice(-2)  + "/" + ("0"+(d.getMonth()+1)).slice(-2) + "/" + d.getFullYear()
 
-            Detalle.push({factura:item.fkfactura, facturafolio:'Fecha: '+datestring+' - Número: '+item.folio, concepto:item.fkdesglose, conceptotexto:item.concepto, folioini:item.folioini, foliofin:item.foliofin, numero:item.numero, unitario:parseFloat(item.unitario).toFixed(2), monto:parseFloat(item.monto).toFixed(2), tipo:"S"});
+            Detalle.push({factura:item.fkfactura, facturafolio:'Fecha: '+datestring+' - Número: '+item.folio, concepto:item.fkdesglose, conceptotexto:item.concepto, folioini:item.folioini, foliofin:item.foliofin, numero:item.numero, unitario:parseFloat(item.unitario), monto:parseFloat(item.monto), tipo:"S"});
         });
         $("#vdetalle").val("");
         $("#vdetalle").val(JSON.stringify(Detalle));
@@ -322,7 +322,7 @@
                 success: function(response, textStatus, xhr)
                 {
                     $("#montofactura").val("");
-                    $("#montofactura").val(formatCurrencyclean(parseFloat(response.monto).toFixed(2)));
+                    $("#montofactura").val(numberWithCommas(parseFloat(response.monto)));
                     $("#divloading").addClass("d-none").removeClass("d-flex");
                     CargarSaldo(IdFactura);
                 },
@@ -349,10 +349,10 @@
                 {
                     $("#saldofactura").val("");
                     var vmonto = $("#montofactura").val();
-                    vmonto = parseFloat(vmonto.replace(",", "")).toFixed(2);
-                    var vsaldo = parseFloat(response).toFixed(2);
+                    vmonto = parseFloat(vmonto.replace(",", ""));
+                    var vsaldo = parseFloat(response);
                     saldototal = vmonto - vsaldo;
-                    $("#saldofactura").val(formatCurrencyclean(parseFloat(saldototal).toFixed(2)));
+                    $("#saldofactura").val(numberWithCommas(parseFloat(saldototal)));
                     $("#divloading").addClass("d-none").removeClass("d-flex");
                 },
                 error: function(xhr, textStatus, errorThrown)
@@ -440,7 +440,7 @@
                 success: function(response, textStatus, xhr)
                 {
                     $("#foliounitario").val("");
-                    $("#foliounitario").val(parseFloat(response).toFixed(2));
+                    $("#foliounitario").val(parseFloat(response));
                     $("#divloading").addClass("d-none").removeClass("d-flex");
                 },
                 error: function(xhr, textStatus, errorThrown)
@@ -489,8 +489,8 @@
             var total = 0;
             if(num && uni)
             {
-                total = num * parseFloat(uni).toFixed(2);
-                $("#foliomonto").val(parseFloat(total).toFixed(2));
+                total = num * parseFloat(uni);
+                $("#foliomonto").val(parseFloat(total));
             }
             else
             {
@@ -609,7 +609,7 @@
             
             if(valida == true)
             {
-                Detalle.push({factura:vfactura, facturafolio:vfacturafolio, concepto:vconcepto, conceptotexto:vconceptotexto, folioini:vfolioini, foliofin:vfoliofin, numero:vfolionumero, unitario:parseFloat(vfoliounitario).toFixed(2), monto:parseFloat(vfoliomonto).toFixed(2), tipo:"N"});    
+                Detalle.push({factura:vfactura, facturafolio:vfacturafolio, concepto:vconcepto, conceptotexto:vconceptotexto, folioini:vfolioini, foliofin:vfoliofin, numero:vfolionumero, unitario:parseFloat(vfoliounitario), monto:parseFloat(vfoliomonto), tipo:"N"});    
                 $("#vdetalle").val("");
                 $("#vdetalle").val(JSON.stringify(Detalle));
                 MostrarDesgloseTabla();
@@ -657,11 +657,11 @@
         function MostrarDesgloseTabla()
         {         
             $("#DesgloseTabla").empty();
-            $("#DesgloseTabla").append("<thead><tr><th class='col-3'>Donación</th><th class='col-3'>Concepto</th><th class='col-1'>Unidades</th><th class='col-2'>Precio</th><th class='col-2'>Total</th><th class='col-1'>Eliminar</th></tr></thead>"); 
+            $("#DesgloseTabla").append("<thead><tr><th class='col-3'>Donación</th><th class='col-3'>Concepto</th><th class='col-1'>Unidades</th><th class='col-2'>Unitario</th><th class='col-2'>Total</th><th class='col-1'>Eliminar</th></tr></thead>"); 
             $("#DesgloseTabla").append("<tbody>");
             $.each(Detalle, function(key, value)
             {
-                $("#DesgloseTabla").append("<tr><td class='align-middle'>"+Detalle[key].facturafolio+"</td><td class='align-middle'>"+Detalle[key].conceptotexto+"</td><td class='align-middle text-center'>"+Detalle[key].numero+"</td><td class='align-middle'>"+formatCurrency(Detalle[key].unitario)+"</td><td class='align-middle'>"+formatCurrency(Detalle[key].monto)+"</td><td><a class='btn btn-outline-danger btn-block' href='javascript:DesgloseEliminar("+key+");'><i class='fas fa-minus'></i></a></td></tr>");
+                $("#DesgloseTabla").append("<tr><td class='align-middle'>"+Detalle[key].facturafolio+"</td><td class='align-middle'>"+Detalle[key].conceptotexto+"</td><td class='align-middle text-center'>"+Detalle[key].numero+"</td><td class='align-middle'>"+numberWithCommas(Detalle[key].unitario)+"</td><td class='align-middle'>"+numberWithCommas(Detalle[key].monto)+"</td><td><a class='btn btn-outline-danger btn-block' href='javascript:DesgloseEliminar("+key+");'><i class='fas fa-minus'></i></a></td></tr>");
             });
             $("#DesgloseTabla").append("</tbody>");
         }
@@ -673,7 +673,7 @@
             {
                 total = parseFloat(total) + parseFloat(Detalle[key].monto);
             });
-            $("#monto").val(formatCurrencyclean(total.toFixed(2)));
+            $("#monto").val(numberWithCommas(total));
         }
 
         function DesgloseEliminar(i)

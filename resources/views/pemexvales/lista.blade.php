@@ -35,7 +35,7 @@
                                     <tr>
                                     <th class="text-center" width="10%" scope="col">Fecha</th>
                                     <th class="text-center" scope="col">Número de placas</th>
-                                    <th class="text-center" scope="col">Monto</th>
+                                    <th class="text-center" scope="col">Litros</th>
                                     <th class="text-center" width="36%" scope="col" colspan="3">
                                         @can('create', \App\Models\Vpemexvale::class)
                                             <a class="btn btn-outline-danger" href="{{url('/pemexvales/create?page='.$page.'&vfecha='.$vfecha.'&vbusqueda='.$vbusqueda)}}"><i class="fas fa-save"></i> Nuevo</a>
@@ -49,9 +49,9 @@
                                         <th class="align-middle text-center" scope="row">{{date('d/m/Y', strtotime($item->fecha))}}</th>
                                         <td class="align-middle">{{$item->placa}}</td>
                                         @if ($item->monto)
-                                            <td class="align-middle">${!! number_format((float)($item->monto), 2) !!}</td>
+                                            <td class="align-middle">{!! number_format((float)($item->monto)) !!}</td>
                                         @else
-                                            <td class="align-middle">{{'$ 0.00'}}</td>
+                                            <td class="align-middle">{{'0'}}</td>
                                         @endif
                                         <td class="text-center" width="12%">
                                             @can('update', $item)

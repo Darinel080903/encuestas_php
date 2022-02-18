@@ -35,6 +35,7 @@
                                     <tr>
                                     <th class="text-center" width="10%" scope="col">Fecha</th>
                                     <th class="text-center" scope="col">Número económico</th>
+                                    <th class="text-center" scope="col">Facturas</th>
                                     <th class="text-center" scope="col">Monto</th>
                                     <th class="text-center" width="36%" scope="col" colspan="3">
                                         @can('create', \App\Models\Vvale::class)
@@ -48,6 +49,7 @@
                                     <tr>
                                         <th class="align-middle text-center" scope="row">{{date('d/m/Y', strtotime($item->fecha))}}</th>
                                         <td class="align-middle">{{$item->numero}}</td>
+                                        <td class="align-middle">{{$item->facturas}}</td>
                                         @if ($item->monto)
                                             <td class="align-middle">${!! number_format((float)($item->monto), 2) !!}</td>
                                         @else

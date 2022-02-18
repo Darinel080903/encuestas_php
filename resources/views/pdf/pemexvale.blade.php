@@ -109,8 +109,8 @@
                             <th class="text-center" BGCOLOR="gray">Concepto</th>
                             <th class="text-center" BGCOLOR="gray">Folio</th>
                             <th class="text-center" BGCOLOR="gray">Folio</th>
-                            <th class="text-center" BGCOLOR="gray">Precio</th>
-                            <th class="text-center" BGCOLOR="gray">Monto</th>
+                            <th class="text-center" BGCOLOR="gray">Unitario</th>
+                            <th class="text-center" BGCOLOR="gray">Total</th>
                         </tr>
                         @foreach ($folios as $item)
                             <tr>
@@ -118,13 +118,13 @@
                                 <td class="text-center">{{$item->concepto}}</td>
                                 <td class="text-center">{{$item->folioini}}</td>
                                 <td class="text-center">{{$item->foliofin}}</td>
-                                <td class="text-center">$ {!! number_format((float)($item->unitario), 2) !!}</td>
-                                <td class="text-center">$ {!! number_format((float)($item->monto), 2) !!}</td>                 
+                                <td class="text-center">{!! number_format((float)($item->unitario)) !!} Lt.</td>
+                                <td class="text-center">{!! number_format((float)($item->monto)) !!} Lt.</td>                 
                             </tr>
                         @endforeach
                         <tr>
                             <td colspan="5"></td>
-                            <td class="text-center">$ {!! number_format((float)($vales->monto), 2) !!}</td>
+                            <td class="text-center">{!! number_format((float)($vales->monto)) !!} Lt.</td>
                         </tr>
                     </table>
                 </div>
