@@ -168,6 +168,19 @@
                                             <i class="fas fa-car-side icon-color"></i> Autos
                                         </a>
                                     @endcan
+
+                                    <div class="dropdown-divider"></div>
+
+                                    @can('viewAny', \App\Models\Proveedor::class)
+                                        <a class="dropdown-item" href="{{url('/proveedores')}}">
+                                            <i class="fas fa-car-side icon-color"></i> Proveedores
+                                        </a>
+                                    @endcan     
+                                    @can('viewAny', \App\Models\Partida::class)
+                                        <a class="dropdown-item" href="{{url('/partidas')}}">
+                                            <i class="fas fa-car-side icon-color"></i> Partidas
+                                        </a>
+                                    @endcan
                                 </div>
                             </li>
                 

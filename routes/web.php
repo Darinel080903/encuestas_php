@@ -147,3 +147,11 @@ Route::get('/pemexvales/unidades/{iddesglose}', 'App\Http\Controllers\AjaxContro
 Route::get('/pemexvales/unitarios/{iddesglose}', 'App\Http\Controllers\AjaxController@cargaunitariospemex');
 
 Route::get('/imprimir/pemexvale/{id}', 'App\Http\Controllers\PDFController@pdfpemexvale');
+
+Route::resource('/proveedores', 'App\Http\Controllers\ProveedorController');
+
+Route::put('/proveedores/{proveedor}/update2', 'App\Http\Controllers\ProveedorController@update2');
+
+Route::resource('/partidas', 'App\Http\Controllers\PartidaController');
+
+Route::put('/partidas/{partida}/update2', 'App\Http\Controllers\PartidaController@update2');

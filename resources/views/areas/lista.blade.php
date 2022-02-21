@@ -18,6 +18,7 @@
                                 <thead>
                                     <tr>   
                                         <th class="text-center" scope="col">Estructura</th>
+                                        <th class="text-center" scope="col"  width="15%">Clave</th>                                        
                                         <th class="text-center" scope="col" width="33%" colspan="3">
                                             @can('create', \App\Models\Area::class)
                                                 <a class="btn btn-outline-danger" href="{{ url('/areas/create') }}"><i class="fas fa-save"></i> Nuevo</a>
@@ -29,6 +30,7 @@
                                     @foreach($areas as $item)
                                         <tr>
                                             <td class="text-justify align-middle" scope="row">{{$item->area}}</td>
+                                            <td class="text-justify align-middle" scope="row">{{$item->clave}}</td> 
                                             <td class="text-center" width="11%">
                                                 @can('update', $item)
                                                     <a class="btn btn-outline-danger" href="{{url('/areas/'.$item->idarea.'/edit')}}"><i class="fas fa-pen"></i> Editar</a>

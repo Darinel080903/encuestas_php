@@ -4,7 +4,9 @@
         @for ($i = 0; $i < $child->nivel; $i++)
             @php($cadena = $cadena.'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;')
         @endfor
+    
         <td class="text-justify align-middle" scope="row">{!! $cadena.'&nbsp;<i class="far fa-circle fa-xs"></i>&nbsp;'.$child->area !!}</td>
+        <td class="text-justify align-middle" scope="row">{{$child->clave}}</td>
         <td class="text-center" width="11%">
             @can('update', $item)
                 <a class="btn btn-outline-danger" href="{{url('/areas/'.$child->idarea.'/edit')}}"><i class="fas fa-pen"></i> Editar</a>

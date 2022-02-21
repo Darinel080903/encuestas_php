@@ -67,6 +67,7 @@ class AreaController extends Controller
         $nuevaarea = new Area();  
         $nuevaarea->fkarea = $request->fkarea;
         $nuevaarea->area = $request->area;
+        $nuevaarea->clave = $request->clave;
         if(isset($request->activo))
         {
             $nuevaarea->activo = 1;
@@ -125,8 +126,9 @@ class AreaController extends Controller
         $modelo = Area::findOrFail($id);
         $this->authorize('update', $modelo);
 
-        $area = Area::findOrFail($id);
-        $areas = Area::whereNull('fkarea')->get();
+        $area = Area::findOrFail($id);        
+        $areas = Area::whereNull('fkarea')->get();        
+                
         return view('areas.editar',compact('areas', 'area'));
     }
 
@@ -149,6 +151,7 @@ class AreaController extends Controller
         $actualizaarea = Area::findOrFail($id);
         $actualizaarea->fkarea = $request->fkarea;
         $actualizaarea->area = $request->area;
+        $actualizaarea->clave = $request->clave;
         if(isset($request->activo))
         {
             $actualizaarea->activo = 1;

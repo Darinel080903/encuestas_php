@@ -39,6 +39,15 @@
                                 </div>
                             </div>
                             <div class="form-row">
+                                <div class="form-group col-md-3">
+                                    <label for="clave">Clave presupuestal:</label>
+                                    <input type="text" class="form-control @error('clave') is-invalid @enderror" id="clave" name="clave" value="{{old('clave')}}" maxlength="22" required>
+                                    <div class="invalid-feedback">
+                                        ¡La <strong>clave</strong> es un campo requerido!
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
                                 <div class="form-group col-md-12">
                                     <label for="activo">Activo:</label><br>
                                     <input type="checkbox" class="form-control" id="activo" name="activo" data-toggle="toggle" data-on="Activo" data-off="Inactivo" data-onstyle="success" data-offstyle="danger" checked>
