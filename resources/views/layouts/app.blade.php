@@ -181,6 +181,26 @@
                                             <i class="fas fa-car-side icon-color"></i> Partidas
                                         </a>
                                     @endcan
+                                    @can('viewAny', \App\Models\Unidad::class)
+                                        <a class="dropdown-item" href="{{url('/unidades')}}">
+                                            <i class="fas fa-box-open icon-color"></i> Unidades
+                                        </a>
+                                    @endcan           
+                                    @can('viewAny', \App\Models\Inmueble::class)
+                                        <a class="dropdown-item" href="{{url('/inmuebles')}}">
+                                            <i class="fas fa-city icon-color"></i> Inmuebles
+                                        </a>
+                                    @endcan  
+                                    @can('viewAny', \App\Models\Mueble::class)
+                                        <a class="dropdown-item" href="{{url('/muebles')}}">
+                                            <i class="fas fa-chair icon-color"></i> Muebles
+                                        </a>
+                                    @endcan     
+                                    @can('viewAny', \App\Models\Razon::class)
+                                        <a class="dropdown-item" href="{{url('/razones')}}">
+                                            <i class="fas fa-archive icon-color"></i> Razones
+                                        </a>
+                                    @endcan
                                 </div>
                             </li>
                 
@@ -256,6 +276,21 @@
                                         @can('viewAny', \App\Models\Vpemexvale::class)
                                             <a class="dropdown-item" href="{{url('/pemexvales')}}">
                                                 <i class="fas fa-file-alt icon-color"></i> Dotaciones
+                                            </a>
+                                        @endcan
+                                    </div>                                
+                                </li>
+                            @endcan
+
+                            @can('viewAny', \App\Models\Vsolicitud::class)
+                                <li class="nav-item dropdown">
+                                    <a id="navbarDropdown" class="nav-link dropdown-toggle text-white" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                        <i class="fas fa-file-invoice icon-color"></i> Solicitudes<span class="caret"></span>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                        @can('viewAny', \App\Models\Vsolicitud::class)
+                                            <a class="dropdown-item" href="{{url('/solicitudes')}}">
+                                                <i class="fas fa-file-invoice icon-color"></i> Solicitudes
                                             </a>
                                         @endcan
                                     </div>                                

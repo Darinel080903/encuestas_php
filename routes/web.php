@@ -155,3 +155,15 @@ Route::put('/proveedores/{proveedor}/update2', 'App\Http\Controllers\ProveedorCo
 Route::resource('/partidas', 'App\Http\Controllers\PartidaController');
 
 Route::put('/partidas/{partida}/update2', 'App\Http\Controllers\PartidaController@update2');
+
+Route::resource('/unidades', 'App\Http\Controllers\UnidadController');
+
+Route::resource('/inmuebles', 'App\Http\Controllers\InmuebleController');
+
+Route::resource('/muebles', 'App\Http\Controllers\MuebleController');
+
+Route::resource('/razones', 'App\Http\Controllers\RazonController');
+
+Route::resource('/solicitudes', 'App\Http\Controllers\SolicitudController');
+
+Route::put('/solicitudes/{solicitud}/update2', 'App\Http\Controllers\SolicitudController@update2');
