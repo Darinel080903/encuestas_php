@@ -38,7 +38,7 @@
                                 </div>            
                                 <div class="form-group col-md-3">
                                     <label for="numero">Número económico:</label>
-                                    <input type="text" class="form-control @error('numero') is-invalid @enderror" id="numero" name="numero" placeholder="Número económico" maxlength="11" value="{{$autos->numero}}" required disabled/>
+                                    <input type="text" class="form-control @error('numero') is-invalid @enderror" id="numero" name="numero" placeholder="Número económico" maxlength="15" value="{{$autos->numero}}" required disabled/>
                                     <div class="invalid-feedback">
                                         ¡El <strong>número </strong> es un campo requerido!
                                     </div>  
@@ -128,17 +128,26 @@
                                     </select>
                                 </div>
                             </div>
+
                             <div class="form-row">
-                                <div class="form-group col-md-6">
+                                <div class="form-group col-md-12">
                                     <label for="descripcion">Descripción u observaciones:</label>
                                     <textarea class="form-control" name="descripcion" placeholder="Descripción" rows="2">{{$autos->descripcion}}</textarea>                                
                                 </div>
-                                <div class="form-group col-md-6">
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group col-md-1">
+                                    <label for="custodia">Resguardo:</label><br>
+                                    <input type="checkbox" class="form-control" id="custodia" name="custodia" data-toggle="toggle" data-on="Activo" data-off="Inactivo" data-onstyle="success" data-offstyle="danger" @if($autos->custodia == 1) {{'checked'}} @endif/>
+                                </div>
+
+                                <div class="form-group col-md-5">
                                     <label for="funcionario">Funcionario resguardo:</label>
-                                    <select class="form-control form-control-chosen" id="funcionario" name="funcionario">
+                                    <select class="form-control form-control-chosen" id="funcionario" name="funcionario" @if($autos->custodia != 1) {{'disabled'}} @endif>
                                         <option value="">Funcionario</option>
                                         @foreach ($funcionarios as $item)
-                                            @if ($autos->fkfuncionario == $item->idfuncionario)
+                                            @if ($custodia == $item->idfuncionario and $autos->custodia == 1)
                                                 <option value="{{$item->idfuncionario}}" selected>{{$item->nombre.' '.$item->paterno.' '.$item->materno}}</option>
                                             @else
                                                 <option value="{{$item->idfuncionario}}">{{$item->nombre.' '.$item->paterno.' '.$item->materno}}</option>
@@ -147,12 +156,39 @@
                                     </select>
                                 </div>
                             </div>
+
                             <div class="form-row">
-                                <div class="form-group">
+                                @if(count($custodias) > 0)
+                                    <div class="table-responsive mb-2">
+                                        <table class="table table-bordered">
+                                            <thead class="thead-dark">
+                                                <tr>
+                                                    <th class="text-center">Ejercicio</th>
+                                                    <th class="text-center">Fecha resguardo</th>
+                                                    <th class="text-center">Funcionario</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach ($custodias as $item)
+                                                    <tr>
+                                                        <td class="text-center">{{$item->ejercicio}}</td>
+                                                        <td class="text-center">{{date('d/m/Y', strtotime($item->fecha))}}</td>
+                                                        <td>{{$item->nombre}} {{$item->paterno}} {{$item->materno}}</td>
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                @endif
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group col-md-1">
                                     <label for="activo">Activo:</label><br>
                                     <input type="checkbox" class="form-control" id="activo" name="activo" data-toggle="toggle" data-on="Activo" data-off="Inactivo" data-onstyle="success" data-offstyle="danger" @if($autos->activo == 1) {{'checked'}} @endif>
                                 </div>
                             </div>
+                            
                             <input type="hidden" name="page" value="{{$page ?? ''}}">
                             <input type="hidden" name="vfecha" value="{{$vfecha ?? ''}}">
                             <input type="hidden" name="vactivo" value="{{$vactivo ?? ''}}">
@@ -285,6 +321,25 @@
             }
         });
 
+        $("#funcionario").change(function(){
+            if($("#funcionario").val() != "" && $("#custodia").prop('checked') == true)
+            {
+                if($("#funcionario_chosen").hasClass("is-invalid") === true)
+                {
+                    $("#funcionario_chosen").removeClass("is-invalid");
+                    $("#funcionario_chosen").addClass("is-valid");
+                }
+            }
+            else
+            {
+                if($("#funcionario_chosen").hasClass("is-valid") === true)
+                {
+                    $("#funcionario_chosen").removeClass("is-valid");
+                    $("#funcionario_chosen").addClass("is-invalid");
+                }
+            }
+        });
+
         $(document).ready(function(){
             if($("#origen").val() === "1")
             {
@@ -311,6 +366,29 @@
                     $("#numero").val("");  
                     $("#numero").prop("disabled", true);
                     $("#numero").prop("required", false);
+                }
+            });
+        });
+
+        $(function(){
+            $("#custodia").change(function(){
+                if($(this).prop('checked') == true){
+                    $("#funcionario").prop("disabled", false);
+                    $("#funcionario").trigger("chosen:updated");
+                    $("#funcionario").prop("required", true);
+                    if($("#frm").hasClass("was-validated")){
+                        $("#funcionario_chosen").removeClass("is-valid");
+                        $("#funcionario_chosen").addClass("is-invalid");
+                    }
+                }
+                else{
+                    $("#funcionario").prop("disabled", true);
+                    $('#funcionario').val('').trigger('chosen:updated');
+                    $("#funcionario").prop("required", false);
+                    if($("#frm").hasClass("was-validated")){
+                        $("#funcionario_chosen").removeClass("is-invalid");
+                        $("#funcionario_chosen").addClass("is-valid");
+                    }                    
                 }
             });
         });
@@ -357,7 +435,16 @@
 
                     $('#transmision_chosen').addClass('is-valid');
                     $('#combustible_chosen').addClass('is-valid');
-                    $('#funcionario_chosen').addClass('is-valid');
+
+                    if($("#funcionario").val() == "" && $("#custodia").prop('checked') == true)
+                    {
+                        $('#funcionario_chosen').addClass('is-invalid');
+                    }
+                    else
+                    {
+                        $('#funcionario_chosen').addClass('is-valid');
+                    }
+                    // $('#funcionario_chosen').addClass('is-valid');
                 }
                 form.classList.add('was-validated');
 
@@ -378,7 +465,12 @@
 
                 $('#transmision_chosen').addClass('is-valid');
                 $('#combustible_chosen').addClass('is-valid');
-                $('#funcionario_chosen').addClass('is-valid');
+                
+                if($("#funcionario").val() != "")
+                {
+                    $('#funcionario_chosen').addClass('is-valid');
+                }
+                // $('#funcionario_chosen').addClass('is-valid');
 
               }, false);
             });

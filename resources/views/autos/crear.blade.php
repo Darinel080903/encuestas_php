@@ -9,7 +9,7 @@
                         <h3 class="headerlistatitulo"><i class="fas fa-save"></i> Nuevo auto</h3>
                     </div>
                     <div class="card-body">
-                        <form class="needs-validation" method="POST" action="{{url('/autos')}}" novalidate>
+                        <form class="needs-validation" id="frm" method="POST" action="{{url('/autos')}}" novalidate>
                         @csrf
                             <div class="form-row">   
                                 <div class="form-group col-md-3">
@@ -37,7 +37,7 @@
                                 </div>                                
                                 <div class="form-group col-md-3">
                                     <label for="numero">Número económico:</label>
-                                    <input type="text" class="form-control @error('numero') is-invalid @enderror" id="numero" name="numero" placeholder="Número económico" maxlength="11" value="{{old('numero')}}" required disabled/>
+                                    <input type="text" class="form-control @error('numero') is-invalid @enderror" id="numero" name="numero" placeholder="Número económico" maxlength="15" value="{{old('numero')}}" required disabled/>
                                     <div class="invalid-feedback">
                                         ¡El <strong>número </strong> es un campo requerido!
                                     </div>  
@@ -122,14 +122,21 @@
                                 </div>
                             </div>
                             <div class="form-row">
-                                <div class="form-group col-md-6">
+                                <div class="form-group col-md-12">
                                     <label for="descripcion">Descripción u observaciones:</label>
                                     <textarea class="form-control" name="descripcion" placeholder="Descripción" rows="2">{{old('descripcion')}}</textarea>                                
                                 </div>
+                            </div>
 
-                                <div class="form-group col-md-6">
+                            <div class="form-row">
+                                <div class="form-group col-md-1">
+                                    <label for="custodia">Resguardo:</label><br>
+                                    <input type="checkbox" class="form-control" id="custodia" name="custodia" data-toggle="toggle" data-on="Activo" data-off="Inactivo" data-onstyle="success" data-offstyle="danger"/>
+                                </div>
+
+                                <div class="form-group col-md-5">
                                     <label for="funcionario">Funcionario resguardo:</label>
-                                    <select class="form-control form-control-chosen" id="funcionario" name="funcionario">
+                                    <select class="form-control form-control-chosen" id="funcionario" name="funcionario" disabled>
                                         <option value="">Funcionario</option>
                                         @foreach ($funcionarios as $item)
                                             @if (old('funcionario') == $item->idfuncionario)
@@ -141,12 +148,14 @@
                                     </select>
                                 </div>
                             </div>
+
                             <div class="form-row">
                                 <div class="form-group col-md-2">
                                     <label for="activo">Activo:</label><br>
                                     <input type="checkbox" class="form-control" id="activo" name="activo" data-toggle="toggle" data-on="Activo" data-off="Inactivo" data-onstyle="success" data-offstyle="danger" checked>
                                 </div>
                             </div>
+
                             <input type="hidden" name="page" value="{{$page ?? ''}}">
                             <input type="hidden" name="vfecha" value="{{$vfecha ?? ''}}">
                             <input type="hidden" name="vactivo" value="{{$vactivo ?? ''}}">
@@ -279,6 +288,25 @@
             }
         });
 
+        $("#funcionario").change(function(){
+            if($("#funcionario").val() != "" && $("#custodia").prop('checked') == true)
+            {
+                if($("#funcionario_chosen").hasClass("is-invalid") === true)
+                {
+                    $("#funcionario_chosen").removeClass("is-invalid");
+                    $("#funcionario_chosen").addClass("is-valid");
+                }
+            }
+            else
+            {
+                if($("#funcionario_chosen").hasClass("is-valid") === true)
+                {
+                    $("#funcionario_chosen").removeClass("is-valid");
+                    $("#funcionario_chosen").addClass("is-invalid");
+                }
+            }
+        });
+
         $(function(){
             $("#origen").change( function(){
                 if ($(this).val() === "1")
@@ -293,6 +321,29 @@
                     $("#numero").prop("disabled", true);
                     $("#numero").prop("required", false);
                     //$("#numero").removeAttr("required");
+                }
+            });
+        });
+
+        $(function(){
+            $("#custodia").change(function(){
+                if($(this).prop('checked') == true){
+                    $("#funcionario").prop("disabled", false);
+                    $("#funcionario").trigger("chosen:updated");
+                    $("#funcionario").prop("required", true);
+                    if($("#frm").hasClass("was-validated")){
+                        $("#funcionario_chosen").removeClass("is-valid");
+                        $("#funcionario_chosen").addClass("is-invalid");
+                    }
+                }
+                else{
+                    $("#funcionario").prop("disabled", true);
+                    $('#funcionario').val('').trigger('chosen:updated');
+                    $("#funcionario").prop("required", false);
+                    if($("#frm").hasClass("was-validated")){
+                        $("#funcionario_chosen").removeClass("is-invalid");
+                        $("#funcionario_chosen").addClass("is-valid");
+                    }                    
                 }
             });
         });
@@ -339,7 +390,16 @@
 
                     $('#transmision_chosen').addClass('is-valid');
                     $('#combustible_chosen').addClass('is-valid');
-                    $('#funcionario_chosen').addClass('is-valid');
+
+                    if($("#funcionario").val() == "" && $("#custodia").prop('checked') == true)
+                    {
+                        $('#funcionario_chosen').addClass('is-invalid');
+                    }
+                    else
+                    {
+                        $('#funcionario_chosen').addClass('is-valid');
+                    }
+                    // $('#funcionario_chosen').addClass('is-valid');
                 }
                 form.classList.add('was-validated');
                 
@@ -360,7 +420,12 @@
 
                 $('#transmision_chosen').addClass('is-valid');
                 $('#combustible_chosen').addClass('is-valid');
-                $('#funcionario_chosen').addClass('is-valid');
+                
+                if($("#funcionario").val() != "")
+                {
+                    $('#funcionario_chosen').addClass('is-valid');
+                }
+                // $('#funcionario_chosen').addClass('is-valid');
 
               }, false);
             });

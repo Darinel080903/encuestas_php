@@ -89,7 +89,7 @@
                     <p class="text-lefth mt-0 mb-0">Marca: <strong>{{$vales->fabrica}}</strong></p>
                     <p class="text-lefth mt-0 mb-0">Tipo: <strong>{{$vales->tipo}}</strong></p>
                     <p class="text-lefth mt-0 mb-0">Modelo: <strong>{{$vales->modelo}}</strong></p>
-                    <p class="text-lefth mt-0 mb-0">Número de erie: <strong>{{$vales->chasis}}</strong></p>
+                    <p class="text-lefth mt-0 mb-0">Número de serie: <strong>{{$vales->chasis}}</strong></p>
                     <p class="text-lefth mt-0 mb-0">Número de placas: <strong>{{$vales->placa}}</strong></p>
                     <p class="text-lefth mt-0 mb-0">Funcionario: <strong>{{$vales->nombre.' '.$vales->paterno.' '.$vales->materno}}</strong></p>
                     <p class="text-lefth mt-0 mb-0">Puesto: <strong>{{$vales->puesto}}</strong></p>

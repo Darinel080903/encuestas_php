@@ -10,6 +10,7 @@ use Illuminate\Support\Str;
 use App\Models\User;
 use App\Models\Vvale;
 use App\Models\Auto;
+use App\Models\Vauto;
 use App\Models\Vale;
 use App\Models\Factura;
 use App\Models\Folio;
@@ -68,7 +69,7 @@ class ValegasController extends Controller
         $vbusqueda = $request->vbusqueda;
 
         $usuario = auth()->user()->id;
-        $autos = Auto::whereNotNull('fkfuncionario')->where([['fkusuario', $usuario], ['fkorigen', 1], ['activo', 1]])->get();
+        $autos = Vauto::whereNotNull('fkfuncionario')->where([['fkusuario', $usuario], ['fkorigen', 1], ['activo', 1]])->get();
         $facturas = Factura::where([['fkusuario', $usuario], ['activo', 1]])->get(); 
 
         return view('vales.crear', compact('page', 'vfecha', 'vbusqueda', 'autos', 'facturas'));

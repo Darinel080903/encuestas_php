@@ -15,6 +15,8 @@ use App\Models\Transmision;
 use App\Models\Combustible;
 use App\Models\Funcionario;
 use App\Models\Autoimg;
+use App\Models\Custodia;
+use App\Models\Vcustodia;
 use App\Models\Bitacora;
 
 class AutoController extends Controller
@@ -123,7 +125,7 @@ class AutoController extends Controller
         $nuevoauto->fktipo = $request->tipo;
         $nuevoauto->modelo = $request->modelo;
         $nuevoauto->placa = $request->placa;
-        $nuevoauto->chasis = $request->chasis;
+        $nuevoauto->chasis = $request->serie;
         $nuevoauto->motor = $request->motor;
         $nuevoauto->fktransmision = $request->transmision;
         $nuevoauto->fkcombustible = $request->combustible;
@@ -131,8 +133,16 @@ class AutoController extends Controller
         // $nuevoauto->telefono = $request->telefono;
         // $nuevoauto->ubicacion = $request->ubicacion;
         // $nuevoauto->precio = $request->precio;
-        $nuevoauto->fkfuncionario = $request->funcionario;
+        // $nuevoauto->fkfuncionario = $request->funcionario;
         $nuevoauto->fkusuario = auth()->user()->id;
+        if(isset($request->custodia))
+        {
+            $nuevoauto->custodia = 1;
+        }
+        else
+        {
+            $nuevoauto->custodia = 0;
+        }
         if(isset($request->activo))
         {
             $nuevoauto->activo = 1;
@@ -142,8 +152,18 @@ class AutoController extends Controller
             $nuevoauto->activo = 0;
         }
         $nuevoauto->save();
-        
 
+        if(isset($request->custodia) and $request->funcionario)
+        {
+            $nuevacustodia = new Custodia();
+            $nuevacustodia->ejercicio = date('Y');
+            $nuevacustodia->fecha = date('Y-m-d');
+            $nuevacustodia->fkauto = $nuevoauto->idauto;
+            $nuevacustodia->fkfuncionario = $request->funcionario;
+            $nuevacustodia->fkusuario = auth()->user()->id;
+            $nuevacustodia->save();
+        }
+    
         $bitacora = new Bitacora();
         $bitacora->fkusuario = auth()->user()->id;
         $bitacora->operacion = 'Auto agregado con id:'.$nuevoauto->idauto;
@@ -201,8 +221,18 @@ class AutoController extends Controller
         $origenes = Origen::all();
         $combustibles = Combustible::all();
         $funcionarios = Funcionario::where('activo', 1)->orderby('nombre', 'asc')->orderby('paterno', 'asc')->orderby('materno', 'asc')->get();
-
-        return view('autos.editar',compact('page', 'vfecha', 'vactivo', 'vorigen', 'vbusqueda', 'fabricas', 'origenes', 'tipos', 'transmisiones', 'combustibles', 'funcionarios', 'autos'));
+        $custodia = Custodia::where('fkauto', $autos->idauto)->orderBy('idcustodia', 'desc')->limit(1)->value('fkfuncionario');
+        if($custodia and $autos->custodia)
+        {
+            $max = Vcustodia::where('fkauto', $autos->idauto)->orderBy('idcustodia', 'desc')->limit(1)->value('idcustodia');
+            $custodias = Vcustodia::where([['fkauto', $autos->idauto], ['idcustodia', '<>', $max]])->orderBy('idcustodia', 'desc')->get();    
+        }
+        else
+        {
+            $custodias = Vcustodia::where('fkauto', $autos->idauto)->orderBy('idcustodia', 'desc')->get();
+        }
+        
+        return view('autos.editar',compact('page', 'vfecha', 'vactivo', 'vorigen', 'vbusqueda', 'autos', 'fabricas', 'origenes', 'tipos', 'transmisiones', 'combustibles', 'funcionarios', 'custodia', 'custodias'));
     }
 
     /**
@@ -258,7 +288,15 @@ class AutoController extends Controller
         // $actualizaauto->telefono = $request->telefono;
         // $actualizaauto->ubicacion = $request->ubicacion;
         // $actualizaauto->precio = $request->precio;
-        $actualizaauto->fkfuncionario = $request->funcionario;
+        // $actualizaauto->fkfuncionario = $request->funcionario;
+        if(isset($request->custodia))
+        {
+            $actualizaauto->custodia = 1;
+        }
+        else
+        {
+            $actualizaauto->custodia = 0;
+        }
         if(isset($request->activo))
         {
             $actualizaauto->activo = 1;
@@ -268,6 +306,21 @@ class AutoController extends Controller
             $actualizaauto->activo = 0;
         }
         $actualizaauto->save();
+
+        if(isset($request->custodia) and $request->funcionario)
+        {
+            $valida = Custodia::where('fkauto', $id)->orderBy('idcustodia', 'desc')->limit(1)->value('fkfuncionario');
+            if ($valida != $request->funcionario)
+            {
+                $nuevacustodia = new Custodia();
+                $nuevacustodia->ejercicio = date('Y');
+                $nuevacustodia->fecha = date('Y-m-d');
+                $nuevacustodia->fkauto = $id;
+                $nuevacustodia->fkfuncionario = $request->funcionario;
+                $nuevacustodia->fkusuario = auth()->user()->id;
+                $nuevacustodia->save();
+            }
+        }
 
         $bitacora = new Bitacora();
         $bitacora->fkusuario = auth()->user()->id;
