@@ -45,7 +45,7 @@ class PaseController extends Controller
         }
         else
         {
-            $datos = Vpase::usuario($usuario)->fecha($vfecha)->busqueda($vbusqueda)->orderByDesc('fecha')->orderByDesc('idfactura')->paginate(20);
+            $datos = Vpase::usuario($usuario)->fecha($vfecha)->busqueda($vbusqueda)->orderByDesc('fecha')->orderByDesc('idpase')->paginate(20);
         }
             
         return view('pases.lista',compact('page','vfecha', 'vbusqueda', 'datos'));
