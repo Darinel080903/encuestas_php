@@ -17,6 +17,7 @@ use App\Models\Folio;
 use App\Models\Vfolio;
 use App\Models\Desglose;
 use App\Models\Funcionario;
+use App\Models\Vfuncionariocustodia;
 use App\Models\Bitacora;
 
 class ValegasController extends Controller
@@ -190,18 +191,25 @@ class ValegasController extends Controller
 
         if($usuariorole->hasRole('administrador'))
         {
-            $datos = Vale::findOrFail($id);
+            $datos = Vvale::findOrFail($id);
+            $autos = Auto::where([['fkorigen', 1], ['custodia', 1], ['activo', 1]])->get();
         }
         else
         {
-            $datos = Vale::where('fkusuario', $usuario)->findOrFail($id);
+            $datos = Vvale::where('fkusuario', $usuario)->findOrFail($id);
+            $autos = Auto::where([['fkusuario', $usuario], ['fkorigen', 1], ['custodia', 1], ['activo', 1]])->get();
         }
-        $autos = Auto::whereNotNull('fkfuncionario')->where([['fkusuario', $usuario], ['fkorigen', 1], ['activo', 1]])->get();
-        $funcionarios = Funcionario::where('idfuncionario', $datos->fkfuncionario)->get();
+        // $autos = Auto::whereNotNull('fkfuncionario')->where([['fkusuario', $usuario], ['fkorigen', 1], ['activo', 1]])->get();
+        // $autos = Auto::where([['fkusuario', $usuario], ['fkorigen', 1], ['custodia', 1], ['activo', 1]])->get();
+        // $funcionarios = Funcionario::where('idfuncionario', $datos->fkfuncionario)->get();
+        // dd($autovalido);
+        $autoactivo = Auto::where('idauto', $datos->fkauto)->value('activo');
+        $autocustodia = Auto::where('idauto', $datos->fkauto)->value('custodia');
+        $funcionarios = Vfuncionariocustodia::where([['fkauto', $datos->fkauto]])->orderBy('idcustodia', 'desc')->get();
         $facturas = Factura::where([['fkusuario', $usuario], ['activo', 1]])->get(); 
         $folios = Vfolio::where('fkvale', $id)->orderby('idfolio', 'asc')->get();
 
-        return view('vales.editar',compact('page', 'vfecha', 'vbusqueda', 'datos', 'autos', 'funcionarios', 'facturas', 'folios'));
+        return view('vales.editar',compact('page', 'vfecha', 'vbusqueda', 'datos', 'autos', 'autoactivo', 'autocustodia', 'funcionarios', 'facturas', 'folios'));
     }
 
     /**

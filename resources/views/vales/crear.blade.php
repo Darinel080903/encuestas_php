@@ -220,7 +220,7 @@
                             $("#funcionario").append("<option value=''>Funcionario</option>");
                             for(let i = 0; i< response.length; i++)
                             {
-                                $("#funcionario").append("<option value='"+response[i].idfuncionario+"'>"+response[i].nombre+" "+response[i].paterno+" "+response[i].materno+"</option>"); 
+                                $("#funcionario").append("<option value='"+response[i].fkfuncionario+"'>"+response[i].ejercicio+" "+response[i].nombre+" "+response[i].paterno+" "+response[i].materno+"</option>"); 
                             }
                             $("#divloading").addClass("d-none").removeClass("d-flex");
                         },

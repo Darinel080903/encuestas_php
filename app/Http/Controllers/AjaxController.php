@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
+
 use App\Models\Articulo;
 use App\Models\Tmpbien;
 use App\Models\Vtmpbien;
@@ -10,6 +13,8 @@ use App\Models\Bien;
 use App\Models\Tipo;
 use App\Models\Auto;
 use App\Models\Funcionario;
+use App\Models\Vcustodia;
+use App\Models\Vfuncionariocustodia;
 use App\Models\Desglose;
 use App\Models\Factura;
 use App\Models\Folio;
@@ -114,12 +119,23 @@ class AjaxController extends Controller
 
     public function cargafuncionario(Request $request, $id)
     {
-        if($request->ajax())
-        {
-            $idfuncionario = Auto::where('idauto', $id)->value('fkfuncionario');
-            $funcionario = Funcionario::where('idfuncionario', $idfuncionario)->get();
+        // if($request->ajax())
+        // {
+            // $idfuncionario = Auto::where('idauto', $id)->value('fkfuncionario');
+            $funcionarios = Vcustodia::where('fkauto', $id)->orderBY('idcustodia', 'asc')->pluck('fkfuncionario');
+            
+            // dd($funcionarios);
+            // $custodias = [];
+            $custodias = collect([]);
+            foreach ($funcionarios as $key => $value)
+            {
+                $custodias->push($value);
+            }
+            // dd($custodias);
+            $funcionario = Vfuncionariocustodia::where('fkauto', $id)->whereIn('fkfuncionario', $custodias)->orderBy('idcustodia', 'desc')->get();
+            // dd($funcionario);
             return response()->json($funcionario);
-        }
+        // }
     }
 
     public function cargaconceptos(Request $request, $id)
