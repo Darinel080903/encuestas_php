@@ -204,17 +204,18 @@ class PemexvaleController extends Controller
         {
             $datos = Pemexvale::findOrFail($id);
             $autos = Auto::where([['fkorigen', 2], ['custodia', 1], ['activo', 1]])->orderby('placa', 'asc')->get();
+            $facturas = Pemexfactura::where('activo', 1)->get(); 
         }
         else
         {
             $datos = Pemexvale::where('fkusuario', $usuario)->findOrFail($id);
             $autos = Auto::where([['fkusuario', $usuario], ['fkorigen', 2], ['custodia', 1], ['activo', 1]])->orderby('placa', 'asc')->get();
+            $facturas = Pemexfactura::where([['fkusuario', $usuario], ['activo', 1]])->get(); 
         }
         
         $autoactivo = Auto::where('idauto', $datos->fkauto)->value('activo');
         $autocustodia = Auto::where('idauto', $datos->fkauto)->value('custodia');
         $funcionarios = Vfuncionariocustodia::where([['fkauto', $datos->fkauto]])->orderBy('idcustodia', 'desc')->get();
-        $facturas = Pemexfactura::where([['fkusuario', $usuario], ['activo', 1]])->get(); 
         $folios = Vpemexfolio::where('fkvale', $id)->orderby('idfolio', 'asc')->get();
 
         return view('pemexvales.editar',compact('page', 'vfecha', 'vbusqueda', 'datos', 'autos', 'autoactivo', 'autocustodia', 'funcionarios', 'facturas', 'folios'));
