@@ -378,6 +378,9 @@ class AutoController extends Controller
         $modelo = Vauto::findOrFail($id);
         $this->authorize('delete', $modelo);
 
+        $eliminacustodia = Custodia::where('fkauto', $id);
+        $eliminacustodia->delete();
+
         $eliminarauto = Auto::findOrFail($id);
         
         foreach (Autoimg::where('fkauto', $id)->cursor() as $imgcursor)
