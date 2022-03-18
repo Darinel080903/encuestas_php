@@ -12,6 +12,9 @@
                     <div class="card-body">
                         <form class="form-inline" id="frmbusqueda" action="{{url('/vales')}}" method="GET">
                         @csrf
+                            <div class="input-group mr-2 mb-2">
+                                <input type="text" class="form-control" id="vfecha" name="vfecha" placeholder="Fecha" aria-label="Fecha" value="{{ $vfecha }}" readonly>
+                            </div>
                             <div class="input-group mr-2 mb-2">  
                                 <select class="form-control" name="vejercicio" id="vejercicio">
                                     <option value="">Ejercicio</option>
@@ -23,9 +26,6 @@
                                         @endif
                                     @endforeach
                                 </select>
-                            </div>
-                            <div class="input-group mr-2 mb-2">
-                                <input type="text" class="form-control" id="vfecha" name="vfecha" placeholder="Fecha" aria-label="Fecha" value="{{ $vfecha }}" readonly>
                             </div>
                             <div class="input-group mr-2 mb-2">
                                 <input type="text" class="form-control" id="vbusqueda" name="vbusqueda" placeholder="Búsqueda" aria-label="Búsqueda" aria-describedby="button-addon2" value="{{$vbusqueda}}">
@@ -51,7 +51,7 @@
                                     <th class="text-center" scope="col">Monto</th>
                                     <th class="text-center" width="36%" scope="col" colspan="3">
                                         @can('create', \App\Models\Vvale::class)
-                                            <a class="btn btn-outline-danger" href="{{url('/vales/create?page='.$page.'&vfecha='.$vfecha.'&vbusqueda='.$vbusqueda)}}"><i class="fas fa-save"></i> Nuevo</a>
+                                            <a class="btn btn-outline-danger" href="{{url('/vales/create?page='.$page.'&vfecha='.$vfecha.'&vejercicio='.$vejercicio.'&vbusqueda='.$vbusqueda)}}"><i class="fas fa-save"></i> Nuevo</a>
                                         @endcan
                                     </th>
                                     </tr>
@@ -69,7 +69,7 @@
                                         @endif
                                         <td class="text-center" width="12%">
                                             @can('update', $item)
-                                                <a class="btn btn-outline-danger" href="{{url('/vales/'.$item->idvale.'/edit?page='.$page.'&vfecha='.$vfecha.'&vbusqueda='.$vbusqueda)}}"><i class="fas fa-pen"></i> Editar</a>
+                                                <a class="btn btn-outline-danger" href="{{url('/vales/'.$item->idvale.'/edit?page='.$page.'&vfecha='.$vfecha.'&vejercicio='.$vejercicio.'&vbusqueda='.$vbusqueda)}}"><i class="fas fa-pen"></i> Editar</a>
                                             @endcan
                                         </td>
                                         <td class="text-center" width="12%">

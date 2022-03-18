@@ -56,7 +56,7 @@ class ValegasController extends Controller
         $ejercicios = Vvale::orderBy('ejercicio', 'desc')->get()->unique('ejercicio');
         // dd($anios);
 
-        return view('vales.lista', compact('page', 'vfecha', 'vbusqueda', 'vejercicio', 'datos', 'ejercicios'));    
+        return view('vales.lista', compact('page', 'vfecha', 'vejercicio', 'vbusqueda', 'datos', 'ejercicios'));    
     }
 
     /**
@@ -70,6 +70,7 @@ class ValegasController extends Controller
 
         $page = $request->page;
         $vfecha = $request->vfecha;
+        $vejercicio = $request->vejercicio;
         $vbusqueda = $request->vbusqueda;
 
         $usuario = auth()->user()->id;
@@ -86,7 +87,7 @@ class ValegasController extends Controller
             $facturas = Factura::where([['fkusuario', $usuario], ['activo', 1]])->get(); 
         }
 
-        return view('vales.crear', compact('page', 'vfecha', 'vbusqueda', 'autos', 'facturas'));
+        return view('vales.crear', compact('page', 'vfecha', 'vejercicio', 'vbusqueda', 'autos', 'facturas'));
     }
 
     /**
@@ -170,7 +171,7 @@ class ValegasController extends Controller
         $bitacora->pc = gethostname();
         $bitacora->save();
 
-        return redirect('/vales?page='.$request->page.'&vfecha='.$request->vfecha.'&vbusqueda='.$request->vbusqueda)->with('mensaje','¡Vale agregado correctamente!');
+        return redirect('/vales?page='.$request->page.'&vfecha='.$request->vfecha.'&vejercicio='.$request->vejercicio.'&vbusqueda='.$request->vbusqueda)->with('mensaje','¡Vale agregado correctamente!');
     }
 
     /**
@@ -197,6 +198,7 @@ class ValegasController extends Controller
 
         $page = $request->page;
         $vfecha = $request->vfecha;
+        $vejercicio = $request->vejercicio;
         $vbusqueda = $request->vbusqueda;
 
         $usuario = auth()->user()->id;
@@ -223,7 +225,7 @@ class ValegasController extends Controller
         $facturas = Factura::where([['fkusuario', $usuario], ['activo', 1]])->get(); 
         $folios = Vfolio::where('fkvale', $id)->orderby('idfolio', 'asc')->get();
 
-        return view('vales.editar',compact('page', 'vfecha', 'vbusqueda', 'datos', 'autos', 'autoactivo', 'autocustodia', 'funcionarios', 'facturas', 'folios'));
+        return view('vales.editar',compact('page', 'vfecha', 'vejercicio', 'vbusqueda', 'datos', 'autos', 'autoactivo', 'autocustodia', 'funcionarios', 'facturas', 'folios'));
     }
 
     /**
@@ -298,7 +300,7 @@ class ValegasController extends Controller
                 }
                 else
                 {
-                    return redirect('/vales?page='.$request->page.'&vfecha='.$request->vfecha.'&vbusqueda='.$request->vbusqueda)->with('mensajeerror','¡Error al guardar verifique las unidades disponibles!');
+                    return redirect('/vales?page='.$request->page.'&vfecha='.$request->vfecha.'&vejercicio='.$request->vejercicio.'&vbusqueda='.$request->vbusqueda)->with('mensajeerror','¡Error al guardar verifique las unidades disponibles!');
                 }             
             }
         }
@@ -311,7 +313,7 @@ class ValegasController extends Controller
         $bitacora->pc = gethostname();
         $bitacora->save();
 
-        return redirect('/vales?page='.$request->page.'&vfecha='.$request->vfecha.'&vbusqueda='.$request->vbusqueda)->with('mensaje','¡Vale editada correctamente!');
+        return redirect('/vales?page='.$request->page.'&vfecha='.$request->vfecha.'&vejercicio='.$request->vejercicio.'&vbusqueda='.$request->vbusqueda)->with('mensaje','¡Vale editada correctamente!');
     }
 
     /**
