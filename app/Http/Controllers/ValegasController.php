@@ -208,11 +208,13 @@ class ValegasController extends Controller
         {
             $datos = Vvale::findOrFail($id);
             $autos = Auto::where([['fkorigen', 1], ['custodia', 1], ['activo', 1]])->get();
+            $facturas = Factura::where('activo', 1)->get(); 
         }
         else
         {
             $datos = Vvale::where('fkusuario', $usuario)->findOrFail($id);
             $autos = Auto::where([['fkusuario', $usuario], ['fkorigen', 1], ['custodia', 1], ['activo', 1]])->get();
+            $facturas = Factura::where([['fkusuario', $usuario], ['activo', 1]])->get(); 
         }
 
         // $autos = Auto::whereNotNull('fkfuncionario')->where([['fkusuario', $usuario], ['fkorigen', 1], ['activo', 1]])->get();
@@ -222,7 +224,6 @@ class ValegasController extends Controller
         $autoactivo = Auto::where('idauto', $datos->fkauto)->value('activo');
         $autocustodia = Auto::where('idauto', $datos->fkauto)->value('custodia');
         $funcionarios = Vfuncionariocustodia::where([['fkauto', $datos->fkauto]])->orderBy('idcustodia', 'desc')->get();
-        $facturas = Factura::where([['fkusuario', $usuario], ['activo', 1]])->get(); 
         $folios = Vfolio::where('fkvale', $id)->orderby('idfolio', 'asc')->get();
 
         return view('vales.editar',compact('page', 'vfecha', 'vejercicio', 'vbusqueda', 'datos', 'autos', 'autoactivo', 'autocustodia', 'funcionarios', 'facturas', 'folios'));
