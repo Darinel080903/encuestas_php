@@ -11,6 +11,7 @@
                     <div class="card-body">
                         <form class="needs-validation" method="POST" action="{{url('/pemexvales')}}" novalidate>
                         @csrf
+
                             <div class="form-row">
                                 <div class="form-group col-md-2">
                                     <label for="fecha">Fecha:</label>
@@ -53,6 +54,7 @@
                                     <input type="text" class="form-control" id="kmfin" name="kmfin" placeholder="Km final" maxlength="11" value="{{old('kmfin')}}"/>
                                 </div>
                             </div>
+
                             <div class="card mb-2">
                                 <div class="card-header">
                                     Desglose de los folios
@@ -155,6 +157,7 @@
                                     </div>
                                 </div>
                             </div>
+
                             <div class="form-row">
                                 <div class="form-group offset-md-9 col-md-2 pl-0 mr-2">
                                     <label for="monto">Total Lt:</label>
@@ -166,6 +169,7 @@
                                     </div>
                                 </div>
                             </div>
+
                             <div class="form-row">
                                 <div class="form-group col-md-4">
                                     <label for="recibe">Recibe:</label>    
@@ -176,18 +180,22 @@
                                     <textarea class="form-control" name="observacion" id="observacion" cols="30" rows="2" placeholder="Observaciones">{{old('observacion')}}</textarea>
                                 </div>
                             </div>
+
                             <input type="hidden" name="page" value="{{$page ?? ''}}">
                             <input type="hidden" name="vfecha" value="{{$vfecha ?? ''}}">
                             <input type="hidden" name="vbusqueda" value="{{$vbusqueda ?? ''}}">
                             <input type="hidden" id="vdetalle" name="vdetalle">
+                            
                             <button type="submit" class="btn btn-outline-danger"><i class="fas fa-save"></i> Guardar</button>
                             <a class="btn btn-outline-danger" href="{{url('/pemexvales?page='.$page.'&vfecha='.$vfecha.'&vbusqueda='.$vbusqueda)}}"><i class="fas fa-sign-out-alt fa-rotate-180"></i> Regresar</a>
+                            
                             <div class="d-none justify-content-center" id="divloading">
                                 <div class="spinner-grow divloading" role="status">
                                     <span class="sr-only">Loading...</span>
                                 </div>
                                 <p class="font-weight-bolder text-muted font-italic mt-1 mb-2">&nbsp;Cargando...</p>
                             </div>
+
                         </form>
                     </div>
                 </div>
@@ -220,7 +228,7 @@
                             $("#funcionario").append("<option value=''>Funcionario</option>");
                             for(let i = 0; i< response.length; i++)
                             {
-                                $("#funcionario").append("<option value='"+response[i].idfuncionario+"'>"+response[i].nombre+" "+response[i].paterno+" "+response[i].materno+"</option>"); 
+                                $("#funcionario").append("<option value='"+response[i].fkfuncionario+"'>"+response[i].ejercicio+" "+response[i].nombre+" "+response[i].paterno+" "+response[i].materno+"</option>"); 
                             }
                             $("#divloading").addClass("d-none").removeClass("d-flex");
                         },
@@ -487,6 +495,7 @@
                 $("#concepto").addClass("is-valid");    
             }
         });
+
         $("#folioini").keyup(function(){
             if($("#folioini").val() != "" && $("#folioini").hasClass("is-invalid") === true)
             {
@@ -494,6 +503,7 @@
                 $("#folioini").addClass("is-valid");    
             }
         });
+        
         $("#foliofin").keyup(function(){
             if($("#foliofin").val() != "" && $("#foliofin").hasClass("is-invalid") === true)
             {
@@ -501,6 +511,7 @@
                 $("#foliofin").addClass("is-valid");    
             }
         });
+        
         $("#folionumero").keyup(function(){
             if($("#folionumero").val() != "" && $("#folionumero").hasClass("is-invalid") === true)
             {
@@ -508,6 +519,7 @@
                 $("#folionumero").addClass("is-valid");    
             }
         });
+        
         $("#folionumero").click(function(){
             if($("#folionumero").val() != "" && $("#folionumero").hasClass("is-invalid") === true)
             {
@@ -515,6 +527,7 @@
                 $("#folionumero").addClass("is-valid");    
             }
         });
+        
         $("#foliounitario").keyup(function(){
             if($("#foliounitario").val() != "" && $("#foliounitario").hasClass("is-invalid") === true)
             {
@@ -522,6 +535,7 @@
                 $("#foliounitario").addClass("is-valid");    
             }
         });
+        
         $("#foliounitario").click(function(){
             if($("#foliounitario").val() != "" && $("#foliounitario").hasClass("is-invalid") === true)
             {
@@ -529,6 +543,7 @@
                 $("#foliounitario").addClass("is-valid");    
             }
         });
+        
         $("#foliomonto").keyup(function(){
             if($("#foliomonto").val() != "" && $("#foliomonto").hasClass("is-invalid") === true)
             {
@@ -536,6 +551,7 @@
                 $("#foliomonto").addClass("is-valid");    
             }
         });
+        
         $("#foliomonto").click(function(){
             if($("#foliomonto").val() != "" && $("#foliomonto").hasClass("is-invalid") === true)
             {

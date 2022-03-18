@@ -12,6 +12,27 @@
                         <form class="needs-validation" method="POST" action="{{url('/pemexvales/'.$datos->idvale)}}" novalidate>
                         @method('PUT')
                         @csrf
+
+                            @if ($autoactivo == false)
+                                <div class="form-row">
+                                    <div class="form-group col-md-12">
+                                        <div class="alert alert-danger mb-0" role="alert">
+                                            El auto asignado a este vale <strong>NO SE ENCUENTRA ACTIVO</strong> por lo tanto la dotación ha sido <strong>DESHABILITADO</strong>.
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
+
+                            @if ($autocustodia == false)
+                                <div class="form-row">
+                                    <div class="form-group col-md-12">
+                                        <div class="alert alert-warning mb-0" role="alert">
+                                            El auto asignado a este vale <strong>NO CUENTA CON RESGUARDO</strong> por lo tanto la dotación ha sido <strong>DESHABILITADO</strong>.
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
+
                             <div class="form-row">
                                 <div class="form-group col-md-2">
                                     <label for="fecha">Fecha:</label>
@@ -41,10 +62,10 @@
                                     <select class="form-control" id="funcionario" name="funcionario" required>
                                         <option value="">Funcionario</option>
                                         @foreach ($funcionarios as $item)
-                                            @if ($datos->fkfuncionario == $item->idfuncionario)
-                                                <option value="{{$item->idfuncionario}}" selected>{{$item->nombre.' '.$item->peterno.' '.$item->materno}}</option>
+                                            @if ($datos->fkfuncionario == $item->fkfuncionario)
+                                                <option value="{{$item->fkfuncionario}}" selected>{{$item->ejercicio}} {{$item->nombre}} {{$item->paterno}} {{$item->materno}}</option>
                                             @else
-                                                <option value="{{$item->idfuncionario}}">{{$item->nombre.' '.$item->peterno.' '.$item->materno}}</option>
+                                                <option value="{{$item->fkfuncionario}}">{{$item->ejercicio}} {{$item->nombre}} {{$item->paterno}} {{$item->materno}}</option>
                                             @endif
                                         @endforeach 
                                     </select>
@@ -61,6 +82,7 @@
                                     <input type="text" class="form-control" id="kmfin" name="kmfin" placeholder="Km final" maxlength="11" value="{{$datos->kmfin}}"/>
                                 </div>
                             </div>
+
                             <div class="card mb-2">
                                 <div class="card-header">
                                     Desglose de los folios
@@ -163,6 +185,7 @@
                                     </div>
                                 </div>
                             </div>
+
                             <div class="form-row">
                                 <div class="form-group offset-md-9 col-md-2 pl-0 mr-2">
                                     <label for="monto">Total Lt:</label>
@@ -174,6 +197,7 @@
                                     </div>
                                 </div>
                             </div>
+
                             <div class="form-row">
                                 <div class="form-group col-md-4">
                                     <label for="recibe">Recibe:</label>    
@@ -184,12 +208,22 @@
                                     <textarea class="form-control" name="observacion" id="observacion" cols="30" rows="2" placeholder="Observaciones">{{$datos->observacion}}</textarea>
                                 </div>
                             </div>
+                            
                             <input type="hidden" name="page" value="{{$page ?? ''}}">
                             <input type="hidden" name="vfecha" value="{{$vfecha ?? ''}}">
                             <input type="hidden" name="vbusqueda" value="{{$vbusqueda ?? ''}}">
                             <input type="hidden" id="vdetalle" name="vdetalle" value="{{$folios ?? ''}}">
-                            <button type="submit" class="btn btn-outline-danger"><i class="fas fa-save"></i> Guardar</button>
+                            
+                            <button type="submit" class="btn btn-outline-danger" @if($autoactivo == false or $autocustodia == false) disabled @endif><i class="fas fa-save"></i> Guardar</button>
                             <a class="btn btn-outline-danger" href="{{url('/pemexvales?page='.$page.'&vfecha='.$vfecha.'&vbusqueda='.$vbusqueda)}}"><i class="fas fa-sign-out-alt fa-rotate-180"></i> Regresar</a>
+
+                            <div class="d-none justify-content-center" id="divloading">
+                                <div class="spinner-grow divloading" role="status">
+                                    <span class="sr-only">Loading...</span>
+                                </div>
+                                <p class="font-weight-bolder text-muted font-italic mt-1 mb-2">&nbsp;Cargando...</p>
+                            </div>
+
                         </form>
                     </div>
                 </div>
@@ -237,7 +271,7 @@
                             $("#funcionario").append("<option value=''>Funcionario</option>");
                             for(let i = 0; i< response.length; i++)
                             {
-                                $("#funcionario").append("<option value='"+response[i].idfuncionario+"'>"+response[i].nombre+" "+response[i].paterno+" "+response[i].materno+"</option>"); 
+                                $("#funcionario").append("<option value='"+response[i].fkfuncionario+"'>"+response[i].ejercicio+" "+response[i].nombre+" "+response[i].paterno+" "+response[i].materno+"</option>"); 
                             }
                             $("#divloading").addClass("d-none").removeClass("d-flex");
                         },

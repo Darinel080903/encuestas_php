@@ -22,6 +22,14 @@ class Vvale extends Model
         }
     }
 
+    public function scopeEjercicio($query, $ejercicio)
+    {
+        if($ejercicio)
+        {
+            return $query->where('ejercicio', '=', $ejercicio);
+        }
+    }
+
     public function scopeFecha($query, $fecha)
     {
         if($fecha)

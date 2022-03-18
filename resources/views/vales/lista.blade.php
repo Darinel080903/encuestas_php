@@ -12,6 +12,18 @@
                     <div class="card-body">
                         <form class="form-inline" id="frmbusqueda" action="{{url('/vales')}}" method="GET">
                         @csrf
+                            <div class="input-group mr-2 mb-2">  
+                                <select class="form-control" name="vejercicio" id="vejercicio">
+                                    <option value="">Ejercicio</option>
+                                    @foreach ($ejercicios as $item)
+                                        @if ($vejercicio == $item->ejercicio)
+                                            <option value="{{$item->ejercicio}}" selected>{{$item->ejercicio}}</option>
+                                        @else
+                                            <option value="{{$item->ejercicio}}">{{$item->ejercicio}}</option>
+                                        @endif
+                                    @endforeach
+                                </select>
+                            </div>
                             <div class="input-group mr-2 mb-2">
                                 <input type="text" class="form-control" id="vfecha" name="vfecha" placeholder="Fecha" aria-label="Fecha" value="{{ $vfecha }}" readonly>
                             </div>
@@ -105,5 +117,9 @@
         {
             $("#"+frm).submit();
         }
+
+        $("#vejercicio").change(function(){
+            $("#frmbusqueda").submit();
+        });
     </script>
 @endsection
