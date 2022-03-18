@@ -82,6 +82,7 @@
                                     <input type="text" class="form-control" id="kmfin" name="kmfin" placeholder="Km final" maxlength="11" value="{{$datos->kmfin}}"/>
                                 </div>
                             </div>
+
                             <div class="card mb-2">
                                 <div class="card-header">
                                     Desglose de los folios
@@ -184,6 +185,7 @@
                                     </div>
                                 </div>
                             </div>
+                            
                             <div class="form-row">
                                 <div class="form-group offset-md-9 col-md-2 pl-0 mr-2">
                                     <label for="monto">Monto:</label>
@@ -195,6 +197,7 @@
                                     </div>
                                 </div>
                             </div>
+                            
                             <div class="form-row">
                                 <div class="form-group col-md-4">
                                     <label for="recibe">Recibe:</label>    
@@ -205,6 +208,7 @@
                                     <textarea class="form-control" name="observacion" id="observacion" cols="30" rows="2" placeholder="Observaciones">{{$datos->observacion}}</textarea>
                                 </div>
                             </div>
+                            
                             <input type="hidden" name="page" value="{{$page ?? ''}}">
                             <input type="hidden" name="vfecha" value="{{$vfecha ?? ''}}">
                             <input type="hidden" name="vbusqueda" value="{{$vbusqueda ?? ''}}">
@@ -219,12 +223,14 @@
                                 </div>
                                 <p class="font-weight-bolder text-muted font-italic mt-1 mb-2">&nbsp;Cargando...</p>
                             </div>
+
                         </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    
     <script>
         var Detalle = [];
 
@@ -530,6 +536,7 @@
                 $("#concepto").addClass("is-valid");    
             }
         });
+        
         $("#folioini").keyup(function(){
             if($("#folioini").val() != "" && $("#folioini").hasClass("is-invalid") === true)
             {
@@ -537,6 +544,7 @@
                 $("#folioini").addClass("is-valid");    
             }
         });
+        
         $("#foliofin").keyup(function(){
             if($("#foliofin").val() != "" && $("#foliofin").hasClass("is-invalid") === true)
             {
@@ -544,6 +552,7 @@
                 $("#foliofin").addClass("is-valid");    
             }
         });
+        
         $("#folionumero").keyup(function(){
             if($("#folionumero").val() != "" && $("#folionumero").hasClass("is-invalid") === true)
             {
@@ -551,6 +560,7 @@
                 $("#folionumero").addClass("is-valid");    
             }
         });
+        
         $("#folionumero").click(function(){
             if($("#folionumero").val() != "" && $("#folionumero").hasClass("is-invalid") === true)
             {
@@ -558,6 +568,7 @@
                 $("#folionumero").addClass("is-valid");    
             }
         });
+        
         $("#foliounitario").keyup(function(){
             if($("#foliounitario").val() != "" && $("#foliounitario").hasClass("is-invalid") === true)
             {
@@ -565,6 +576,7 @@
                 $("#foliounitario").addClass("is-valid");    
             }
         });
+        
         $("#foliounitario").click(function(){
             if($("#foliounitario").val() != "" && $("#foliounitario").hasClass("is-invalid") === true)
             {
@@ -572,6 +584,7 @@
                 $("#foliounitario").addClass("is-valid");    
             }
         });
+        
         $("#foliomonto").keyup(function(){
             if($("#foliomonto").val() != "" && $("#foliomonto").hasClass("is-invalid") === true)
             {
@@ -579,6 +592,7 @@
                 $("#foliomonto").addClass("is-valid");    
             }
         });
+        
         $("#foliomonto").click(function(){
             if($("#foliomonto").val() != "" && $("#foliomonto").hasClass("is-invalid") === true)
             {
