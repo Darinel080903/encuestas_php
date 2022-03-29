@@ -11,6 +11,10 @@
                     <div class="card-body">
                         <form class="needs-validation" method="POST" action="{{url('/vales')}}" novalidate>
                         @csrf
+
+                            <div class="alert alert-danger d-none" id="divcomprobacion" role="alert">
+                                ¡Vehiculo con comprobación pendiente, favor de verificar!
+                            </div>
                             
                             <div class="form-row">
                                 <div class="form-group col-md-2">
@@ -20,6 +24,7 @@
                                 <div class="invalid-feedback">
                                     ¡La <strong>fecha</strong> es un campo requerido!
                                 </div>
+
                                 <div class="form-group col-md-3">
                                     <label for="auto">Autos / Activos / Resguardo:</label>
                                     <select class="form-control" id="auto" name="auto" required>
@@ -36,6 +41,7 @@
                                         ¡El <strong>auto</strong> es un campo requerido!
                                     </div>
                                 </div>
+                                
                                 <div class="form-group col-md-3">
                                     <label for="funcionario">Funcionarios:</label>
                                     <select class="form-control" id="funcionario" name="funcionario" required>
@@ -45,10 +51,12 @@
                                         ¡El <strong>funcionario</strong> es un campo requerido!
                                     </div>
                                 </div>
+                                
                                 <div class="form-group col-md-2 mb-0">
                                     <label for="kmini">Km inicial:</label>
                                     <input type="text" class="form-control" id="kmini" name="kmini" placeholder="Km inicial" maxlength="11" value="{{old('kmini')}}"/>
                                 </div>
+                                
                                 <div class="form-group col-md-2 mb-0">
                                     <label for="kmfin">Km final:</label>
                                     <input type="text" class="form-control" id="kmfin" name="kmfin" placeholder="Km final" maxlength="11" value="{{old('kmfin')}}"/>
@@ -74,6 +82,7 @@
                                                 @endforeach  
                                             </select>
                                         </div>
+                                        
                                         <div class="form-group col-md-2 mb-0">
                                             <label for="montofactura">Monto factura:</label>
                                             <div class="input-group">
@@ -83,6 +92,7 @@
                                                 <input type="text" class="form-control" id="montofactura" name="montofactura" placeholder="Monto" maxlength="11" readonly/>
                                             </div>
                                         </div>
+                                        
                                         <div class="form-group col-md-2 mb-0">
                                             <label for="saldofactura">Saldo factura:</label>
                                             <div class="input-group">
@@ -93,6 +103,7 @@
                                             </div>
                                         </div>
                                     </div>
+
                                     <div class="form-row">
                                         <div class="form-group col-md-1 mb-0">
                                             <label for="disponible">Disponible:</label>
@@ -180,15 +191,23 @@
                                     <textarea class="form-control" name="observacion" id="observacion" cols="30" rows="2" placeholder="Observaciones">{{old('observacion')}}</textarea>
                                 </div>
                             </div>
+
+                            <div class="form-row">
+                                <div class="form-group col-md-2">
+                                    <label for="activo">Comprobación:</label><br>
+                                    <input type="checkbox" class="form-control" id="activo" name="activo" data-toggle="toggle" data-on="Si" data-off="No" data-onstyle="success" data-offstyle="danger">
+                                </div>
+                            </div>
                             
                             <input type="hidden" name="page" value="{{$page ?? ''}}">
                             <input type="hidden" name="vfecha" value="{{$vfecha ?? ''}}">
                             <input type="hidden" name="vejercicio" value="{{$vejercicio ?? ''}}">
+                            <input type="hidden" name="vcomprobacion" value="{{$vcomprobacion ?? ''}}">
                             <input type="hidden" name="vbusqueda" value="{{$vbusqueda ?? ''}}">
                             <input type="hidden" id="vdetalle" name="vdetalle">
                             
-                            <button type="submit" class="btn btn-outline-danger"><i class="fas fa-save"></i> Guardar</button>
-                            <a class="btn btn-outline-danger" href="{{url('/vales?page='.$page.'&vfecha='.$vfecha.'&vejercicio='.$vejercicio.'&vbusqueda='.$vbusqueda)}}"><i class="fas fa-sign-out-alt fa-rotate-180"></i> Regresar</a>
+                            <button type="submit" class="btn btn-outline-danger" id="btnguardar"><i class="fas fa-save"></i> Guardar</button>
+                            <a class="btn btn-outline-danger" href="{{url('/vales?page='.$page.'&vfecha='.$vfecha.'&vejercicio='.$vejercicio.'&vcomprobacion='.$vcomprobacion.'&vbusqueda='.$vbusqueda)}}"><i class="fas fa-sign-out-alt fa-rotate-180"></i> Regresar</a>
                             
                             <div class="d-none justify-content-center" id="divloading">
                                 <div class="spinner-grow divloading" role="status">
@@ -233,6 +252,7 @@
                                 $("#funcionario").append("<option value='"+response[i].fkfuncionario+"'>"+response[i].ejercicio+" "+response[i].nombre+" "+response[i].paterno+" "+response[i].materno+"</option>"); 
                             }
                             $("#divloading").addClass("d-none").removeClass("d-flex");
+                            Comprobacion(Auto);
                         },
                         error: function(xhr, textStatus, errorThrown)
                         {
@@ -246,9 +266,48 @@
                 {
                     $("#funcionario").empty();
                     $("#funcionario").append("<option value=''>Funcionario</option>");
+                    $("#divcomprobacion").addClass("d-none");
+                    $("#btnguardar").prop("disabled", false);
                 } 
             });
         });
+
+        function Comprobacion(idauto)
+        {
+            if(idauto)
+            {
+                var urlcom = "{{url('/vales/comprobacion/idauto')}}";
+                urlcom = urlcom.replace("idauto", idauto);
+                // Ini Ajax
+                $("#divloading").addClass("d-flex").removeClass("d-none");
+                $.ajax({type:"get",
+                    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                    url:urlcom,
+                    dataType: "json",
+                    success: function(response, textStatus, xhr)
+                    {
+                        console.log(response);
+                        if(response > 0)
+                        {
+                            $("#divcomprobacion").removeClass("d-none");
+                            $("#btnguardar").prop("disabled", true);
+                        }
+                        else
+                        {
+                            $("#divcomprobacion").addClass("d-none");
+                            $("#btnguardar").prop("disabled", false);
+                        }
+                        $("#divloading").addClass("d-none").removeClass("d-flex");
+                    },
+                    error: function(xhr, textStatus, errorThrown)
+                    {
+                        alert("¡Error al cargar el funcionario!");
+                        $("#divloading").addClass("d-none").removeClass("d-flex");
+                    }
+                });
+                // Fin Ajax
+            }
+        }
 
         $(function(){
             $("#kmini").validCampoFranz("0123456789");

@@ -25,6 +25,7 @@ use App\Models\Vbien;
 use App\Models\Pemexdesglose;
 use App\Models\Pemexfactura;
 use App\Models\Pemexfolio;
+use App\Models\Vale;
 
 class AjaxController extends Controller
 {
@@ -276,6 +277,15 @@ class AjaxController extends Controller
         {
             $unitario = Pemexdesglose::where('iddesglose', $id)->value('unitario');
             return response()->json($unitario);
+        }
+    }
+
+    public function cargacomprobacion(Request $request, $id)
+    {
+        if($request->ajax())
+        {
+            $comprobacion = Vale::where([['fkauto', $id], ['activo', 0]])->count();
+            return response()->json($comprobacion);
         }
     }
 }

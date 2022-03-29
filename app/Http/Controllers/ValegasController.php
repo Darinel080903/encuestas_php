@@ -39,24 +39,26 @@ class ValegasController extends Controller
 
         $page = $request->page;
         $vfecha = $request->vfecha;
-        $vbusqueda = $request->vbusqueda;
         $vejercicio = $request->vejercicio;
+        $vcomprobacion = $request->vcomprobacion;
+        $vbusqueda = $request->vbusqueda;
+        
 
         $usuario = auth()->user()->id;
         $usuariorole = User::findOrFail($usuario);
         if($usuariorole->hasRole('administrador'))
         {
-            $datos = Vvale::ejercicio($vejercicio)->fecha($vfecha)->busqueda($vbusqueda)->orderByDesc('fecha')->orderByDesc('idvale')->paginate(20);
+            $datos = Vvale::fecha($vfecha)->ejercicio($vejercicio)->comprobacion($vcomprobacion)->busqueda($vbusqueda)->orderByDesc('fecha')->orderByDesc('idvale')->paginate(20);
         }
         else
         {
-            $datos = Vvale::usuario($usuario)->ejercicio($vejercicio)->fecha($vfecha)->busqueda($vbusqueda)->orderByDesc('fecha')->orderByDesc('idvale')->paginate(20);
+            $datos = Vvale::usuario($usuario)->fecha($vfecha)->ejercicio($vejercicio)->comprobacion($vcomprobacion)->busqueda($vbusqueda)->orderByDesc('fecha')->orderByDesc('idvale')->paginate(20);
         }
 
         $ejercicios = Vvale::orderBy('ejercicio', 'desc')->get()->unique('ejercicio');
         // dd($anios);
 
-        return view('vales.lista', compact('page', 'vfecha', 'vejercicio', 'vbusqueda', 'datos', 'ejercicios'));    
+        return view('vales.lista', compact('page', 'vfecha', 'vejercicio', 'vcomprobacion', 'vbusqueda', 'datos', 'ejercicios'));    
     }
 
     /**
@@ -71,6 +73,7 @@ class ValegasController extends Controller
         $page = $request->page;
         $vfecha = $request->vfecha;
         $vejercicio = $request->vejercicio;
+        $vcomprobacion = $request->vcomprobacion;
         $vbusqueda = $request->vbusqueda;
 
         $usuario = auth()->user()->id;
@@ -78,16 +81,16 @@ class ValegasController extends Controller
 
         if($usuariorole->hasRole('administrador'))
         {
-            $autos = Vauto::whereNotNull('fkfuncionario')->where([['fkorigen', 1], ['activo', 1]])->get();
+            $autos = Auto::where([['fkorigen', 1], ['custodia', 1], ['activo', 1]])->get();
             $facturas = Factura::where('activo', 1)->get();
         }
         else
         {
-            $autos = Vauto::whereNotNull('fkfuncionario')->where([['fkusuario', $usuario], ['fkorigen', 1], ['activo', 1]])->get();
+            $autos = Vauto::where([['fkusuario', $usuario], ['fkorigen', 1], ['custodia', 1], ['activo', 1]])->get();
             $facturas = Factura::where([['fkusuario', $usuario], ['activo', 1]])->get(); 
         }
 
-        return view('vales.crear', compact('page', 'vfecha', 'vejercicio', 'vbusqueda', 'autos', 'facturas'));
+        return view('vales.crear', compact('page', 'vfecha', 'vejercicio', 'vcomprobacion', 'vbusqueda', 'autos', 'facturas'));
     }
 
     /**
@@ -134,6 +137,14 @@ class ValegasController extends Controller
         $nuevo->recibe = $request->recibe;
         $nuevo->observacion = $request->observacion;
         $nuevo->fkusuario = auth()->user()->id;
+        if(isset($request->activo))
+        {
+            $nuevo->activo = 1;
+        }
+        else
+        {
+            $nuevo->activo = 0;
+        }
         $nuevo->save();
 
         if($folios)
@@ -171,7 +182,7 @@ class ValegasController extends Controller
         $bitacora->pc = gethostname();
         $bitacora->save();
 
-        return redirect('/vales?page='.$request->page.'&vfecha='.$request->vfecha.'&vejercicio='.$request->vejercicio.'&vbusqueda='.$request->vbusqueda)->with('mensaje','¡Vale agregado correctamente!');
+        return redirect('/vales?page='.$request->page.'&vfecha='.$request->vfecha.'&vejercicio='.$request->vejercicio.'&vcomprobacion='.$request->vcomprobacion.'&vbusqueda='.$request->vbusqueda)->with('mensaje','¡Vale agregado correctamente!');
     }
 
     /**
@@ -199,6 +210,7 @@ class ValegasController extends Controller
         $page = $request->page;
         $vfecha = $request->vfecha;
         $vejercicio = $request->vejercicio;
+        $vcomprobacion = $request->vcomprobacion;
         $vbusqueda = $request->vbusqueda;
 
         $usuario = auth()->user()->id;
@@ -226,7 +238,7 @@ class ValegasController extends Controller
         $funcionarios = Vfuncionariocustodia::where([['fkauto', $datos->fkauto]])->orderBy('idcustodia', 'desc')->get();
         $folios = Vfolio::where('fkvale', $id)->orderby('idfolio', 'asc')->get();
 
-        return view('vales.editar',compact('page', 'vfecha', 'vejercicio', 'vbusqueda', 'datos', 'autos', 'autoactivo', 'autocustodia', 'funcionarios', 'facturas', 'folios'));
+        return view('vales.editar',compact('page', 'vfecha', 'vejercicio', 'vcomprobacion', 'vbusqueda', 'datos', 'autos', 'autoactivo', 'autocustodia', 'funcionarios', 'facturas', 'folios'));
     }
 
     /**
@@ -272,6 +284,14 @@ class ValegasController extends Controller
         $actualiza->monto = $monto;
         $actualiza->recibe = $request->recibe;
         $actualiza->observacion = $request->observacion;
+        if(isset($request->activo))
+        {
+            $actualiza->activo = 1;
+        }
+        else
+        {
+            $actualiza->activo = 0;
+        }
         $actualiza->save();
 
         $eliminafolios = Folio::where('fkvale', $id);
@@ -314,7 +334,45 @@ class ValegasController extends Controller
         $bitacora->pc = gethostname();
         $bitacora->save();
 
-        return redirect('/vales?page='.$request->page.'&vfecha='.$request->vfecha.'&vejercicio='.$request->vejercicio.'&vbusqueda='.$request->vbusqueda)->with('mensaje','¡Vale editada correctamente!');
+        return redirect('/vales?page='.$request->page.'&vfecha='.$request->vfecha.'&vejercicio='.$request->vejercicio.'&vcomprobacion='.$request->vcomprobacion.'&vbusqueda='.$request->vbusqueda)->with('mensaje','¡Vale editada correctamente!');
+    }
+
+    public function update2(Request $request, $id)
+    {        
+        $actualiza = Vale::findOrFail($id);
+        if(isset($request->activo))
+        {
+            $actualiza->activo = 1;
+        }
+        else
+        {
+            $actualiza->activo = 0;
+        }
+        $actualiza->save();
+
+        $bitacora = new Bitacora();
+        $bitacora->fkusuario = auth()->user()->id;
+        if(isset($request->activo))
+        {
+            $bitacora->operacion = 'Vale comprobado correctamente con id:'.$id;
+        }
+        else
+        {
+            $bitacora->operacion = 'Vale descomprobado correctamente con id:'.$id;
+        }
+        $bitacora->fecha = date('Y-m-d H:i:s');
+        $bitacora->ip = $request->ip();
+        $bitacora->pc = gethostname();
+        $bitacora->save();
+
+        if(isset($request->activo))
+        {
+            return back()->withInput()->with('mensaje', '¡Vale comprobado correctamente!');
+        }
+        else
+        {
+            return back()->withInput()->with('mensaje', '¡Vale descomprobado correctamente!');
+        }
     }
 
     /**

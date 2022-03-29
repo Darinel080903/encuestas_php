@@ -22,6 +22,15 @@ class Vvale extends Model
         }
     }
 
+    public function scopeFecha($query, $fecha)
+    {
+        if($fecha)
+        {
+            $fechaformat = date('Y-m-d', strtotime(str_replace('/', '-', $fecha)));
+            return $query->where('fecha', '=', $fechaformat);
+        }
+    }
+
     public function scopeEjercicio($query, $ejercicio)
     {
         if($ejercicio)
@@ -30,12 +39,11 @@ class Vvale extends Model
         }
     }
 
-    public function scopeFecha($query, $fecha)
+    public function scopeComprobacion($query, $comprobacion)
     {
-        if($fecha)
+        if($comprobacion != '')
         {
-            $fechaformat = date('Y-m-d', strtotime(str_replace('/', '-', $fecha)));
-            return $query->where('fecha', '=', $fechaformat);
+            return $query->where('activo', $comprobacion);
         }
     }
 

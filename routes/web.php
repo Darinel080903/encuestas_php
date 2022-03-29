@@ -100,6 +100,8 @@ Route::put('/facturas/{id}/update2', 'App\Http\Controllers\FacturaController@upd
 
 Route::resource('/vales', 'App\Http\Controllers\ValegasController');
 
+Route::put('/vales/{id}/update2', 'App\Http\Controllers\ValegasController@update2');
+
 Route::get('/vales/autos/{idauto}', 'App\Http\Controllers\AjaxController@cargafuncionario');
 
 Route::get('/vales/conceptos/{idfactura}', 'App\Http\Controllers\AjaxController@cargaconceptos');
@@ -167,3 +169,5 @@ Route::resource('/razones', 'App\Http\Controllers\RazonController');
 Route::resource('/solicitudes', 'App\Http\Controllers\SolicitudController');
 
 Route::put('/solicitudes/{solicitud}/update2', 'App\Http\Controllers\SolicitudController@update2');
+
+Route::get('/vales/comprobacion/{idauto}', 'App\Http\Controllers\AjaxController@cargacomprobacion');

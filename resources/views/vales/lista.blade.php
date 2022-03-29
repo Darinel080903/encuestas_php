@@ -27,6 +27,23 @@
                                     @endforeach
                                 </select>
                             </div>
+                            <div class="input-group mr-2 mb-2">  
+                                <select class="form-control" name="vcomprobacion" id="vcomprobacion">
+                                    @if($vcomprobacion == "")
+                                        <option value="" selected>Comprobación</option>
+                                        <option value="1">Si</option>
+                                        <option value="0">No</option>
+                                    @elseif($vcomprobacion == 1)
+                                        <option value="">Comprobación</option>
+                                        <option value="1" selected>Si</option>
+                                        <option value="0">No</option>
+                                    @elseif($vcomprobacion == 0)
+                                        <option value="">Comprobación</option>
+                                        <option value="1">Si</option>
+                                        <option value="0" selected>No</option>
+                                    @endif
+                                </select>
+                            </div>
                             <div class="input-group mr-2 mb-2">
                                 <input type="text" class="form-control" id="vbusqueda" name="vbusqueda" placeholder="Búsqueda" aria-label="Búsqueda" aria-describedby="button-addon2" value="{{$vbusqueda}}">
                                 <div class="input-group-append">
@@ -49,9 +66,10 @@
                                     <th class="text-center" scope="col">Número económico</th>
                                     <th class="text-center" scope="col">Facturas</th>
                                     <th class="text-center" scope="col">Monto</th>
+                                    <th class="text-center" scope="col">Comprobación</th>
                                     <th class="text-center" width="36%" scope="col" colspan="3">
                                         @can('create', \App\Models\Vvale::class)
-                                            <a class="btn btn-outline-danger" href="{{url('/vales/create?page='.$page.'&vfecha='.$vfecha.'&vejercicio='.$vejercicio.'&vbusqueda='.$vbusqueda)}}"><i class="fas fa-save"></i> Nuevo</a>
+                                            <a class="btn btn-outline-danger" href="{{url('/vales/create?page='.$page.'&vfecha='.$vfecha.'&vejercicio='.$vejercicio.'&vcomprobacion='.$vcomprobacion.'&vbusqueda='.$vbusqueda)}}"><i class="fas fa-save"></i> Nuevo</a>
                                         @endcan
                                     </th>
                                     </tr>
@@ -68,8 +86,15 @@
                                             <td class="align-middle">{{'$ 0.00'}}</td>
                                         @endif
                                         <td class="text-center" width="12%">
+                                            <form id="frmimgpublicar{{$item->idvale}}" name="frmimgpublicar{{$item->idvale}}" method="POST" action="{{url('/vales/'.$item->idvale.'/update2')}}">
+                                                @method('PUT')
+                                                @csrf
+                                                <input type="checkbox" id="activo" name="activo" onchange="funpublicar('frmimgpublicar{{$item->idvale}}')"  data-toggle="toggle" data-on="Si" data-off="No" data-onstyle="success" data-offstyle="danger" @if($item->activo == 1) {{'checked'}} @endif @if(!Auth::user()->hasRole('administrador')) disabled @endif>
+                                            </form>
+                                        </td>
+                                        <td class="text-center" width="12%">
                                             @can('update', $item)
-                                                <a class="btn btn-outline-danger" href="{{url('/vales/'.$item->idvale.'/edit?page='.$page.'&vfecha='.$vfecha.'&vejercicio='.$vejercicio.'&vbusqueda='.$vbusqueda)}}"><i class="fas fa-pen"></i> Editar</a>
+                                                <a class="btn btn-outline-danger" href="{{url('/vales/'.$item->idvale.'/edit?page='.$page.'&vfecha='.$vfecha.'&vejercicio='.$vejercicio.'&vcomprobacion='.$vcomprobacion.'&vbusqueda='.$vbusqueda)}}"><i class="fas fa-pen"></i> Editar</a>
                                             @endcan
                                         </td>
                                         <td class="text-center" width="12%">
@@ -119,6 +144,10 @@
         }
 
         $("#vejercicio").change(function(){
+            $("#frmbusqueda").submit();
+        });
+
+        $("#vcomprobacion").change(function(){
             $("#frmbusqueda").submit();
         });
     </script>
