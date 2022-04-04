@@ -39,6 +39,7 @@ class PemexvaleController extends Controller
 
         $page = $request->page;
         $vfecha = $request->vfecha;
+        $vcomprobacion = $request->vcomprobacion;
         $vbusqueda = $request->vbusqueda;
 
         $usuario = auth()->user()->id;
@@ -46,14 +47,14 @@ class PemexvaleController extends Controller
 
         if($usuariorole->hasRole('administrador'))
         {
-            $datos = Vpemexvale::fecha($vfecha)->busqueda($vbusqueda)->orderByDesc('fecha')->orderByDesc('idvale')->paginate(20);
+            $datos = Vpemexvale::fecha($vfecha)->comprobacion($vcomprobacion)->busqueda($vbusqueda)->orderByDesc('fecha')->orderByDesc('idvale')->paginate(20);
         }
         else
         {
-            $datos = Vpemexvale::usuario($usuario)->fecha($vfecha)->busqueda($vbusqueda)->orderByDesc('fecha')->orderByDesc('idvale')->paginate(20);
+            $datos = Vpemexvale::usuario($usuario)->fecha($vfecha)->comprobacion($vcomprobacion)->busqueda($vbusqueda)->orderByDesc('fecha')->orderByDesc('idvale')->paginate(20);
         }
 
-        return view('pemexvales.lista', compact('page', 'vfecha', 'vbusqueda', 'datos'));    
+        return view('pemexvales.lista', compact('page', 'vfecha', 'vcomprobacion', 'vbusqueda', 'datos'));    
     }
 
     /**
@@ -67,6 +68,7 @@ class PemexvaleController extends Controller
 
         $page = $request->page;
         $vfecha = $request->vfecha;
+        $vcomprobacion = $request->vcomprobacion;
         $vbusqueda = $request->vbusqueda;
 
         $usuario = auth()->user()->id;
@@ -74,16 +76,16 @@ class PemexvaleController extends Controller
 
         if($usuariorole->hasRole('administrador'))
         {
-            $autos = Vauto::whereNotNull('fkfuncionario')->where([['fkorigen', 2], ['activo', 1]])->orderby('placa', 'asc')->get();
+            $autos = Auto::where([['fkorigen', 2], ['custodia', 1], ['activo', 1]])->orderby('placa', 'asc')->get();
             $facturas = Pemexfactura::where('activo', 1)->get(); 
         }
         else
         {
-            $autos = Vauto::whereNotNull('fkfuncionario')->where([['fkusuario', $usuario], ['fkorigen', 2], ['activo', 1]])->orderby('placa', 'asc')->get();
+            $autos = Auto::where([['fkusuario', $usuario], ['fkorigen', 2], ['custodia', 1], ['activo', 1]])->orderby('placa', 'asc')->get();
             $facturas = Pemexfactura::where([['fkusuario', $usuario], ['activo', 1]])->get(); 
         }
          
-        return view('pemexvales.crear', compact('page', 'vfecha', 'vbusqueda', 'autos', 'facturas'));
+        return view('pemexvales.crear', compact('page', 'vfecha', 'vcomprobacion', 'vbusqueda', 'autos', 'facturas'));
     }
 
     /**
@@ -113,7 +115,7 @@ class PemexvaleController extends Controller
                 $disponible = $numero - $unidades;
                 if($disponible < $item->numero)
                 {
-                    return redirect('/pemexvales?page='.$request->page.'&vfecha='.$request->vfecha.'&vbusqueda='.$request->vbusqueda)->with('mensajeerror','¡Error no se pudo realizar la operación, verifique las unidades disponibles!');
+                    return redirect('/pemexvales?page='.$request->page.'&vfecha='.$request->vfecha.'&vcomprobacion='.$request->vcomprobacion.'&vbusqueda='.$request->vbusqueda)->with('mensajeerror','¡Error no se pudo realizar la operación, verifique las unidades disponibles!');
                 }             
             }
         }
@@ -130,6 +132,14 @@ class PemexvaleController extends Controller
         $nuevo->recibe = $request->recibe;
         $nuevo->observacion = $request->observacion;
         $nuevo->fkusuario = auth()->user()->id;
+        if(isset($request->activo))
+        {
+            $nuevo->activo = 1;
+        }
+        else
+        {
+            $nuevo->activo = 0;
+        }
         $nuevo->save();
 
         if($folios)
@@ -154,7 +164,7 @@ class PemexvaleController extends Controller
                 }
                 else
                 {
-                    return redirect('/pemexvales?page='.$request->page.'&vfecha='.$request->vfecha.'&vbusqueda='.$request->vbusqueda)->with('mensajeerror','¡Error al guardar verifique las unidades disponibles!');
+                    return redirect('/pemexvales?page='.$request->page.'&vfecha='.$request->vfecha.'&vcomprobacion='.$request->vcomprobacion.'&vbusqueda='.$request->vbusqueda)->with('mensajeerror','¡Error al guardar verifique las unidades disponibles!');
                 }             
             }
         }
@@ -167,7 +177,7 @@ class PemexvaleController extends Controller
         $bitacora->pc = gethostname();
         $bitacora->save();
 
-        return redirect('/pemexvales?page='.$request->page.'&vfecha='.$request->vfecha.'&vbusqueda='.$request->vbusqueda)->with('mensaje','¡Dotación agregada correctamente!');
+        return redirect('/pemexvales?page='.$request->page.'&vfecha='.$request->vfecha.'&vcomprobacion='.$request->vcomprobacion.'&vbusqueda='.$request->vbusqueda)->with('mensaje','¡Dotación agregada correctamente!');
     }
 
 
@@ -195,6 +205,7 @@ class PemexvaleController extends Controller
 
         $page = $request->page;
         $vfecha = $request->vfecha;
+        $vcomprobacion = $request->vcomprobacion;
         $vbusqueda = $request->vbusqueda;
 
         $usuario = auth()->user()->id;
@@ -218,7 +229,7 @@ class PemexvaleController extends Controller
         $funcionarios = Vfuncionariocustodia::where([['fkauto', $datos->fkauto]])->orderBy('idcustodia', 'desc')->get();
         $folios = Vpemexfolio::where('fkvale', $id)->orderby('idfolio', 'asc')->get();
 
-        return view('pemexvales.editar',compact('page', 'vfecha', 'vbusqueda', 'datos', 'autos', 'autoactivo', 'autocustodia', 'funcionarios', 'facturas', 'folios'));
+        return view('pemexvales.editar',compact('page', 'vfecha', 'vcomprobacion', 'vbusqueda', 'datos', 'autos', 'autoactivo', 'autocustodia', 'funcionarios', 'facturas', 'folios'));
     }
 
     /**
@@ -250,6 +261,14 @@ class PemexvaleController extends Controller
         $actualiza->monto = $monto;
         $actualiza->recibe = $request->recibe;
         $actualiza->observacion = $request->observacion;
+        if(isset($request->activo))
+        {
+            $actualiza->activo = 1;
+        }
+        else
+        {
+            $actualiza->activo = 0;
+        }
         $actualiza->save();
 
         $eliminafolios = Pemexfolio::where('fkvale', $id);
@@ -279,7 +298,7 @@ class PemexvaleController extends Controller
                 }
                 else
                 {
-                    return redirect('/pemexvales?page='.$request->page.'&vfecha='.$request->vfecha.'&vbusqueda='.$request->vbusqueda)->with('mensajeerror','¡Error al guardar verifique las unidades disponibles!');
+                    return redirect('/pemexvales?page='.$request->page.'&vfecha='.$request->vfecha.'&vcomprobacion='.$request->vcomprobacion.'&vbusqueda='.$request->vbusqueda)->with('mensajeerror','¡Error al guardar verifique las unidades disponibles!');
                 }             
             }
         }
@@ -292,7 +311,45 @@ class PemexvaleController extends Controller
         $bitacora->pc = gethostname();
         $bitacora->save();
 
-        return redirect('/pemexvales?page='.$request->page.'&vfecha='.$request->vfecha.'&vbusqueda='.$request->vbusqueda)->with('mensaje','¡Dotación editada correctamente!');
+        return redirect('/pemexvales?page='.$request->page.'&vfecha='.$request->vfecha.'&vcomprobacion='.$request->vcomprobacion.'&vbusqueda='.$request->vbusqueda)->with('mensaje','¡Dotación editada correctamente!');
+    }
+
+    public function update2(Request $request, $id)
+    {        
+        $actualiza = Pemexvale::findOrFail($id);
+        if(isset($request->activo))
+        {
+            $actualiza->activo = 1;
+        }
+        else
+        {
+            $actualiza->activo = 0;
+        }
+        $actualiza->save();
+
+        $bitacora = new Bitacora();
+        $bitacora->fkusuario = auth()->user()->id;
+        if(isset($request->activo))
+        {
+            $bitacora->operacion = 'Dotación comprobada correctamente con id:'.$id;
+        }
+        else
+        {
+            $bitacora->operacion = 'Dotación descomprobada correctamente con id:'.$id;
+        }
+        $bitacora->fecha = date('Y-m-d H:i:s');
+        $bitacora->ip = $request->ip();
+        $bitacora->pc = gethostname();
+        $bitacora->save();
+
+        if(isset($request->activo))
+        {
+            return back()->withInput()->with('mensaje', '¡Dotación comprobada correctamente!');
+        }
+        else
+        {
+            return back()->withInput()->with('mensaje', '¡Dotación descomprobada correctamente!');
+        }
     }
 
     /**

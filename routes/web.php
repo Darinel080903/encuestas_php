@@ -138,6 +138,8 @@ Route::put('/pemexfacturas/{id}/update2', 'App\Http\Controllers\PemexfacturaCont
 
 Route::resource('/pemexvales', 'App\Http\Controllers\PemexvaleController');
 
+Route::put('/pemexvales/{id}/update2', 'App\Http\Controllers\PemexvaleController@update2');
+
 Route::get('/pemexvales/conceptos/{idfactura}', 'App\Http\Controllers\AjaxController@cargaconceptospemex');
 
 Route::get('/pemexvales/montos/{idfactura}', 'App\Http\Controllers\AjaxController@cargamontospemex');
@@ -171,3 +173,5 @@ Route::resource('/solicitudes', 'App\Http\Controllers\SolicitudController');
 Route::put('/solicitudes/{solicitud}/update2', 'App\Http\Controllers\SolicitudController@update2');
 
 Route::get('/vales/comprobacion/{idauto}', 'App\Http\Controllers\AjaxController@cargacomprobacion');
+
+Route::get('/valespemex/comprobacion/{idauto}', 'App\Http\Controllers\AjaxController@cargacomprobacionpemex');

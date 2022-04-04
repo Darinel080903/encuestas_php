@@ -26,6 +26,7 @@ use App\Models\Pemexdesglose;
 use App\Models\Pemexfactura;
 use App\Models\Pemexfolio;
 use App\Models\Vale;
+use App\Models\Pemexvale;
 
 class AjaxController extends Controller
 {
@@ -36,7 +37,6 @@ class AjaxController extends Controller
             $campos = Articulo::findOrFail($id);
             return response()->json($campos);
         }
-        
     }
     
     public function tmpguardarbien(Request $request)
@@ -96,7 +96,6 @@ class AjaxController extends Controller
        
         $retorno = Vtmpbien::where('fkusuario', $usuario)->get(); 
         return response()->json($retorno);
-           
     }
 
     public function limpiartmpbien() 
@@ -285,6 +284,15 @@ class AjaxController extends Controller
         if($request->ajax())
         {
             $comprobacion = Vale::where([['fkauto', $id], ['activo', 0]])->count();
+            return response()->json($comprobacion);
+        }
+    }
+
+    public function cargacomprobacionpemex(Request $request, $id)
+    {
+        if($request->ajax())
+        {
+            $comprobacion = Pemexvale::where([['fkauto', $id], ['activo', 0]])->count();
             return response()->json($comprobacion);
         }
     }

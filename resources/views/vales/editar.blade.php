@@ -227,6 +227,7 @@
                             <input type="hidden" name="vcomprobacion" value="{{$vcomprobacion ?? ''}}">
                             <input type="hidden" name="vbusqueda" value="{{$vbusqueda ?? ''}}">
                             <input type="hidden" id="vdetalle" name="vdetalle" value="{{$folios ?? ''}}">
+                            <input type="hidden" id="vauto" name="vauto" value="{{$datos->fkauto ?? ''}}">
                             
                             <button type="submit" class="btn btn-outline-danger" id="btnguardar" @if($autoactivo == false or $autocustodia == false) disabled @endif><i class="fas fa-save"></i> Guardar</button>
                             <a class="btn btn-outline-danger" href="{{url('/vales?page='.$page.'&vfecha='.$vfecha.'&vejercicio='.$vejercicio.'&vcomprobacion='.$vcomprobacion.'&vbusqueda='.$vbusqueda)}}"><i class="fas fa-sign-out-alt fa-rotate-180"></i> Regresar</a>
@@ -296,10 +297,13 @@
                 }
                 else
                 {
+                    $("#divloading").addClass("d-none").removeClass("d-flex");
+
                     $("#funcionario").empty();
                     $("#funcionario").append("<option value=''>Funcionario</option>");
+
                     $("#divcomprobacion").addClass("d-none");
-                    $("#btnguardar").prop("disabled", false);
+                    $("#btnguardar").prop("disabled", false); 
                 } 
             });
         });
@@ -318,11 +322,19 @@
                     dataType: "json",
                     success: function(response, textStatus, xhr)
                     {
-                        console.log(response);
-                        if(response > 0)
+                        var vauto = $("#vauto").val();
+                        if(idauto != vauto) 
                         {
-                            $("#divcomprobacion").removeClass("d-none");
-                            $("#btnguardar").prop("disabled", true);
+                            if(response > 0)
+                            {
+                                $("#divcomprobacion").removeClass("d-none");
+                                $("#btnguardar").prop("disabled", true);
+                            }
+                            else
+                            {
+                                $("#divcomprobacion").addClass("d-none");
+                                $("#btnguardar").prop("disabled", false);
+                            }   
                         }
                         else
                         {

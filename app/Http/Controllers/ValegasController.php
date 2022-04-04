@@ -43,7 +43,6 @@ class ValegasController extends Controller
         $vcomprobacion = $request->vcomprobacion;
         $vbusqueda = $request->vbusqueda;
         
-
         $usuario = auth()->user()->id;
         $usuariorole = User::findOrFail($usuario);
         if($usuariorole->hasRole('administrador'))
@@ -86,7 +85,7 @@ class ValegasController extends Controller
         }
         else
         {
-            $autos = Vauto::where([['fkusuario', $usuario], ['fkorigen', 1], ['custodia', 1], ['activo', 1]])->get();
+            $autos = Auto::where([['fkusuario', $usuario], ['fkorigen', 1], ['custodia', 1], ['activo', 1]])->get();
             $facturas = Factura::where([['fkusuario', $usuario], ['activo', 1]])->get(); 
         }
 

@@ -31,11 +31,19 @@ class Vpemexvale extends Model
         }
     }
 
+    public function scopeComprobacion($query, $comprobacion)
+    {
+        if($comprobacion != '')
+        {
+            return $query->where('activo', $comprobacion);
+        }
+    }
+
     public function scopeBusqueda($query, $busqueda)
     {
         if($busqueda)
         {
-            return $query->where('numero', 'like', "%$busqueda%")->orwhere('monto', 'like', "%$busqueda%")->orwhere('observacion', 'like', "%$busqueda%");
+            return $query->where('placa', 'like', "%$busqueda%")->orwhere('nombrecompleto', 'like', "%$busqueda%")->orwhere('monto', 'like', "%$busqueda%")->orwhere('observacion', 'like', "%$busqueda%");
         }
     }
 }

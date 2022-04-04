@@ -15,6 +15,23 @@
                             <div class="input-group mr-2 mb-2">
                                 <input type="text" class="form-control" id="vfecha" name="vfecha" placeholder="Fecha" aria-label="Fecha" value="{{ $vfecha }}" readonly>
                             </div>
+                            <div class="input-group mr-2 mb-2">  
+                                <select class="form-control" name="vcomprobacion" id="vcomprobacion">
+                                    @if($vcomprobacion == "")
+                                        <option value="" selected>Comprobación</option>
+                                        <option value="1">Si</option>
+                                        <option value="0">No</option>
+                                    @elseif($vcomprobacion == 1)
+                                        <option value="">Comprobación</option>
+                                        <option value="1" selected>Si</option>
+                                        <option value="0">No</option>
+                                    @elseif($vcomprobacion == 0)
+                                        <option value="">Comprobación</option>
+                                        <option value="1">Si</option>
+                                        <option value="0" selected>No</option>
+                                    @endif
+                                </select>
+                            </div>
                             <div class="input-group mr-2 mb-2">
                                 <input type="text" class="form-control" id="vbusqueda" name="vbusqueda" placeholder="Búsqueda" aria-label="Búsqueda" aria-describedby="button-addon2" value="{{$vbusqueda}}">
                                 <div class="input-group-append">
@@ -35,10 +52,12 @@
                                     <tr>
                                     <th class="text-center" width="10%" scope="col">Fecha</th>
                                     <th class="text-center" scope="col">Número de placas</th>
+                                    <th class="text-center" scope="col">Funcionario</th>
                                     <th class="text-center" scope="col">Litros</th>
+                                    <th class="text-center" scope="col">Comprobación</th>
                                     <th class="text-center" width="36%" scope="col" colspan="3">
                                         @can('create', \App\Models\Vpemexvale::class)
-                                            <a class="btn btn-outline-danger" href="{{url('/pemexvales/create?page='.$page.'&vfecha='.$vfecha.'&vbusqueda='.$vbusqueda)}}"><i class="fas fa-save"></i> Nuevo</a>
+                                            <a class="btn btn-outline-danger" href="{{url('/pemexvales/create?page='.$page.'&vfecha='.$vfecha.'&vcomprobacion='.$vcomprobacion.'&vbusqueda='.$vbusqueda)}}"><i class="fas fa-save"></i> Nuevo</a>
                                         @endcan
                                     </th>
                                     </tr>
@@ -48,14 +67,22 @@
                                     <tr>
                                         <th class="align-middle text-center" scope="row">{{date('d/m/Y', strtotime($item->fecha))}}</th>
                                         <td class="align-middle">{{$item->placa}}</td>
+                                        <td class="align-middle">{{$item->nombrecompleto}}</td>
                                         @if ($item->monto)
                                             <td class="align-middle">{!! number_format((float)($item->monto)) !!}</td>
                                         @else
                                             <td class="align-middle">{{'0'}}</td>
                                         @endif
                                         <td class="text-center" width="12%">
+                                            <form id="frmimgpublicar{{$item->idvale}}" name="frmimgpublicar{{$item->idvale}}" method="POST" action="{{url('/pemexvales/'.$item->idvale.'/update2')}}">
+                                                @method('PUT')
+                                                @csrf
+                                                <input type="checkbox" id="activo" name="activo" onchange="funpublicar('frmimgpublicar{{$item->idvale}}')"  data-toggle="toggle" data-on="Si" data-off="No" data-onstyle="success" data-offstyle="danger" @if($item->activo == 1) {{'checked'}} @endif>
+                                            </form>
+                                        </td>
+                                        <td class="text-center" width="12%">
                                             @can('update', $item)
-                                                <a class="btn btn-outline-danger" href="{{url('/pemexvales/'.$item->idvale.'/edit?page='.$page.'&vfecha='.$vfecha.'&vbusqueda='.$vbusqueda)}}"><i class="fas fa-pen"></i> Editar</a>
+                                                <a class="btn btn-outline-danger" href="{{url('/pemexvales/'.$item->idvale.'/edit?page='.$page.'&vfecha='.$vfecha.'&vcomprobacion='.$vcomprobacion.'&vbusqueda='.$vbusqueda)}}"><i class="fas fa-pen"></i> Editar</a>
                                             @endcan
                                         </td>
                                         <td class="text-center" width="12%">
@@ -103,5 +130,9 @@
         {
             $("#"+frm).submit();
         }
+
+        $("#vcomprobacion").change(function(){
+            $("#frmbusqueda").submit();
+        });
     </script>
 @endsection

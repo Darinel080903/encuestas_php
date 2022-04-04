@@ -286,7 +286,7 @@
                     dataType: "json",
                     success: function(response, textStatus, xhr)
                     {
-                        console.log(response);
+                        // console.log(response);
                         if(response > 0)
                         {
                             $("#divcomprobacion").removeClass("d-none");

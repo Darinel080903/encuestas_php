@@ -40,14 +40,14 @@
 
             footer {
                 position: fixed; 
-                bottom: -60px; 
+                bottom: -30px; 
                 left: 10px; 
                 right: 10px;
-                height: 200px; 
+                height: 250px; 
 
                 /** Extra personal styles **/
                 /* background-color: #03a9f4; */
-                color: white;
+                /* color: white; */
                 text-align: center;
                 /* line-height: 35px; */
             }
@@ -71,6 +71,7 @@
                     </tr>
                 </tbody>
             </table>
+            <p class="text-justify mt-3"><small>NOTA: LOS VALES DE COMBUSTIBLE ENTREGADOS SERÁN UTILIZADOS ÚNICAMENTE EN LA UNIDAD VEHICULAR OFICIAL DESCRITA, PARA FINES DE REPRESENTACIÓN DEL TITULAR, LOS CUALES DEBERÁN COMPROBAR MEDIANTE BITÁCORA DE RECORRIDO EN UN PLAZO NO MAYOR A TRES DÍAS HÁBILES POSTERIORES AL CONCLUIR SU COMISIÓN.</small></p>
         </footer>
 
         <div class="container-fluid">
