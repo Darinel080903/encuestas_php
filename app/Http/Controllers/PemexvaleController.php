@@ -45,7 +45,7 @@ class PemexvaleController extends Controller
         $usuario = auth()->user()->id;
         $usuariorole = User::findOrFail($usuario);
 
-        if($usuariorole->hasRole('administrador'))
+        if($usuariorole->hasRole('administrador') OR $usuariorole->hasRole('supervisor'))
         {
             $datos = Vpemexvale::fecha($vfecha)->comprobacion($vcomprobacion)->busqueda($vbusqueda)->orderByDesc('fecha')->orderByDesc('idvale')->paginate(20);
         }
@@ -315,7 +315,10 @@ class PemexvaleController extends Controller
     }
 
     public function update2(Request $request, $id)
-    {        
+    {
+        $modelo = Vpemexvale::findOrFail($id);
+        $this->authorize('update', $modelo);
+                
         $actualiza = Pemexvale::findOrFail($id);
         if(isset($request->activo))
         {

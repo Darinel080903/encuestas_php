@@ -36,7 +36,7 @@ class PemexfacturaController extends Controller
         $usuario = auth()->user()->id;
         $usuariorole = User::findOrFail($usuario);
 
-        if($usuariorole->hasRole('administrador'))
+        if($usuariorole->hasRole('administrador') OR $usuariorole->hasRole('supervisor'))
         {
             $datos = Pemexfactura::fecha($vfecha)->busqueda($vbusqueda)->orderByDesc('fecha')->orderByDesc('idfactura')->paginate(20);
         }
