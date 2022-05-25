@@ -76,12 +76,12 @@ class PemexvaleController extends Controller
 
         if($usuariorole->hasRole('administrador'))
         {
-            $autos = Auto::where([['fkorigen', 2], ['custodia', 1], ['activo', 1]])->orderby('placa', 'asc')->get();
+            $autos = Auto::where([['custodia', 1], ['activo', 1]])->orderby('placa', 'asc')->get();
             $facturas = Pemexfactura::where('activo', 1)->get(); 
         }
         else
         {
-            $autos = Auto::where([['fkusuario', $usuario], ['fkorigen', 2], ['custodia', 1], ['activo', 1]])->orderby('placa', 'asc')->get();
+            $autos = Auto::where([['fkusuario', $usuario], ['custodia', 1], ['activo', 1]])->orderby('placa', 'asc')->get();
             $facturas = Pemexfactura::where([['fkusuario', $usuario], ['activo', 1]])->get(); 
         }
          
@@ -214,13 +214,13 @@ class PemexvaleController extends Controller
         if($usuariorole->hasRole('administrador'))
         {
             $datos = Pemexvale::findOrFail($id);
-            $autos = Auto::where([['fkorigen', 2], ['custodia', 1], ['activo', 1]])->orderby('placa', 'asc')->get();
+            $autos = Auto::where([['custodia', 1], ['activo', 1]])->orderby('placa', 'asc')->get();
             $facturas = Pemexfactura::where('activo', 1)->get(); 
         }
         else
         {
             $datos = Pemexvale::where('fkusuario', $usuario)->findOrFail($id);
-            $autos = Auto::where([['fkusuario', $usuario], ['fkorigen', 2], ['custodia', 1], ['activo', 1]])->orderby('placa', 'asc')->get();
+            $autos = Auto::where([['fkusuario', $usuario], ['custodia', 1], ['activo', 1]])->orderby('placa', 'asc')->get();
             $facturas = Pemexfactura::where([['fkusuario', $usuario], ['activo', 1]])->get(); 
         }
         

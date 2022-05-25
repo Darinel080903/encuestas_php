@@ -43,7 +43,7 @@ class Vpemexvale extends Model
     {
         if($busqueda)
         {
-            return $query->where('placa', 'like', "%$busqueda%")->orwhere('nombrecompleto', 'like', "%$busqueda%")->orwhere('monto', 'like', "%$busqueda%")->orwhere('observacion', 'like', "%$busqueda%");
+            return $query->where('placa', 'like', "%$busqueda%")->orwhere('nombrecompleto', 'like', "%$busqueda%")->orwhere('monto', 'like', "%$busqueda%")->orwhere('observacion', 'like', "%$busqueda%")->orwhere('recibe', 'like', "%$busqueda%");
         }
     }
 }

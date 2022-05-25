@@ -180,4 +180,14 @@ class PDFController extends Controller
         
         return \PDF::loadView('pdf.pemexvale', compact('fecha', 'vales', 'folios', 'autoriza', 'entrega'))->stream('archivo.pdf');
     }
+
+    public function pdfreportevale(Request $request)
+    {  
+        
+        $vales = Vvale::ejercicio($request->ejercicio)->factura($request->factura)->orderBy('fecha', 'asc')->get();
+        $vale = Vvale::ejercicio($request->ejercicio)->factura($request->factura)->orderBy('fecha', 'asc')->sum('monto');      
+        $autoriza = Vfuncionario::where([['autoriza', 1],['activo', 1]])->orderBy('idfuncionario', 'desc')->first();
+                
+        return \PDF::loadView('pdf.imprimirvale', compact('autoriza', 'vales', 'vale'))->stream('archivo.pdf');
+    }
 }

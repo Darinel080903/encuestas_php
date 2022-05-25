@@ -65,12 +65,13 @@
                                     <th class="text-center" width="10%" scope="col">Fecha</th>
                                     <th class="text-center" scope="col">Número económico</th>
                                     <th class="text-center" scope="col">Funcionario</th>
+                                    <th class="text-center" scope="col">Recibe</th>
                                     <th class="text-center" scope="col">Facturas</th>
                                     <th class="text-center" scope="col">Monto</th>
                                     <th class="text-center" scope="col">Comprobación</th>
-                                    <th class="text-center" width="36%" scope="col" colspan="3">
+                                    <th class="text-center" width="18%" scope="col" colspan="3">
                                         @can('create', \App\Models\Vvale::class)
-                                            <a class="btn btn-outline-danger" href="{{url('/vales/create?page='.$page.'&vfecha='.$vfecha.'&vejercicio='.$vejercicio.'&vcomprobacion='.$vcomprobacion.'&vbusqueda='.$vbusqueda)}}"><i class="fas fa-save"></i> Nuevo</a>
+                                            <a class="btn btn-outline-danger" href="{{url('/vales/create?page='.$page.'&vfecha='.$vfecha.'&vejercicio='.$vejercicio.'&vcomprobacion='.$vcomprobacion.'&vbusqueda='.$vbusqueda)}}"><i class="fas fa-save"></i></a>
                                         @endcan
                                     </th>
                                     </tr>
@@ -81,33 +82,34 @@
                                         <th class="align-middle text-center" scope="row">{{date('d/m/Y', strtotime($item->fecha))}}</th>
                                         <td class="align-middle">{{$item->numero}}</td>
                                         <td class="align-middle">{{$item->nombrecompleto}}</td>
+                                        <td class="align-middle">{{$item->recibe}}</td>
                                         <td class="align-middle">{{$item->facturas}}</td>
                                         @if ($item->monto)
                                             <td class="align-middle">${!! number_format((float)($item->monto), 2) !!}</td>
                                         @else
                                             <td class="align-middle">{{'$ 0.00'}}</td>
                                         @endif
-                                        <td class="text-center" width="12%">
+                                        <td class="text-center" width="9%">
                                             <form id="frmimgpublicar{{$item->idvale}}" name="frmimgpublicar{{$item->idvale}}" method="POST" action="{{url('/vales/'.$item->idvale.'/update2')}}">
                                                 @method('PUT')
                                                 @csrf
                                                 <input type="checkbox" id="activo" name="activo" onchange="funpublicar('frmimgpublicar{{$item->idvale}}')"  data-toggle="toggle" data-on="Si" data-off="No" data-onstyle="success" data-offstyle="danger" @if($item->activo == 1) {{'checked'}} @endif>
                                             </form>
                                         </td>
-                                        <td class="text-center" width="12%">
+                                        <td class="text-center" width="6%">
                                             @can('update', $item)
-                                                <a class="btn btn-outline-danger" href="{{url('/vales/'.$item->idvale.'/edit?page='.$page.'&vfecha='.$vfecha.'&vejercicio='.$vejercicio.'&vcomprobacion='.$vcomprobacion.'&vbusqueda='.$vbusqueda)}}"><i class="fas fa-pen"></i> Editar</a>
+                                                <a class="btn btn-outline-danger" href="{{url('/vales/'.$item->idvale.'/edit?page='.$page.'&vfecha='.$vfecha.'&vejercicio='.$vejercicio.'&vcomprobacion='.$vcomprobacion.'&vbusqueda='.$vbusqueda)}}"><i class="fas fa-pen"></i></a>
                                             @endcan
                                         </td>
-                                        <td class="text-center" width="12%">
-                                            <a class="btn btn-outline-danger" href="{{url('/imprimir/vale/'.$item->idvale)}}" target="_blank"><i class="fas fa-print"></i>&nbsp;Imprimir</a>
+                                        <td class="text-center" width="6%">
+                                            <a class="btn btn-outline-danger" href="{{url('/imprimir/vale/'.$item->idvale)}}" target="_blank"><i class="fas fa-print"></i></a>
                                         </td>
-                                        <td class="text-center" width="12%">
+                                        <td class="text-center" width="6%">
                                             @can('delete', $item)
                                                 <form action="{{url('/vales/'.$item->idvale)}}" method="POST">
                                                     @method('DELETE')
                                                     @csrf
-                                                    <button class="btn btn-outline-danger" type="submit"><i class="fas fa-trash"></i> Borrar</button>
+                                                    <button class="btn btn-outline-danger" type="submit"><i class="fas fa-trash"></i></button>
                                                 </form>
                                             @endcan
                                         </td>

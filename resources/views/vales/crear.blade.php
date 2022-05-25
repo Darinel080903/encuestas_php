@@ -230,9 +230,14 @@
             format: 'dd/mm/yyyy'
         });
 
+        $(document).ready(function(){
+            $("#auto").chosen();
+        });
+
         $(function(){
-            $("#auto").change(function(){
-                var Auto = event.target.value;
+            $("#auto").chosen().change(function(){
+                // var Auto = event.target.value;
+                var Auto = $("#auto").chosen().val();
                 if(Auto)
                 {
                     var url = "{{url('/vales/autos/idauto')}}";
@@ -748,6 +753,25 @@
             Limpiar();
         }
 
+        $("#auto").change(function(){
+            if($("#auto").val() != "")
+            {
+                if($("#auto_chosen").hasClass("is-invalid") === true)
+                {
+                    $("#auto_chosen").removeClass("is-invalid");
+                    $("#auto_chosen").addClass("is-valid");
+                }
+            }
+            else
+            {
+                if($("#auto_chosen").hasClass("is-valid") === true)
+                {
+                    $("#auto_chosen").removeClass("is-valid");
+                    $("#auto_chosen").addClass("is-invalid");
+                }
+            }
+        });
+
         // Example starter JavaScript for disabling form submissions if there are invalid fields
         (function() {
           'use strict';
@@ -758,10 +782,22 @@
             var validation = Array.prototype.filter.call(forms, function(form) {
               form.addEventListener('submit', function(event) {
                 if (form.checkValidity() === false) {
-                  event.preventDefault();
-                  event.stopPropagation();
+                    event.preventDefault();
+                    event.stopPropagation();
+                    if($("#auto").val() == "")
+                    {
+                        $('#auto_chosen').addClass('is-invalid');
+                    }
+                    else
+                    {
+                        $('#auto_chosen').addClass('is-valid');
+                    }
                 }
                 form.classList.add('was-validated');
+                if($("#auto").val() != "")
+                {
+                    $('#auto_chosen').addClass('is-valid');
+                }
               }, false);
             });
           }, false);

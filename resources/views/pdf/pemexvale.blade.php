@@ -85,7 +85,9 @@
                     <p class="text-right mt-0 mb-0"><strong>Area de Recursos Materiales y Servicios Generales</strong></p>
                     <h3 class="text-right mt-0 mb-0">Asunto: Vale</h3>
                     <p class="text-lefth mt-0 mb-0">Fecha: <strong>{{$fecha}}</strong></p>
-                    {{-- <p class="text-lefth mt-0 mb-0">Número económico: <strong>{{$vales->numero}}</strong></p> --}}
+                    @if($vales->fkorigen == 1)
+                        <p class="text-lefth mt-0 mb-0">Número económico: <strong>{{$vales->numero}}</strong></p>    
+                    @endif
                     <p class="text-lefth mt-0 mb-0">Marca: <strong>{{$vales->fabrica}}</strong></p>
                     <p class="text-lefth mt-0 mb-0">Tipo: <strong>{{$vales->tipo}}</strong></p>
                     <p class="text-lefth mt-0 mb-0">Modelo: <strong>{{$vales->modelo}}</strong></p>

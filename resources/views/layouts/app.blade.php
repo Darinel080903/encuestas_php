@@ -258,6 +258,13 @@
                                                 <i class="fas fa-file-alt icon-color"></i> Vales
                                             </a>
                                         @endcan
+                                        <div class="dropdown-divider"></div>
+
+                                        @can('viewAny', \App\Models\Reportevale::class)
+                                            <a class="dropdown-item" href="{{url('/reportes')}}">
+                                                <i class="fas fa-print icon-color"></i> Reporte de vales
+                                            </a>
+                                        @endcan
                                     </div>                                
                                 </li>
                             @endcan

@@ -175,3 +175,7 @@ Route::put('/solicitudes/{solicitud}/update2', 'App\Http\Controllers\SolicitudCo
 Route::get('/vales/comprobacion/{idauto}', 'App\Http\Controllers\AjaxController@cargacomprobacion');
 
 Route::get('/valespemex/comprobacion/{idauto}', 'App\Http\Controllers\AjaxController@cargacomprobacionpemex');
+
+Route::resource('/reportes', 'App\Http\Controllers\ReportevaleController');
+
+Route::get('/reportes/imprimir/pdf', 'App\Http\Controllers\PDFController@pdfreportevale');
