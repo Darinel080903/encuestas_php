@@ -62,7 +62,7 @@
                                                 <form id="frmimgpublicar{{$item->idfactura}}" name="frmimgpublicar{{$item->idfactura}}" method="POST" action="{{url('/facturas/'.$item->idfactura.'/update2')}}">
                                                     @method('PUT')
                                                     @csrf
-                                                    <input type="checkbox" id="activo" name="activo" onchange="funpublicar('frmimgpublicar{{$item->idfactura}}')"  data-toggle="toggle" data-on="Activo" data-off="Inactivo" data-onstyle="success" data-offstyle="danger" @if($item->activo == 1) {{'checked'}} @endif @if(!Auth::user()->hasRole('administrador')) disabled @endif>
+                                                    <input type="checkbox" id="activo" name="activo" onchange="funpublicar('frmimgpublicar{{$item->idfactura}}')"  data-toggle="toggle" data-on="Activo" data-off="Inactivo" data-onstyle="success" data-offstyle="danger" @if($item->activo == 1) {{'checked'}} @endif>
                                                 </form>
                                             @endcan
                                         </td>
