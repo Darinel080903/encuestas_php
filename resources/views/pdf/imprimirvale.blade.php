@@ -98,9 +98,7 @@
                         <tr>
                             <td colspan="4"></td>                            
                             <td class="text-right"><small>${!! number_format((float)($vale), 2) !!}</small></td>                          
-                        </tr>
-                                              
-                       
+                        </tr>                
                     </table>
                 </div>
             </div>                       
