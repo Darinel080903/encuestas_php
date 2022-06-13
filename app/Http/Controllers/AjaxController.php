@@ -281,10 +281,24 @@ class AjaxController extends Controller
 
     public function cargacomprobacion(Request $request, $id)
     {
+        $validacion='';
         if($request->ajax())
         {
-            $comprobacion = Vale::where([['fkauto', $id], ['activo', 0]])->count();
-            return response()->json($comprobacion);
+            $comprobacionvale = Vale::where([['fkauto', $id], ['activo', 0]])->count();
+            $comprobacionpemex = Pemexvale::where([['fkauto', $id], ['activo', 0]])->count();
+            if($comprobacionvale > 0 and $comprobacionpemex == 0)
+            {
+                $validacion = 'v';
+            }
+            elseif($comprobacionpemex > 0 and $comprobacionvale == 0)
+            {
+                $validacion = 'p';
+            }
+            elseif($comprobacionpemex > 0 and $comprobacionvale > 0)
+            {
+                $validacion = 'vp';
+            }
+            return response()->json($validacion);
         }
     }
 
@@ -292,8 +306,34 @@ class AjaxController extends Controller
     {
         if($request->ajax())
         {
-            $comprobacion = Pemexvale::where([['fkauto', $id], ['activo', 0]])->count();
-            return response()->json($comprobacion);
+            $validacion='';
+            $tipo = Auto::findOrFail($id)->value('fkorigen');
+            if($tipo == 1)
+            {
+                $comprobacionvale = Vale::where([['fkauto', $id], ['activo', 0]])->count();
+                $comprobacionpemex = Pemexvale::where([['fkauto', $id], ['activo', 0]])->count();
+                if($comprobacionvale > 0 and $comprobacionpemex == 0)
+                {
+                    $validacion = 'v';
+                }
+                elseif($comprobacionpemex > 0 and $comprobacionvale == 0)
+                {
+                    $validacion = 'p';
+                }
+                elseif($comprobacionpemex > 0 and $comprobacionvale > 0)
+                {
+                    $validacion = 'vp';
+                }
+            }
+            else
+            {
+                $comprobacionpemex = Pemexvale::where([['fkauto', $id], ['activo', 0]])->count();
+                if($comprobacionpemex == 0)
+                {
+                    $validacion = 'p';
+                }
+            }
+            return response()->json($validacion);
         }
     }
 }

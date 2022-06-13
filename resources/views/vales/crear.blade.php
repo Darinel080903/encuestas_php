@@ -12,8 +12,16 @@
                         <form class="needs-validation" method="POST" action="{{url('/vales')}}" novalidate>
                         @csrf
 
-                            <div class="alert alert-danger d-none" id="divcomprobacion" role="alert">
+                            {{-- <div class="alert alert-danger d-none" id="divcomprobacion" role="alert">
                                 ¡Vehiculo con comprobación pendiente, favor de verificar!
+                            </div> --}}
+
+                            <div class="alert alert-danger d-none" id="divcomprobacionvale" role="alert">
+                                ¡Vehiculo con comprobación de <strong>Gasto Corriente</strong> pendiente, favor de verificar!
+                            </div>
+
+                            <div class="alert alert-danger d-none" id="divcomprobacionpemex" role="alert">
+                                ¡Vehiculo con comprobación de <strong>PEMEX</strong> pendiente, favor de verificar!
                             </div>
                             
                             <div class="form-row">
@@ -291,16 +299,29 @@
                     dataType: "json",
                     success: function(response, textStatus, xhr)
                     {
-                        // console.log(response);
-                        if(response > 0)
+                        if(response == "v")
                         {
-                            $("#divcomprobacion").removeClass("d-none");
-                            $("#btnguardar").prop("disabled", true);
+                            $("#divcomprobacionvale").removeClass("d-none");
+                            $("#divcomprobacionpemex").addClass("d-none");
+                            // $("#btnguardar").prop("disabled", true);
+                        }
+                        else if(response == "p")
+                        {
+                            $("#divcomprobacionvale").addClass("d-none");
+                            $("#divcomprobacionpemex").removeClass("d-none");
+                            // $("#btnguardar").prop("disabled", true);
+                        }
+                        else if(response == "vp")
+                        {
+                            $("#divcomprobacionvale").removeClass("d-none");
+                            $("#divcomprobacionpemex").removeClass("d-none");
+                            // $("#btnguardar").prop("disabled", true);
                         }
                         else
                         {
-                            $("#divcomprobacion").addClass("d-none");
-                            $("#btnguardar").prop("disabled", false);
+                            $("#divcomprobacionvale").addClass("d-none");
+                            $("#divcomprobacionpemex").addClass("d-none");
+                            // $("#btnguardar").prop("disabled", false);
                         }
                         $("#divloading").addClass("d-none").removeClass("d-flex");
                     },
