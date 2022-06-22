@@ -76,7 +76,13 @@
                                     @foreach ($autos as $item)
                                     <tr>
                                         <td class="text-center align-middle" scope="row">{{date('d/m/Y', strtotime($item->fecha))}}</td>
-                                        <td class="text-justify align-middle">{{$item->numero}}</td>
+                                        <td class="text-justify align-middle">
+                                            @if($item->fkorigen == 1)
+                                                {{$item->numero}}
+                                            @elseif($item->fkorigen == 2)
+                                                {{$item->placa}}
+                                            @endif
+                                        </td>
                                         <td class="text-justify align-middle">{{$item->fabrica.' - '.$item->tipo.' - '.$item->modelo}}</td>
                                         <td class="text-justify align-middle">{{$item->origen}}</td>
                                         <td class="text-center" width="11%">

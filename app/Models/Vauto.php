@@ -51,7 +51,7 @@ class Vauto extends Model
     {
         if($busqueda)
         {
-            return $query->where('numero', 'like', "%$busqueda%")->orWhere('fabrica', 'like', "%$busqueda%")->orWhere('tipo', 'like', "%$busqueda%")->orWhere('modelo', 'like', "%$busqueda%")->orWhere('descripcion', 'like', "%$busqueda%");
+            return $query->where('numero', 'like', "%$busqueda%")->orWhere('placa', 'like', "%$busqueda%")->orWhere('fabrica', 'like', "%$busqueda%")->orWhere('tipo', 'like', "%$busqueda%")->orWhere('modelo', 'like', "%$busqueda%")->orWhere('descripcion', 'like', "%$busqueda%");
         }
     }
 }

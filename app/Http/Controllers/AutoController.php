@@ -46,7 +46,7 @@ class AutoController extends Controller
         $usuario = auth()->user()->id;
         $usuariorole = User::findOrFail($usuario);
 
-        if($usuariorole->hasRole('administrador'))
+        if($usuariorole->hasRole('administrador') or $usuariorole->hasRole('supervisor'))
         {
             $autos = Vauto::fecha($vfecha)->activo($vactivo)->origen($vorigen)->busqueda($vbusqueda)->orderByDesc('fecha')->orderByDesc('idauto')->paginate(20);
         }
@@ -206,7 +206,7 @@ class AutoController extends Controller
         $usuario = auth()->user()->id;
         $usuariorole = User::findOrFail($usuario);
 
-        if($usuariorole->hasRole('administrador'))
+        if($usuariorole->hasRole('administrador') or $usuariorole->hasRole('supervisor'))
         {
             $autos = Auto::findOrFail($id);
         }

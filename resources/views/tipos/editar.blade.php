@@ -39,7 +39,7 @@
                             </div>
                             <input type="hidden" name="page" value="{{$page ?? ''}}">
                             <input type="hidden" name="vbusqueda" value="{{$vbusqueda ?? ''}}">
-                            <button type="submit" class="btn btn-outline-danger"><i class="fas fa-save"></i> Guardar</button>
+                            <button type="submit" class="btn btn-outline-danger @if(Auth::user()->hasRole('supervisor')) noaccion @endif"><i class="fas fa-save"></i> Guardar</button>
                             <a class="btn btn-outline-danger" href="{{url('/tipos?page='.$page.'&vbusqueda='.$vbusqueda)}}"><i class="fas fa-sign-out-alt fa-rotate-180"></i> Regresar</a>
                         </form>
                     </div>
@@ -48,6 +48,16 @@
         </div>
     </div>
     <script>
+        $(document).ready(function(){
+            $(window).keydown(function(event){
+                if(event.keyCode == 13)
+                {
+                    event.preventDefault();
+                    return false;
+                }
+            });
+        });
+        
         $(document).ready(function(){
             $(".form-control-chosen").chosen();
         });

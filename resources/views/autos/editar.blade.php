@@ -194,7 +194,7 @@
                             <input type="hidden" name="vactivo" value="{{$vactivo ?? ''}}">
                             <input type="hidden" name="vorigen" value="{{$vorigen ?? ''}}">
                             <input type="hidden" name="vbusqueda" value="{{$vbusqueda ?? ''}}">
-                            <button type="submit" class="btn btn-outline-danger"><i class="fas fa-save"></i> Guardar</button>
+                            <button type="submit" class="btn btn-outline-danger @if(Auth::user()->hasRole('supervisor')) noaccion @endif"><i class="fas fa-save"></i> Guardar</button>
                             <a class="btn btn-outline-danger" href="{{url('/autos?page='.$page.'&vfecha='.$vfecha.'&vactivo='.$vactivo.'&vorigen='.$vorigen.'&vbusqueda='.$vbusqueda)}}"><i class="fas fa-sign-out-alt fa-rotate-180"></i> Regresar</a>
                             <div class="d-none justify-content-center" id="divloading">
                                 <div class="spinner-grow divloading" role="status">
@@ -209,6 +209,16 @@
         </div>
     </div>
     <script>
+        $(document).ready(function(){
+            $(window).keydown(function(event){
+                if(event.keyCode == 13)
+                {
+                    event.preventDefault();
+                    return false;
+                }
+            });
+        });
+
         $('#fecha').datepicker({
             uiLibrary: 'bootstrap4',
             locale: 'es-es',
