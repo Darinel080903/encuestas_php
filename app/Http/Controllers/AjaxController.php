@@ -27,6 +27,7 @@ use App\Models\Pemexfactura;
 use App\Models\Pemexfolio;
 use App\Models\Vale;
 use App\Models\Pemexvale;
+use App\Models\Vauto;
 
 class AjaxController extends Controller
 {
@@ -336,4 +337,24 @@ class AjaxController extends Controller
             return response()->json($validacion);
         }
     }
+
+    //para el ajax de claves
+    public function cargarclaves(Request $request, $id)
+    {
+        if($request->ajax())
+        {            
+           $areas = Area::findOrFail($id);          
+           return response()->json($areas);           
+        } 
+    }
+
+    // para el ajax de autos 
+    public function cargarautos(Request $request, $id)
+    {
+        if($request->ajax())
+        {            
+            $autos = Vauto::findOrFail($id);          
+            return response()->json($autos);           
+        }
+    }   
 }

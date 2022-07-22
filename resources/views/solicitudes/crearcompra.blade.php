@@ -6,21 +6,18 @@
             <div class="col-md-12">
                 <div class="card cardborde">
                     <div class="card-header justify-content-between align-items-centr text-center encabezadoform">
-                        <h3 class="headerlistatitulo"><i class="fas fa-save"></i> Nueva solicitud</h3>
+                        <h3 class="headerlistatitulo"><i class="fas fa-save"></i> Nueva compra</h3>
                     </div>
                     <div class="card-body">
-                        <form class="needs-validation" method="POST" action="{{url('/solicitudes')}}" novalidate>
+                        <form class="needs-validation" method="POST" action="{{url('/compras')}}" novalidate>
                         @csrf
                             
                             <div class="form-row">
 
                                 <div class="form-group col-md-2">
                                     <label for="fecha">Fecha:</label>
-                                    <input type="text" class="form-control @error('fecha') is-invalid @enderror" id="fecha" name="fecha" aria-label="Fecha" placeholder="Fecha" value="{{ date("d/m/Y") }}" readonly/>
-                                </div>
-                                <div class="invalid-feedback">
-                                    ¡La <strong>fecha</strong> es un campo requerido!
-                                </div>
+                                    <input type="text" class="form-control" id="fecha" name="fecha" aria-label="Fecha" placeholder="Fecha" value="{{ date("d/m/Y") }}" readonly/>
+                                </div>                                
                                 <div class="form-group col-md-2">
                                     <label for="folio">Folio:</label>
                                     <input type="text" class="form-control" id="folio" name="folio" value="{{$folio}}" maxlength="11" placeholder="folio" readonly>                                   
@@ -31,7 +28,7 @@
 
                                 <div class="form-group col-md-3">
                                     <label for="partida">Partidas:</label>
-                                    <select class="form-control" id="partida" name="partida" required>
+                                    <select class="form-control @error('partida') is-invalid @enderror" id="partida" name="partida" required>
                                         <option value="">partida</option>
                                         @foreach ($partidas as $item)
                                             @if (old('partida') == $item->idpartida)
@@ -86,7 +83,7 @@
                                 </div>                               
                             </div>
 
-                            <div class="form-row d-none">                               
+                            {{-- <div class="form-row d-none">                               
                                                                 
                                 <div class="form-group col-md-3 mb-0">
                                     <label for="disponible">Disponible:</label>
@@ -111,49 +108,13 @@
                                         @endforeach  
                                     </select> 
                                 </div>   
-                            </div>
+                            </div>                            --}}
 
-                            <div class="form-row">
-
-                                <div class="form-group col-md-3">
-                                    <label for="clase">Clase:</label>
-                                    <select class="form-control" id="clase" name="clase" required>
-                                        <option value="">clase</option>
-                                        @foreach ($clases as $item)
-                                            @if (old('clase') == $item->idclase)
-                                                <option value="{{$item->idclase}}" selected>{{$item->clase}}</option>
-                                            @else
-                                                <option value="{{$item->idclase}}">{{$item->clase}}</option>
-                                            @endif
-                                        @endforeach  
-                                    </select>
-                                    <div class="invalid-feedback">
-                                        ¡La <strong>clase</strong> es un campo requerido!
-                                    </div>
-                                </div>
-                                <div class="form-group col-md-3">
-                                    <label for="grupo">Grupo:</label>
-                                    <select class="form-control" id="grupo" name="grupo" disabled>
-                                        <option value="">grupo</option>
-                                        @foreach ($grupos as $item)
-                                            @if (old('grupo') == $item->idgrupo)
-                                                <option value="{{$item->idgrupo}}" selected>{{$item->grupo}}</option>
-                                            @else
-                                                <option value="{{$item->idgrupo}}">{{$item->grupo}}</option>
-                                            @endif
-                                        @endforeach  
-                                    </select>
-                                    <div class="invalid-feedback">
-                                        ¡El <strong>grupo</strong> es un campo requerido!
-                                    </div>
-                                </div>
-                               
-                            </div> 
                             <div class="form-row">
 
                                 <div class="form-group col-md-8">
                                     <label for="proveedor">Proveedor:</label>
-                                    <select class="form-control" id="proveedor" name="proveedor" required>
+                                    <select class="form-control" id="proveedor" name="proveedor">
                                         <option value="">proveedor</option>
                                         @foreach ($proveedores as $item)
                                             @if (old('proveedor') == $item->idproveedor)
@@ -162,18 +123,12 @@
                                                 <option value="{{$item->idproveedor}}">{{$item->proveedor}}</option>
                                             @endif
                                         @endforeach  
-                                    </select>
-                                    <div class="invalid-feedback">
-                                        ¡El <strong>proveedor</strong> es un campo requerido!
-                                    </div>
+                                    </select>                                    
                                 </div>
                                 
                                 <div class="form-group col-md-2">
                                     <label for="factura">Facturas:</label>
-                                    <input type="text" class="form-control @error('factura') is-invalid @enderror" id="factura" name="factura" value="{{old('factura')}}" maxlength="11" placeholder="factura" required>
-                                    <div class="invalid-feedback">
-                                        ¡La <strong>factura</strong> es un campo requerido!
-                                    </div>
+                                    <input type="text" class="form-control" id="factura" name="factura" value="{{old('factura')}}" maxlength="11" placeholder="factura">                                    
                                 </div>
                              
                                 <div class="form-group col-md-2">
@@ -183,7 +138,7 @@
 
                             </div> 
                             
-                            <div class="card border-success mb-2 d-none" id="desglose">
+                            <div class="card border-success mb-2" id="desglose">
                                 <div class="card-header">
                                     Desglose
                                 </div>
@@ -252,173 +207,6 @@
                                         </table>                                       
                                     </div>                                   
                                 </div>                                
-                            </div>
-                                                                                    
-                            <div class="card border-success mb-2 d-none" id="inmuebles">
-                                <div class="card-header">
-                                    Inmuebles
-                                </div>
-                                <div class="card-body">
-                                    <div class="form-row">
-                                       
-                                        <div class="form-group col-md-12">
-                                            <label for="inmuebledescripcion">Descripción:</label>
-                                            <input type="text" class="form-control @error('inmuebledescripcion') is-invalid @enderror" id="inmuebledescripcion" name="inmuebledescripcion" value="{{old('inmuebledescripcion')}}" maxlength="250" placeholder="descripcion">
-                                            <div class="invalid-feedback">
-                                                ¡La <strong>descripcion</strong> es un campo requerido!
-                                            </div>
-                                        </div>                                                                               
-                                        <div class="form-group col-md-4">
-                                            <label for="inmueble">Inmueble:</label>
-                                            <select class="form-control @error('inmueble') is-invalid @enderror" id="inmueble" name="inmueble">
-                                                <option value="">imnueble</option>
-                                                @foreach ($inmuebles as $item)
-                                                    @if (old('inmueble') == $item->idinmueble)
-                                                        <option value="{{$item->idinmueble}}" selected>{{$item->inmueble}}</option>
-                                                    @else
-                                                        <option value="{{$item->idinmueble}}">{{$item->inmueble}}</option>
-                                                    @endif
-                                                @endforeach  
-                                            </select>  
-                                            <div class="invalid-feedback">
-                                                ¡El <strong>inmueble</strong> es un campo requerido!
-                                            </div>                                         
-                                        </div>
-                                        <div class="form-group col-md-12">
-                                            <label for="inmuebleservicio">Servicio:</label>    
-                                            <textarea class="form-control" name="inmuebleservicio" id="inmuebleservicio" cols="30" rows="2" placeholder="servicio">{{old('inmuebleservicio')}}</textarea>
-                                        </div> 
-                                        <div class="form-group col-md-2">
-                                            <label for="fechainmueble">Fecha servicio inmueble:</label>
-                                            <input type="text" class="form-control @error('fechainmueble') is-invalid @enderror" id="fechainmueble" name="fechainmueble" aria-label="fechainmueble" placeholder="fechaservicio" value="{{ old('fechainmueble') }}" readonly/>
-                                        </div>                                       
-                                    </div>
-                                </div>                     
-                            </div>
-
-                            <div class="card border-success mb-2 d-none" id="muebles">
-                                <div class="card-header">
-                                    Muebles
-                                </div>
-                                <div class="card-body">
-                                    <div class="form-row">
-                                       
-                                        <div class="form-group col-md-12">
-                                            <label for="muebledescripcion">Descripción:</label>
-                                            <input type="text" class="form-control @error('muebledescripcion') is-invalid @enderror" id="muebledescripcion" name="descripcion" value="{{old('muebledescripcion')}}" maxlength="250" placeholder="descripcion">
-                                            <div class="invalid-feedback">
-                                                ¡La <strong>descripcion</strong> es un campo requerido!
-                                            </div>
-                                        </div>                                       
-                                        <div class="form-group col-md-4">
-                                            <label for="mueble">Muebles:</label>
-                                            <select class="form-control" id="mueble" name="mueble">
-                                                <option value="">mueble</option>
-                                                @foreach ($muebles as $item)
-                                                    @if (old('muebles') == $item->idmueble)
-                                                        <option value="{{$item->idmueble}}" selected>{{$item->mueble}}</option>
-                                                    @else
-                                                        <option value="{{$item->idmueble}}">{{$item->mueble}}</option>
-                                                    @endif
-                                                @endforeach  
-                                            </select>
-                                            <div class="invalid-feedback">
-                                                ¡El <strong>mueble</strong> es un campo requerido!
-                                            </div>
-                                        </div>
-                                        <div class="form-group col-md-4">
-                                            <label for="razon">Razones:</label>
-                                            <select class="form-control" id="razon" name="razon">
-                                                <option value="">razon</option>
-                                                @foreach ($razones as $item)
-                                                    @if (old('razones') == $item->idrazon)
-                                                        <option value="{{$item->idrazon}}" selected>{{$item->razon}}</option>
-                                                    @else
-                                                        <option value="{{$item->idrazon}}">{{$item->razon}}</option>
-                                                    @endif
-                                                @endforeach  
-                                            </select>
-                                            <div class="invalid-feedback">
-                                                ¡La <strong>razon</strong> es un campo requerido!
-                                            </div>
-                                        </div>
-                                        <div class="form-group col-md-4">
-                                            <label for="modelo">Modelo:</label>
-                                            <input type="text" class="form-control @error('modelo') is-invalid @enderror" id="modelo" name="modelo" value="{{old('modelo')}}" maxlength="11" placeholder="modelo">
-                                            <div class="invalid-feedback">
-                                                ¡El <strong>modelo</strong> es un campo requerido!
-                                            </div>
-                                        </div>
-                                        <div class="form-group col-md-12">
-                                            <label for="muebleservicio">Servicio:</label>    
-                                            <textarea class="form-control" name="muebleservicio" id="muebleservicio" cols="30" rows="2" placeholder="servicio">{{old('muebleservicio')}}</textarea>
-                                        </div> 
-                                        <div class="form-group col-md-2">
-                                            <label for="fechaactivo">Fecha servicio Activo:</label>
-                                            <input type="text" class="form-control @error('fechaactivo') is-invalid @enderror" id="fechaactivo" name="fechaactivo" aria-label="fechaactivo" placeholder="fechaservicio" value="{{ old('fechaactivo') }}" readonly/>
-                                        </div>                                       
-                                    </div>
-                                </div>                     
-                            </div>
-
-                            <div class="card border-success mb-2 d-none" id="vehiculo">
-                                <div class="card-header">
-                                    Vehiculos
-                                </div>
-                                <div class="card-body">
-                                    <div class="form-row">
-                                       
-                                        <div class="form-group col-md-12">
-                                            <label for="vehiculodescripcion">Descripción:</label>
-                                            <input type="text" class="form-control @error('vehiculodescripcion') is-invalid @enderror" id="vehiculodescripcion" name="vehiculodescripcion" value="{{old('vehiculodescripcion')}}" maxlength="250" placeholder="descripcion">
-                                            <div class="invalid-feedback">
-                                                ¡La <strong>descripcion</strong> es un campo requerido!
-                                            </div>
-                                        </div>                                                                                                                       
-                                        <div class="form-group col-md-3">
-                                            <label for="auto">Vehiculo:</label>
-                                            <select class="form-control" id="auto" name="auto">
-                                                <option value="">numero</option>
-                                                @foreach ($autos as $item)
-                                                    @if (old('numero') == $item->idauto)
-                                                        <option value="{{$item->idauto}}" selected>{{$item->numero}}</option>
-                                                    @else
-                                                        <option value="{{$item->idauto}}">{{$item->numero}}</option>
-                                                    @endif
-                                                @endforeach  
-                                            </select>                                            
-                                        </div>
-                                        <div class="form-group col-md-3">
-                                            <label for="placas">Placas:</label>
-                                            <input type="text" class="form-control @error('placas') is-invalid @enderror" id="placas" name="placas" value="{{old('placas')}}" maxlength="11" placeholder="placas">
-                                            <div class="invalid-feedback">
-                                                ¡La <strong>placa</strong> es un campo requerido!
-                                            </div>
-                                        </div>
-                                        <div class="form-group col-md-3">
-                                            <label for="modelovehiculo">Modelo:</label>
-                                            <input type="text" class="form-control @error('modelovehiculo') is-invalid @enderror" id="modelovehiculo" name="modelovehiculo" value="{{old('modelovehiculo')}}" maxlength="11" placeholder="modelo">
-                                            <div class="invalid-feedback">
-                                                ¡El <strong>modelo</strong> es un campo requerido!
-                                            </div>
-                                        </div>
-                                        <div class="form-group col-md-3">
-                                            <label for="tipo">Tipo:</label>
-                                            <input type="text" class="form-control @error('tipo') is-invalid @enderror" id="tipo" name="tipo" value="{{old('tipo')}}" maxlength="11" placeholder="tipo">
-                                            <div class="invalid-feedback">
-                                                ¡El <strong>tipo</strong> es un campo requerido!
-                                            </div>
-                                        </div>
-                                        <div class="form-group col-md-12">
-                                            <label for="servicio">Servicio:</label>    
-                                            <textarea class="form-control" name="servicio" id="servicio" cols="30" rows="2" placeholder="servicio">{{old('servicio')}}</textarea>
-                                        </div> 
-                                        <div class="form-group col-md-2">
-                                            <label for="fechaservicio">Fecha servicio:</label>
-                                            <input type="text" class="form-control @error('fechaservicio') is-invalid @enderror" id="fechaservicio" name="fechaservicio" aria-label="fechaservicio" placeholder="fechaservicio" value="{{ old('fechaservicio') }}" readonly/>
-                                        </div>                                       
-                                    </div>
-                                </div>                     
                             </div>
 
                             <div class="form-row" id="contenido">
@@ -528,7 +316,7 @@
                             <input type="hidden" name="page" value="{{$page ?? ''}}">
                             <input type="hidden" name="vfecha" value="{{$vfecha ?? ''}}">
                             <input type="hidden" name="vbusqueda" value="{{$vbusqueda ?? ''}}">
-                            <input type="text" id="vdetalle" name="vdetalle">
+                            <input type="hidden" id="vdetalle" name="vdetalle">
                             
                             <button type="submit" class="btn btn-outline-danger"><i class="fas fa-save"></i> Guardar</button>
                             <a class="btn btn-outline-danger" href="{{url('/solicitudes?page='.$page.'&vfecha='.$vfecha.'&vbusqueda='.$vbusqueda)}}"><i class="fas fa-sign-out-alt fa-rotate-180"></i> Regresar</a>
@@ -557,29 +345,14 @@
                 uiLibrary: 'bootstrap4',
                 locale: 'es-es',
                 format: 'dd/mm/yyyy'
-            });     
-            $('#fechainmueble').datepicker({
-                uiLibrary: 'bootstrap4',
-                locale: 'es-es',
-                format: 'dd/mm/yyyy'
-            });
-            $('#fechaactivo').datepicker({
-                uiLibrary: 'bootstrap4',
-                locale: 'es-es',
-                format: 'dd/mm/yyyy'
             });       
-            $('#fechaservicio').datepicker({
-                uiLibrary: 'bootstrap4',
-                locale: 'es-es',
-                format: 'dd/mm/yyyy'
-            });          
-            bsCustomFileInput.init();
+            //bsCustomFileInput.init();
         });
 
         $(document).ready(function(){
             $(".form-control-chosen").chosen();
             //$("#elabora_chosen").addClass("chosendisable");
-            $('#elabora').prop('disabled', true).trigger("chosen:updated");
+            //$('#elabora').prop('disabled', true).trigger("chosen:updated");
         });
         
         $(function(){
@@ -614,14 +387,16 @@
                 $("#desglosecantidad").removeClass("is-invalid");
                 $("#desglosecantidad").addClass("is-valid");    
             }
-        });  
+        }); 
+
         $("#desgloseunidad").click(function(){
             if($("#desgloseunidad").val() != "" && $("#desgloseunidad").hasClass("is-invalid") === true)
             {
                 $("#desgloseunidad").removeClass("is-invalid");
                 $("#desgloseunidad").addClass("is-valid");    
             }
-        });       
+        }); 
+
         $("#desglosedescripcion").keyup(function(){
             if($("#desglosedescripcion").val() != "" && $("#desglosedescripcion").hasClass("is-invalid") === true)
             {
@@ -629,6 +404,7 @@
                 $("#desglosedescripcion").addClass("is-valid");    
             }
         });
+
         $("#desgloseunitario").keyup(function(){
             if($("#desgloseunitario").val() != "" && $("#desgloseunitario").hasClass("is-invalid") === true)
             {
@@ -636,6 +412,7 @@
                 $("#desgloseunitario").addClass("is-valid");    
             }
         });
+        
         $("#desglosemonto").keyup(function(){
             if($("#desglosemonto").val() != "" && $("#desglosemonto").hasClass("is-invalid") === true)
             {
@@ -738,9 +515,9 @@
 
         function MostrarMontoTotal()
         {   
-            var tipo = $("#clase").val();
-            if(tipo == 1)
-            {
+            //var tipo = $("#clase").val();
+            //if(tipo == 1)
+            //{
                 var total = 0;
                 $.each(Detalle, function(key, value)
                 {
@@ -748,7 +525,7 @@
                 });
                 $("#subtotal").val(formatCurrencyclean(total.toFixed(2)));
 
-            }                    
+            //}                    
            
             var mon = $("#subtotal").val();
             var iva = $("#iva").val();
@@ -786,11 +563,10 @@
             $("#total").val(formatCurrencyclean((mon+iva+aju).toFixed(2)));            
         }  
 
-        
-
         $("#subtotal").keyup(function(){
             MostrarMontoTotal();
         });
+
         $("#subtotal").blur(function() {
             var subtotal = $('#subtotal').val();
             if(subtotal != "")
@@ -804,6 +580,7 @@
         $("#iva").keyup(function(){
             MostrarMontoTotal();
         });
+
         $("#iva").blur(function() {
             var iva = $('#iva').val();
             if(iva != "")
@@ -847,76 +624,6 @@
             $("#DesgloseTabla").append("</tbody>");
         }
 
-        $("#clase").change(function(){
-            var clase = $("#clase").val();
-            if(clase == 1) //compras
-            {   
-                $("#desglose").removeClass("d-none"); //remueve la funcion ocultar
-                $("#subtotal").prop("readonly", true);                  
-                $("#inmuebles").addClass("d-none");                  
-                $("#muebles").addClass("d-none");                  
-                $("#vehiculo").addClass("d-none");                
-                limpiar();                   
-            }
-            else if(clase == 2) // servicio
-            {                   
-                $("#desglose").addClass("d-none");    //agrega la funcion ocultar
-                $("#subtotal").prop("readonly", false);                 
-            }
-        });
-        
-        function limpiar()  //funcion para limpiar el contenido de los select
-        {
-            $("#subtotal").val("");
-            $("#iva").val("");
-            $("#ajuste").val("");
-            $("#total").val("");            
-        }
-               
-        $(function(){  //Funcion para desabilitar o habilitar select 
-            $("#clase").change( function(){
-                if ($(this).val() === "2")
-                {
-                    $("#grupo").val("");  
-                    $("#grupo").prop("disabled", false); 
-                    $("#grupo").prop("required", true);                   
-                } 
-                else
-                {
-                    $("#grupo").val("");  
-                    $("#grupo").prop("disabled", true);
-                    $("#grupo").prop("required", false);                    
-                }
-            });
-        });
-       
-        $("#grupo").change(function(){  //funcion para mostrar u ocultar inmuebles,muebles y vehiculos
-            var grupo = $("#grupo").val();                                               
-            if(grupo == 1) //inmuebles
-            {   
-                
-                $("#inmuebles").removeClass("d-none");
-                $("#inmueblesdescripcion").prop("required",false); 
-                $("#inmueble").prop("required",false); 
-                $("#muebles").addClass("d-none"); 
-                $("#vehiculo").addClass("d-none");                                                   
-            }
-            else if(grupo == 2) // muebles
-            {      
-                $("#muebles").removeClass("d-none");
-                $("#muebledescripcion").prop("required",false); 
-                $("#mueble").prop("required",false); 
-                $("#inmuebles").addClass("d-none");             
-                $("#vehiculo").addClass("d-none");                   
-            }
-            else if(grupo == 3) // vehiculos
-            {   
-                $("#vehiculo").removeClass("d-none");
-                $("#inmuebles").addClass("d-none");             
-                $("#muebles").addClass("d-none");                   
-            }            
-        });
-
         $(function(){
             $("#areacargo").change(function(){  //se escribe el input que utilizaremos (areacargo)
                 $("#divloading").addClass("d-flex").removeClass("d-none"); // funcion para el icono de cargar 
@@ -951,107 +658,6 @@
                 } 
             });
         });
-        
-        $(function(){
-            $("#auto").change(function(){  //se escribe el input que utilizaremos (auto)
-                $("#divloading").addClass("d-flex").removeClass("d-none"); // funcion para el icono de cargar 
-                var identificador = $("#auto").val();
-                if(identificador)
-                {
-                    // Ini Ajax
-                    var url = "{{url('/solicitudes/auto/idauto')}}";
-                    url = url.replace("idauto", identificador);
-                    $.ajax({type:"get",
-                        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-                        url:url,
-                        dataType: "json",
-                        success: function(response, textStatus, xhr)
-                        {
-                            // console.log(response);
-                            // console.log(response.modelo);
-                            // console.log(response.placa);
-                            // console.log(response.tipo);
-                            $("#placas").empty();
-                            $("#placas").val(response.placa);                             
-                            $("#modelovehiculo").val(response.modelo);                                                         
-                            $("#tipo").val(response.tipo);
-                            $("#divloading").addClass("d-none").removeClass("d-flex");                            
-                        },
-                        error: function(xhr, textStatus, errorThrown)
-                        {
-                            alert("¡Error al cargar el vehiculo!");
-                        }
-                    });
-                    // Fin Ajax
-                }
-                else
-                {
-                    $("#placa").val("");                    
-                    $("#modelovehiculo").val("");                    
-                    $("#tipo").val("");                    
-                    $("#divloading").addClass("d-none").removeClass("d-flex");                    
-                } 
-            });
-        });
-
-        $(function(){
-            $("#grupo").change( function(){
-                if ($(this).val() === "1")
-                {
-                    $("#inmuebledescripcion").val("");  
-                    $("#inmuebledescripcion").prop("required", true);                   
-                    $("#inmuebles").prop("required", true);                   
-                } 
-                else
-                {
-                    $("#inmuebledescripcion").val("");  
-                    $("#inmuebledescripcion").prop("required", false);
-                    $("#inmuebles").prop("required", false);                   
-                }
-            });
-        });
-
-       
-        // $(function(){
-        //     $("#auto").change(function(){
-        //         var Auto = event.target.value;
-        //         if(Auto)
-        //         {
-        //             var url = "{{url('/vales/autos/idauto')}}";
-        //             url = url.replace("idauto", Auto);
-        //             // Ini Ajax
-        //             $("#divloading").addClass("d-flex").removeClass("d-none");
-        //             $.ajax({type:"get",
-        //                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-        //                 url:url,
-        //                 dataType: "json",
-        //                 success: function(response, textStatus, xhr)
-        //                 {
-        //                     $("#funcionario").empty();
-        //                     $("#funcionario").append("<option value=''>Funcionario</option>");
-        //                     for(let i = 0; i< response.length; i++)
-        //                     {
-        //                         $("#funcionario").append("<option value='"+response[i].idfuncionario+"'>"+response[i].nombre+" "+response[i].paterno+" "+response[i].materno+"</option>"); 
-        //                     }
-        //                     $("#divloading").addClass("d-none").removeClass("d-flex");
-        //                 },
-        //                 error: function(xhr, textStatus, errorThrown)
-        //                 {
-        //                     alert("¡Error al cargar el funcionario!");
-        //                     $("#divloading").addClass("d-none").removeClass("d-flex");
-        //                 }
-        //             });
-        //             // Fin Ajax
-        //         }
-        //         else
-        //         {
-        //             $("#funcionario").empty();
-        //             $("#funcionario").append("<option value=''>Funcionario</option>");
-        //         } 
-        //     });
-        // });
-
-        
 
         // Example starter JavaScript for disabling form submissions if there are invalid fields
         (function() {
@@ -1064,37 +670,9 @@
               form.addEventListener('submit', function(event) {
                 if (form.checkValidity() === false) {
                   event.preventDefault();
-                  event.stopPropagation();
-                  if($("#areacargo").val() == "")
-                    {
-                        $('#areacargo_chosen').addClass('is-invalid');
-                    }
-                    else
-                    {
-                        $('#areacargo_chosen').addClass('is-valid');
-                    }
-                    if($("#area").val() == "")
-                    {
-                        $('#area_chosen').addClass('is-invalid');
-                    }
-                    else
-                    {
-                        $('#area_chosen').addClass('is-valid');
-                    }
-                    // $('#categoria_chosen').addClass('is-valid');
-                    // $('#puesto_chosen').addClass('is-valid');
+                  event.stopPropagation();                  
                 }
-                form.classList.add('was-validated');
-                if($("#areacargo").val() != "")
-                {
-                    $('#areacargo_chosen').addClass('is-valid');
-                }
-                if($("#area").val() != "")
-                {
-                    $('#area_chosen').addClass('is-valid');
-                }
-                // $('#categoria_chosen').addClass('is-valid');
-                // $('#puesto_chosen').addClass('is-valid');
+                form.classList.add('was-validated');                
               }, false);
             });
           }, false);

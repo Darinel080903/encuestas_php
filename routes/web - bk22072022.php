@@ -179,37 +179,3 @@ Route::get('/valespemex/comprobacion/{idauto}', 'App\Http\Controllers\AjaxContro
 Route::resource('/reportes', 'App\Http\Controllers\ReportevaleController');
 
 Route::get('/reportes/imprimir/pdf', 'App\Http\Controllers\PDFController@pdfreportevale');
-
-// ADD AAFT
-
-Route::resource('/compras', 'App\Http\Controllers\CompraController');
-
-Route::get('/solicitudes/clave/{idarea}', 'App\Http\Controllers\AjaxController@cargarclaves');
-
-Route::get('/solicitudes/auto/{idauto}', 'App\Http\Controllers\AjaxController@cargarautos');
-
-Route::resource('/servicioinmuebles', 'App\Http\Controllers\ServicioinmuebleController');
-
-Route::resource('/serviciomuebles', 'App\Http\Controllers\ServiciomuebleController');
-
-Route::resource('/servicioautos', 'App\Http\Controllers\ServicioautoController');
-
-Route::get('/formatos/solicitud/{idsolicitud}', 'App\Http\Controllers\PdfController@pdfsolicitud');
-
-Route::get('/formatos/solicitudvehicular/{idsolicitud}', 'App\Http\Controllers\PdfController@pdfsolicitudvehicular');
-
-Route::get('/formatos/conformidad/{idsolicitud}', 'App\Http\Controllers\PdfController@pdfconformidad');
-
-Route::get('/formatos/solicitudinmueble/{idsolicitud}', 'App\Http\Controllers\PdfController@pdfsolicitudinmueble');
-
-Route::get('/formatos/conformidadinmueble/{idsolicitud}', 'App\Http\Controllers\PdfController@pdfconformidadinmueble');
-
-Route::get('/formatos/solicitudmueble/{idsolicitud}', 'App\Http\Controllers\PdfController@pdfsolicitudmueble');
-
-Route::get('/formatos/conformidadmueble/{idsolicitud}', 'App\Http\Controllers\PdfController@pdfconformidadmueble');
-
-Route::get('/formatos/ordencompra/{idsolicitud}', 'App\Http\Controllers\PdfController@pdfordencompra');
-
-Route::get('/formatos/solicitudcompra/{idsolicitud}', 'App\Http\Controllers\PdfController@pdfsolicitudcompra');
-
-Route::get('/formatos/constanciaretenciones/{idsolicitud}', 'App\Http\Controllers\PdfController@pdfconstanciaretenciones');

@@ -21,7 +21,15 @@ use App\Models\Tmpbien;
 use App\Models\Vvale;
 use App\Models\Vfolio;
 use App\Models\Vfuncionario;
+use App\Models\Vfuncionariocustodia;
+use App\Models\Solicitud;
+use App\Models\Servicio;
+use App\Models\Vservicio;
+use App\Models\Vsolicitud;
 use App\Models\Vpase;
+use App\Models\Vauto;
+use App\Models\Vcompra;
+use App\Models\Desglose;
 use App\Models\Detalle;
 use App\Models\Vhistorico;
 use App\Models\Historico;
@@ -189,5 +197,123 @@ class PDFController extends Controller
         $autoriza = Vfuncionario::where([['autoriza', 1],['activo', 1]])->orderBy('idfuncionario', 'desc')->first();
                 
         return \PDF::loadView('pdf.imprimirvale', compact('autoriza', 'vales', 'vale'))->stream('archivo.pdf');
+    }
+
+    public function pdfsolicitud(Request $request, $id)
+    {   
+        $solicitudes = Vsolicitud::findOrFail($id);        
+
+        $dias = ['0' => 'Domingo', '1' => 'Lunes', '2' => 'Martes', '3' => 'Miércoles', '4' => 'Jueves', '5' => 'Viernes', '6' => 'Sábado'];
+        $diaespañol = Arr::get($dias, date('w', strtotime($solicitudes->fechafactura)));
+        $meses = ['1' => 'Enero', '2' => 'Febrero', '3' => 'Marzo', '4' => 'Abril', '5' => 'Mayo', '6' => 'Junio', '7' => 'Julio', '8' => 'Agosto', '9' => 'Septiembre', '10' => 'Octubre', '11' => 'Noviembre', '12' => 'Diciembre'];
+        $mesespañol = Arr::get($meses, date('n', strtotime($solicitudes->fechafactura)));
+        $fechafactura = $diaespañol.' '.date('d', strtotime($solicitudes->fechafactura)).' de '.$mesespañol.' de '.date('Y', strtotime($solicitudes->fechafactura));
+                
+        $autoriza = Vfuncionario::where([['autoriza', 1],['activo', 1]])->orderBy('idfuncionario', 'desc')->first();
+        $entrega = Vfuncionario::where([['entrega', 1],['activo', 1]])->orderBy('idfuncionario', 'desc')->first();
+        
+        return \PDF::loadView('pdf.solicitud', compact('autoriza', 'entrega', 'solicitudes', 'fechafactura'))->stream('archivo.pdf');
+    }
+
+    public function pdfsolicitudvehicular(Request $request, $id)
+    {   
+        $solicitudes = Vsolicitud::findOrFail($id);        
+        $servicios = Servicio::where('fksolicitud', $id)->first();      
+        $autos = Vauto::where([['idauto', $servicios->fkauto], ['activo', 1]])->first();
+               
+        $autoriza = Vfuncionario::where([['autoriza', 1],['activo', 1]])->orderBy('idfuncionario', 'desc')->first();
+        $entrega = Vfuncionario::where([['entrega', 1],['activo', 1]])->orderBy('idfuncionario', 'desc')->first();
+        
+        return \PDF::loadView('pdf.solicitudvehicular', compact('autoriza', 'entrega', 'solicitudes', 'autos'))->stream('archivo.pdf');
+    }
+
+    public function pdfconformidad(Request $request, $id)
+    {   
+        $solicitudes = Vsolicitud::findOrFail($id);        
+        $servicios = Servicio::where('fksolicitud', $id)->first();      
+        $autos = Vauto::where([['idauto', $servicios->fkauto], ['activo', 1]])->first();
+        $auto = Vfuncionariocustodia::where([['fkauto', $autos->idauto], ['activo', 1]])->orderBy('fkfuncionario', 'desc')->first();
+               
+        $autoriza = Vfuncionario::where([['autoriza', 1],['activo', 1]])->orderBy('idfuncionario', 'desc')->first();
+        $entrega = Vfuncionario::where([['entrega', 1],['activo', 1]])->orderBy('idfuncionario', 'desc')->first();
+        
+        return \PDF::loadView('pdf.conformidad', compact('autoriza', 'entrega', 'solicitudes', 'autos', 'auto'))->stream('archivo.pdf');
+    }
+
+    public function pdfsolicitudinmueble(Request $request, $id)
+    {   
+        $solicitudes = Vsolicitud::findOrFail($id);                
+        $servicios = Vservicio::where('fksolicitud', $id)->first();      
+                       
+        $autoriza = Vfuncionario::where([['autoriza', 1],['activo', 1]])->orderBy('idfuncionario', 'desc')->first();
+        $entrega = Vfuncionario::where([['entrega', 1],['activo', 1]])->orderBy('idfuncionario', 'desc')->first();
+        
+        return \PDF::loadView('pdf.solicitudinmueble', compact('autoriza', 'entrega', 'solicitudes', 'servicios'))->stream('archivo.pdf');
+    }
+
+    public function pdfconformidadinmueble(Request $request, $id)
+    {   
+        $solicitudes = Vsolicitud::findOrFail($id);        
+        $servicios = Vservicio::where('fksolicitud', $id)->first();      
+                      
+        $autoriza = Vfuncionario::where([['autoriza', 1],['activo', 1]])->orderBy('idfuncionario', 'desc')->first();
+        $entrega = Vfuncionario::where([['entrega', 1],['activo', 1]])->orderBy('idfuncionario', 'desc')->first();
+        
+        return \PDF::loadView('pdf.conformidadinmueble', compact('autoriza', 'entrega', 'solicitudes', 'servicios'))->stream('archivo.pdf');
+    }
+
+    public function pdfsolicitudmueble(Request $request, $id)
+    {   
+        $solicitudes = Vsolicitud::findOrFail($id);                
+        $servicios = Vservicio::where('fksolicitud', $id)->first();      
+                       
+        $autoriza = Vfuncionario::where([['autoriza', 1],['activo', 1]])->orderBy('idfuncionario', 'desc')->first();
+        $entrega = Vfuncionario::where([['entrega', 1],['activo', 1]])->orderBy('idfuncionario', 'desc')->first();
+        
+        return \PDF::loadView('pdf.solicitudmueble', compact('autoriza', 'entrega', 'solicitudes', 'servicios'))->stream('archivo.pdf');
+    }
+
+    public function pdfconformidadmueble(Request $request, $id)
+    {   
+        $solicitudes = Vsolicitud::findOrFail($id);        
+        $servicios = Vservicio::where('fksolicitud', $id)->first();      
+                      
+        $autoriza = Vfuncionario::where([['autoriza', 1],['activo', 1]])->orderBy('idfuncionario', 'desc')->first();
+        $entrega = Vfuncionario::where([['entrega', 1],['activo', 1]])->orderBy('idfuncionario', 'desc')->first();
+        
+        return \PDF::loadView('pdf.conformidadmueble', compact('autoriza', 'entrega', 'solicitudes', 'servicios'))->stream('archivo.pdf');
+    }
+
+    public function pdfordencompra(Request $request, $id)
+    {           
+        $solicitudes = Vsolicitud::findOrFail($id);                
+        $desgloses = Vcompra::where('fksolicitud', $id)->orderBy('idcompra', 'asc')->get();    
+                        
+        $autoriza = Vfuncionario::where([['autoriza', 1],['activo', 1]])->orderBy('idfuncionario', 'desc')->first();
+        $entrega = Vfuncionario::where([['entrega', 1],['activo', 1]])->orderBy('idfuncionario', 'desc')->first();
+        
+        return \PDF::loadView('pdf.ordencompra', compact('autoriza', 'entrega', 'solicitudes', 'desgloses'))->stream('archivo.pdf');
+    }
+    public function pdfsolicitudcompra(Request $request, $id)
+    {           
+        $solicitudes = Vsolicitud::findOrFail($id);                
+        $desgloses = Vcompra::where('fksolicitud', $id)->orderBy('idcompra', 'asc')->get();    
+                        
+        $autoriza = Vfuncionario::where([['autoriza', 1],['activo', 1]])->orderBy('idfuncionario', 'desc')->first();
+        $entrega = Vfuncionario::where([['entrega', 1],['activo', 1]])->orderBy('idfuncionario', 'desc')->first();
+        
+        return \PDF::loadView('pdf.solicitudcompra', compact('autoriza', 'entrega', 'solicitudes', 'desgloses'))->stream('archivo.pdf');
+    }
+
+    public function pdfconstanciaretenciones(Request $request, $id)
+    {           
+        $solicitudes = Vsolicitud::findOrFail($id);
+        $servicios = Vservicio::where('fksolicitud', $id)->first();                
+        //$desgloses = Vcompra::where('fksolicitud', $id)->orderBy('idcompra', 'asc')->get();    
+                        
+        $autoriza = Vfuncionario::where([['autoriza', 1],['activo', 1]])->orderBy('idfuncionario', 'desc')->first();
+        $entrega = Vfuncionario::where([['entrega', 1],['activo', 1]])->orderBy('idfuncionario', 'desc')->first();
+        
+        return \PDF::loadView('pdf.constanciaretenciones', compact('autoriza', 'entrega', 'solicitudes', 'servicios'))->stream('archivo.pdf');
     }
 }

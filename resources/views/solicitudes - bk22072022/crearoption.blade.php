@@ -8,7 +8,7 @@
             <option value="{{$child->idarea}}" selected>{!! $child->area !!}</option>
         @else
             <option value="{{$child->idarea}}">{!! $child->area !!}</option>
-        @endif       
+        @endif
         
         @if(count($child->childs))
             @include('solicitudes.crearoption',['childs' => $child->childs])
