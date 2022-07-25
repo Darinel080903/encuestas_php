@@ -20,7 +20,7 @@
                                 </div>                            
                                 <div class="form-group col-md-2">
                                     <label for="folio">Folio:</label>
-                                    <input type="text" class="form-control" id="folio" name="folio" value="{{ $solicitudes->folio }}" maxlength="11" placeholder="folio">                                
+                                    <input type="text" class="form-control" id="folio" name="folio" value="{{ $solicitudes->folio }}" maxlength="11" placeholder="folio" readonly>                                
                                 </div> 
 
                             </div>
@@ -216,13 +216,13 @@
 
                             </div> 
                             
-                            <div class="form-row">
+                            {{-- <div class="form-row">
                                 
                                 <div class="form-group col-md-12">
                                     <label for="concepto">Concepto de ajuste:</label>    
                                     <textarea class="form-control" name="concepto" id="concepto" cols="30" rows="2" placeholder="concepto de ajuste">{{$solicitudes->concepto}}</textarea>
                                 </div>
-                            </div>
+                            </div> --}}
 
                             <div class="form-row">                               
                             
@@ -283,10 +283,10 @@
                                     <h3>Formatos</h3>                             
                                 </div>
 
-                                <div class="form-row" id="formatos"></div> 
-                                <a  class="btn btn-outline-danger" href="{{url('/formatos/solicitud/'.$solicitudes->idsolicitud)}}" target="_blank"><i class="fas fa-save"></i> Solicitud de pago</a>  
+                                <div class="form-row" id="formatos"></div>                                 
                                 <a  class="btn btn-outline-danger" href="{{url('/formatos/ordencompra/'.$solicitudes->idsolicitud)}}" target="_blank"><i class="fas fa-save"></i> Orden de compra menor</a>  
                                 <a  class="btn btn-outline-danger" href="{{url('/formatos/solicitudcompra/'.$solicitudes->idsolicitud)}}" target="_blank"><i class="fas fa-save"></i> Solicitud de compra</a>  
+                                <a  class="btn btn-outline-danger" href="{{url('/formatos/solicitud/'.$solicitudes->idsolicitud)}}" target="_blank"><i class="fas fa-save"></i> Solicitud de pago</a>  
                                 {{-- <a  class="btn btn-outline-danger" href="{{url('/formatos/constanciaretenciones/'.$solicitudes->idsolicitud)}}" target="_blank"><i class="fas fa-save"></i> Constancia de retenciones</a>   --}}
                             </div>
                             <br>

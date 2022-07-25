@@ -63,14 +63,21 @@
                                     @foreach ($datos as $item)
                                     <tr>
                                         <td class="align-middle">
-                                            @if ($item->fkclase == 1)
+                                            @if($item->fkclase == 1)
+
                                                 <i class="fas fa-dollar-sign"></i>
-                                            @elseif ($item->fkclase == 2)
-                                                @if ($item->fkgrupo == 1)
+
+                                                @elseif($item->fkclase == 2)
+
+                                                    @if($item->fkgrupo == 1)
                                                     <i class="fas fa-hotel"></i>
-                                                @elseif ($item->fkgrupo == 2)
+                                                @endif
+
+                                                @if($item->fkgrupo == 2)
                                                     <i class="fas fa-chair"></i>
-                                                @elseif ($item->fkgrupo == 3)
+                                                @endif
+
+                                                @if($item->fkgrupo == 3)
                                                     <i class="fas fa-car"></i>
                                                 @endif
                                             @endif
@@ -80,7 +87,7 @@
                                         <td class="align-middle">{{$item->partida}}</td>
                                         <td class="align-middle">{{$item->area}}</td>
                                         <td class="align-middle">${!! number_format((float)($item->total), 2) !!}</td>
-                                        <td class="text-center" width="7%">
+                                        <td class="text-center" width="9%">
                                             @if($item->fkclase == 1)
                                                 @can('update', $item)
                                                     <a class="btn btn-outline-danger" href="{{url('/compras/'.$item->idsolicitud.'/edit?page='.$page.'&vfecha='.$vfecha.'&vbusqueda='.$vbusqueda)}}"><i class="fas fa-pen"></i></a>
@@ -103,10 +110,10 @@
                                             @endif
                                                                                             
                                         </td>
-                                        <td class="text-center" width="7%">
+                                        {{-- <td class="text-center" width="7%">
                                             <a class="btn btn-outline-danger" href="{{url('/imprimir/solicitudes/'.$item->idsolicitud)}}" target="_blank"><i class="fas fa-print"></i>&nbsp;</a>
-                                        </td>
-                                        <td class="text-center" width="7%">
+                                        </td> --}}
+                                        <td class="text-center" width="9%">
                                             @can('delete', $item)
                                                 <form action="{{url('/solicitudes/'.$item->idsolicitud)}}" method="POST">
                                                     @method('DELETE')

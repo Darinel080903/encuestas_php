@@ -20,7 +20,7 @@
                                 </div>                            
                                 <div class="form-group col-md-2">
                                     <label for="folio">Folio:</label>
-                                    <input type="text" class="form-control" id="folio" name="folio" value="{{ $solicitudes->folio }}" maxlength="11" placeholder="folio">                                
+                                    <input type="text" class="form-control" id="folio" name="folio" value="{{ $solicitudes->folio }}" maxlength="11" placeholder="folio" readonly>                                
                                 </div>                                    
                             </div>
 
@@ -243,9 +243,9 @@
                                 </div>
 
                                 <div class="form-row" id="formatos"></div> 
-                                <a  class="btn btn-outline-danger" href="{{url('/formatos/solicitud/'.$solicitudes->idsolicitud)}}" target="_blank"><i class="fas fa-save"></i> Solicitud de pago</a>  
                                 <a  class="btn btn-outline-danger" href="{{url('/formatos/solicitudinmueble/'.$solicitudes->idsolicitud)}}" target="_blank"><i class="fas fa-save"></i> Solicitud de servicio</a>  
                                 <a  class="btn btn-outline-danger" href="{{url('/formatos/conformidadinmueble/'.$solicitudes->idsolicitud)}}" target="_blank"><i class="fas fa-save"></i> Formato de conformidad</a>  
+                                <a  class="btn btn-outline-danger" href="{{url('/formatos/solicitudservicio/'.$solicitudes->idsolicitud)}}" target="_blank"><i class="fas fa-save"></i> Solicitud de pago</a>  
                                 <a  class="btn btn-outline-danger" href="{{url('/formatos/constanciaretenciones/'.$solicitudes->idsolicitud)}}" target="_blank"><i class="fas fa-save"></i> Constancia de retenciones</a>  
                             </div>
                             <br>

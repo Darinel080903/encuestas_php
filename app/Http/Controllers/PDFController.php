@@ -36,6 +36,7 @@ use App\Models\Historico;
 use App\Models\Vpemexvale;
 use App\Models\Vpemexfolio;
 
+
 class PDFController extends Controller
 {
     /**
@@ -201,7 +202,8 @@ class PDFController extends Controller
 
     public function pdfsolicitud(Request $request, $id)
     {   
-        $solicitudes = Vsolicitud::findOrFail($id);        
+        $solicitudes = Vsolicitud::findOrFail($id);
+        $desgloses = Vcompra::where('fksolicitud', $id)->orderBy('idcompra', 'asc')->get();                    
 
         $dias = ['0' => 'Domingo', '1' => 'Lunes', '2' => 'Martes', '3' => 'Miércoles', '4' => 'Jueves', '5' => 'Viernes', '6' => 'Sábado'];
         $diaespañol = Arr::get($dias, date('w', strtotime($solicitudes->fechafactura)));
@@ -212,7 +214,7 @@ class PDFController extends Controller
         $autoriza = Vfuncionario::where([['autoriza', 1],['activo', 1]])->orderBy('idfuncionario', 'desc')->first();
         $entrega = Vfuncionario::where([['entrega', 1],['activo', 1]])->orderBy('idfuncionario', 'desc')->first();
         
-        return \PDF::loadView('pdf.solicitud', compact('autoriza', 'entrega', 'solicitudes', 'fechafactura'))->stream('archivo.pdf');
+        return \PDF::loadView('pdf.solicitud', compact('autoriza', 'entrega', 'solicitudes', 'fechafactura', 'desgloses'))->stream('archivo.pdf');
     }
 
     public function pdfsolicitudvehicular(Request $request, $id)
@@ -315,5 +317,22 @@ class PDFController extends Controller
         $entrega = Vfuncionario::where([['entrega', 1],['activo', 1]])->orderBy('idfuncionario', 'desc')->first();
         
         return \PDF::loadView('pdf.constanciaretenciones', compact('autoriza', 'entrega', 'solicitudes', 'servicios'))->stream('archivo.pdf');
+    }
+
+    public function pdfsolicitudservicio(Request $request, $id)
+    {   
+        $solicitudes = Vsolicitud::findOrFail($id);
+        $desgloses = Vcompra::where('fksolicitud', $id)->orderBy('idcompra', 'asc')->get();            
+
+        $dias = ['0' => 'Domingo', '1' => 'Lunes', '2' => 'Martes', '3' => 'Miércoles', '4' => 'Jueves', '5' => 'Viernes', '6' => 'Sábado'];
+        $diaespañol = Arr::get($dias, date('w', strtotime($solicitudes->fechafactura)));
+        $meses = ['1' => 'Enero', '2' => 'Febrero', '3' => 'Marzo', '4' => 'Abril', '5' => 'Mayo', '6' => 'Junio', '7' => 'Julio', '8' => 'Agosto', '9' => 'Septiembre', '10' => 'Octubre', '11' => 'Noviembre', '12' => 'Diciembre'];
+        $mesespañol = Arr::get($meses, date('n', strtotime($solicitudes->fechafactura)));
+        $fechafactura = $diaespañol.' '.date('d', strtotime($solicitudes->fechafactura)).' de '.$mesespañol.' de '.date('Y', strtotime($solicitudes->fechafactura));
+                
+        $autoriza = Vfuncionario::where([['autoriza', 1],['activo', 1]])->orderBy('idfuncionario', 'desc')->first();
+        $entrega = Vfuncionario::where([['entrega', 1],['activo', 1]])->orderBy('idfuncionario', 'desc')->first();
+        
+        return \PDF::loadView('pdf.solicitudservicio', compact('autoriza', 'entrega', 'solicitudes', 'fechafactura'))->stream('archivo.pdf');
     }
 }

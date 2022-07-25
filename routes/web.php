@@ -213,3 +213,5 @@ Route::get('/formatos/ordencompra/{idsolicitud}', 'App\Http\Controllers\PdfContr
 Route::get('/formatos/solicitudcompra/{idsolicitud}', 'App\Http\Controllers\PdfController@pdfsolicitudcompra');
 
 Route::get('/formatos/constanciaretenciones/{idsolicitud}', 'App\Http\Controllers\PdfController@pdfconstanciaretenciones');
+
+Route::get('/formatos/solicitudservicio/{idsolicitud}', 'App\Http\Controllers\PdfController@pdfsolicitudservicio');

@@ -69,7 +69,7 @@
                                                 <option value="{{$item->idarea}}">{{$item->area}}</option>
                                             @endif
                                             @if(count($item->childs))
-                                                @include('solicitudes.crearoptionacargo',['childs' => $item->childs])
+                                                @include('solicitudes.crearoptionacargo', ['childs' => $item->childs])
                                             @endif
                                         @endforeach  
                                     </select>
@@ -230,7 +230,7 @@
                                         <input type="text" class="form-control" id="iva" name="iva" placeholder="iva" maxlength="11" />
                                     </div>
                                 </div>
-                                <div class="form-group col-md-3">
+                                {{-- <div class="form-group col-md-3">
                                     <label for="ajuste">Ajuste:</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
@@ -238,7 +238,7 @@
                                         </div>
                                         <input type="text" class="form-control" id="ajuste" name="ajuste" placeholder="ajuste" maxlength="11" />
                                     </div>
-                                </div>
+                                </div> --}}
                                 <div class="form-group col-md-3">
                                     <label for="total">Total:</label>
                                     <div class="input-group">
@@ -251,13 +251,13 @@
 
                             </div> 
                             
-                            <div class="form-row">
+                            {{-- <div class="form-row">
                                 
                                 <div class="form-group col-md-12">
                                     <label for="concepto">Concepto de ajuste:</label>    
                                     <textarea class="form-control" name="concepto" id="concepto" cols="30" rows="2" placeholder="concepto de ajuste">{{old('concepto')}}</textarea>
                                 </div>
-                            </div>
+                            </div> --}}
 
                             <div class="form-row">                               
                                

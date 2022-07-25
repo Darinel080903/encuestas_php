@@ -106,7 +106,7 @@
               </tr>
             </tbody>
         </table>
-             
+                
         <div class="row">
             <div class="col">
                 <table border="1" style="width: 100%;">             
@@ -116,21 +116,21 @@
                         <th class="text-center" BGCOLOR="gray">Importe</th>
                         <th class="text-center" BGCOLOR="gray">Ajuste</th>
                         <th class="text-center" BGCOLOR="gray">Neto a pagar</th>                       
-                    </tr><br>
-                    @foreach ($desgloses as $key => $item)                    
+                    </tr><br>                    
                         <tr>
-                            <td class="text-center">{{$item->factura}}</td>
-                            <td class="text-center">{{$item->descripcion}}</td> 
-                            <td class="text-center">$ {!! number_format((float)($item->unitario + $item->ajuste), 2) !!} </td>
-                            <td class="text-center">$ {!! number_format((float)($item->ajuste), 2) !!}</td>
-                            <td class="text-center">$ {!! number_format((float)($item->total  - $item->ajuste), 2) !!}</td>                                                       
-                        </tr> 
-                    @endforeach                                                              
+                            <td class="text-center">{{$solicitudes->factura}}</td>
+                            <td class="text-center">{{$solicitudes->descripcion}}</td> 
+                            <td class="text-center">$ {!! number_format((float)($solicitudes->subtotal + $solicitudes->ajuste), 2) !!} </td>
+                            <td class="text-center">$ {!! number_format((float)($solicitudes->ajuste), 2) !!}</td>
+                            <td class="text-center">$ {!! number_format((float)($solicitudes->total  - $solicitudes->ajuste), 2) !!}</td>                                                       
+                        </tr>                     
                     <tr>
-                        <td colspan="2"></td>                        
+                        <td colspan="2"></td>
+                        {{-- <td class="text-center">Total</td> --}}
                         <td class="text-center">$ {!! number_format((float)($solicitudes->subtotal + $solicitudes->ajuste), 2) !!}</td>
                         <td class="text-center">$ {!! number_format((float)($solicitudes->ajuste), 2) !!}</td>
-                        <td class="text-center">$ {!! number_format((float)($solicitudes->total - $solicitudes->ajuste), 2) !!}</td>                                                                               
+                        <td class="text-center">$ {!! number_format((float)($solicitudes->total - $solicitudes->ajuste), 2) !!}</td>                                                       
+                        {{-- <td class="text-center">{!! number_format((float)($solicitudes->total)) !!} Lt.</td> --}}
                     </tr>
                 </table>
             </div>
