@@ -41,10 +41,7 @@
                             <div class="form-row">
                                 <div class="form-group col-md-3">
                                     <label for="clave">Clave presupuestal:</label>
-                                    <input type="text" class="form-control @error('clave') is-invalid @enderror" id="clave" name="clave" value="{{old('clave')}}" maxlength="22" required>
-                                    <div class="invalid-feedback">
-                                        ¡La <strong>clave</strong> es un campo requerido!
-                                    </div>
+                                    <input type="text" class="form-control" id="clave" name="clave" value="{{old('clave')}}" maxlength="22">                                    
                                 </div>
                             </div>
                             <div class="form-row">

@@ -94,14 +94,65 @@ class FuncionarioController extends Controller
         $nuevofuncionario->materno = $request->materno;
         $nuevofuncionario->fkcategoria = $request->categoria;
         $nuevofuncionario->fkpuesto = $request->puesto;
-        // if(isset($request->firma))
-        // {
-        //     $nuevofuncionario->firma = 1;
-        // }
-        // else
-        // {
-        //     $nuevofuncionario->firma = 0;
-        // }
+        
+        if(isset($request->firma))
+        {
+            $nuevofuncionario->firma = 1;
+        }
+        else
+        {
+            $nuevofuncionario->firma = 0;
+        }
+        if(isset($request->otorga))
+        {
+            $nuevofuncionario->otorga = 1;
+        }
+        else
+        {
+            $nuevofuncionario->otorga = 0;
+        }
+        if(isset($request->responsable))
+        {
+            $nuevofuncionario->responsable = 1;
+        }
+        else
+        {
+            $nuevofuncionario->responsable = 0;
+        }
+
+        if(isset($request->elabora))
+        {
+            $nuevofuncionario->elabora = 1;
+        }
+        else
+        {
+            $nuevofuncionario->elabora = 0;
+        }
+        if(isset($request->solicita))
+        {
+            $nuevofuncionario->entrega = 1;
+        }
+        else
+        {
+            $nuevofuncionario->entrega = 0;
+        }
+        if(isset($request->autoriza))
+        {
+            $nuevofuncionario->autoriza = 1;
+        }
+        else
+        {
+            $nuevofuncionario->autoriza = 0;
+        }
+        if(isset($request->valida))
+        {
+            $nuevofuncionario->valida = 1;
+        }
+        else
+        {
+            $nuevofuncionario->valida = 0;
+        }
+
         if(isset($request->activo))
         {
             $nuevofuncionario->activo = 1;
@@ -189,14 +240,65 @@ class FuncionarioController extends Controller
         $actualizafuncionario->materno = $request->materno;
         $actualizafuncionario->fkcategoria = $request->categoria;
         $actualizafuncionario->fkpuesto = $request->puesto;
-        // if(isset($request->firma))
-        // {
-        //     $actualizafuncionario->firma = 1;
-        // }
-        // else
-        // {
-        //     $actualizafuncionario->firma = 0;
-        // }
+        
+        if(isset($request->firma))
+        {
+            $actualizafuncionario->firma = 1;
+        }
+        else
+        {
+            $actualizafuncionario->firma = 0;
+        }
+        if(isset($request->otorga))
+        {
+            $actualizafuncionario->otorga = 1;
+        }
+        else
+        {
+            $actualizafuncionario->otorga = 0;
+        }
+        if(isset($request->responsable))
+        {
+            $actualizafuncionario->responsable = 1;
+        }
+        else
+        {
+            $actualizafuncionario->responsable = 0;
+        }
+
+        if(isset($request->elabora))
+        {
+            $actualizafuncionario->elabora = 1;
+        }
+        else
+        {
+            $actualizafuncionario->elabora = 0;
+        }
+        if(isset($request->solicita))
+        {
+            $actualizafuncionario->entrega = 1;
+        }
+        else
+        {
+            $actualizafuncionario->entrega = 0;
+        }
+        if(isset($request->autoriza))
+        {
+            $actualizafuncionario->autoriza = 1;
+        }
+        else
+        {
+            $actualizafuncionario->autoriza = 0;
+        }
+        if(isset($request->valida))
+        {
+            $actualizafuncionario->valida = 1;
+        }
+        else
+        {
+            $actualizafuncionario->valida = 0;
+        }
+
         if(isset($request->activo))
         {
             $actualizafuncionario->activo = 1;

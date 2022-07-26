@@ -21,6 +21,14 @@
                                 </div>
                                 
                             </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group col-md-12">
+                                    <label for="domicilio">Domicilio:</label>
+                                    <input type="text" class="form-control" id="domicilio" name="domicilio" value="{{old('domicilio')}}" maxlength="250" placeholder="domicilio">                                    
+                                </div>                                
+                            </div>
+
                             <div class="form-row">
                                 <div class="form-group col-md-3">
                                     <label for="rfc">Rfc:</label>
@@ -35,7 +43,11 @@
                                     <div class="invalid-feedback">
                                         ¡La <strong>homoclave</strong> es un campo requerido!
                                     </div>
-                                </div>                                
+                                </div> 
+                                <div class="form-group col-md-3">
+                                    <label for="curp">Curp:</label>
+                                    <input type="text" class="form-control" id="curp" name="curp" value="{{old('curp')}}" maxlength="18" placeholder="curp">                                    
+                                </div>                               
                             </div>
                             
                             <div class="form-row">

@@ -73,8 +73,10 @@ class ProveedorController extends Controller
         
         $nuevoproveedor = new Proveedor();
         $nuevoproveedor->proveedor = $request->proveedor;
+        $nuevoproveedor->domicilio = $request->domicilio;
         $nuevoproveedor->rfc = $request->rfc;
         $nuevoproveedor->homoclave = $request->homoclave;        
+        $nuevoproveedor->curp = $request->curp;
         if(isset($request->activo))
         {
             $nuevoproveedor->activo = 1;
@@ -149,8 +151,10 @@ class ProveedorController extends Controller
         
         $actualizaproveedor = Proveedor::findOrFail($id);
         $actualizaproveedor->proveedor = $request->proveedor;
+        $actualizaproveedor->domicilio = $request->domicilio;
         $actualizaproveedor->rfc = $request->rfc;
         $actualizaproveedor->homoclave = $request->homoclave;        
+        $actualizaproveedor->curp = $request->curp;
         if(isset($request->activo))
         {
             $actualizaproveedor->activo = 1;

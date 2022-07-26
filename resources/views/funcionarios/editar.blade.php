@@ -103,20 +103,65 @@
                                     </select>
                                 </div>
                             </div>
-                            {{-- <div class="form-row">
-                                <div class="form-group col-md-12">
-                                    <label for="firma">Firma:</label><br>
-                                    <input type="checkbox" class="form-control" id="firma" name="firma" data-toggle="toggle" data-on="Si" data-off="No" data-onstyle="success" data-offstyle="danger" @if($funcionarios->firma == 1) {{'checked'}} @endif>
+
+                            @if(Auth::user()->hasRole('administrador') OR Auth::user()->hasRole('informatica'))
+                                <div class="card mb-3">
+                                    <div class="card-header">Permisos de informática</div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-2">
+                                                <label for="firma">Firma pases de salida:</label><br>
+                                                <input type="checkbox" class="form-control" id="firma" name="firma" data-toggle="toggle" data-on="Si" data-off="No" data-onstyle="success" data-offstyle="danger" @if($funcionarios->firma == 1) {{'checked'}} @endif>
+                                            </div>
+                                            <div class="form-group col-md-2">
+                                                <label for="otorga">Otorga resguardo:</label><br>
+                                                <input type="checkbox" class="form-control" id="otorga" name="otorga" data-toggle="toggle" data-on="Si" data-off="No" data-onstyle="success" data-offstyle="danger" @if($funcionarios->otorga == 1) {{'checked'}} @endif>
+                                            </div>
+                                            <div class="form-group col-md-2">
+                                                <label for="responsable">Responsable UI:</label><br>
+                                                <input type="checkbox" class="form-control" id="responsable" name="responsable" data-toggle="toggle" data-on="Si" data-off="No" data-onstyle="success" data-offstyle="danger" @if($funcionarios->responsable == 1) {{'checked'}} @endif>
+                                            </div>
+                                        </div>    
+                                    </div>
                                 </div>
-                            </div>  --}}
+                            @endif
+                            
+                            @if(Auth::user()->hasRole('administrador') OR Auth::user()->hasRole('recursos-materiales'))
+                                <div class="card mb-3">
+                                    <div class="card-header">Permisos de materiales</div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-2">
+                                                <label for="elabora">Elabora:</label><br>
+                                                <input type="checkbox" class="form-control" id="elabora" name="elabora" data-toggle="toggle" data-on="Si" data-off="No" data-onstyle="success" data-offstyle="danger" @if($funcionarios->elabora == 1) {{'checked'}} @endif>
+                                            </div>
+                                            <div class="form-group col-md-2">
+                                                <label for="solicita">Solicita:</label><br>
+                                                <input type="checkbox" class="form-control" id="solicita" name="solicita" data-toggle="toggle" data-on="Si" data-off="No" data-onstyle="success" data-offstyle="danger" @if($funcionarios->entrega == 1) {{'checked'}} @endif>
+                                            </div>
+                                            <div class="form-group col-md-2">
+                                                <label for="autoriza">Autoriza:</label><br>
+                                                <input type="checkbox" class="form-control" id="autoriza" name="autoriza" data-toggle="toggle" data-on="Si" data-off="No" data-onstyle="success" data-offstyle="danger" @if($funcionarios->autoriza == 1) {{'checked'}} @endif>
+                                            </div>
+                                            <div class="form-group col-md-2">
+                                                <label for="valida">Valida:</label><br>
+                                                <input type="checkbox" class="form-control" id="valida" name="valida" data-toggle="toggle" data-on="Si" data-off="No" data-onstyle="success" data-offstyle="danger" @if($funcionarios->valida == 1) {{'checked'}} @endif>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
+                            
                             <div class="form-row">
                                 <div class="form-group col-md-12">
                                     <label for="activo">Activo:</label><br>
                                     <input type="checkbox" class="form-control" id="activo" name="activo" data-toggle="toggle" data-on="Activo" data-off="Inactivo" data-onstyle="success" data-offstyle="danger" @if($funcionarios->activo == 1) {{'checked'}} @endif>
                                 </div>
-                            </div>  
+                            </div>
+
                             <input type="hidden" name="page" value="{{ $page ?? '' }}">
                             <input type="hidden" name="vbusqueda" value="{{ $vbusqueda ?? '' }}">
+                            
                             <button type="submit" class="btn btn-outline-danger"><i class="fas fa-save"></i> Guardar</button>
                             <a class="btn btn-outline-danger" href="{{ url('/funcionarios?page='.$page.'&vbusqueda='.$vbusqueda) }}"><i class="fas fa-sign-out-alt fa-rotate-180"></i> Regresar</a>
                         </form>
